@@ -1,0 +1,28 @@
+{
+  "name": "conversations",
+  "version": "0.0.1",
+  "description": "",
+  "author": "thomas collardeau",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "webpack-dev-server --config webpack.dev.js --progress --colors --content-base public ",
+    "lint": "eslint src",
+    "build": "webpack"
+  },
+  "dependencies": {
+    "express": "~4.9.8",
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "babel": "^5.6.14",
+    "babel-core": "^5.6.17",
+    "babel-eslint": "^3.1.23",
+    "babel-loader": "^5.3.1",
+    "eslint": "^0.24.1",
+    "eslint-plugin-react": "^2.7.0",
+    "node-libs-browser": "^0.5.2",
+    "webpack": "^1.10.1",
+    "webpack-dev-server": "^1.10.1"
+  }
+}
