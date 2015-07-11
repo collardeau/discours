@@ -1,21 +1,29 @@
 import React from 'react';
+import Item from './Item';
 
-export default class Header extends React.Component {
+let styles = {
+  title: {
+    textAlign: 'left'
+  }
+};
+
+export default class Content extends React.Component {
+
+  handleSubmit = () => {
+    let msg = this.refs.msg.getDOMNode().value;
+  }
 
   render(){
 
-    let styles = {
-      title: {
-        textAlign: 'left'
-      }
-    };
-
     let { content, res } = this.props.appState;
+    let items = res.map((item, key) => <Item key={key}>{item.content}</Item>);
 
     return (
       <main style={styles.title}>
         <h3>{content}</h3>
-        <p>{res[0].content}</p>
+        <input ref='msg' type='text' />
+        <button onClick={this.handleSubmit}>Submit</button>
+        <ul>{items}</ul>
       </main>
     );
   }

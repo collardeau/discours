@@ -40,6 +40,7 @@ export default class App extends React.Component {
     return (
       <div style={styles.container}>
         <Header>Convos</Header>
+        <nav>Navigation</nav>
         <Content appState={this.state} change={this.change}></Content>
         <button onClick={this.handleClick}>Hit me</button>
       </div>

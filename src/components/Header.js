@@ -6,7 +6,8 @@ export default class Header extends React.Component {
 
     let styles = {
       title: {
-        textAlign: 'center'
+        textAlign: 'center',
+        border: '1px solid black'
       }
     };
 
