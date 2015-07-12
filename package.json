@@ -6,12 +6,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "webpack-dev-server --config webpack.dev.js --progress --colors --content-base public ",
-    "lint": "eslint src",
-    "build": "webpack"
+    "dev": "webpack-dev-server --progress --colors --hot",
+    "lint": "eslint src"
   },
   "dependencies": {
     "express": "~4.9.8",
+    "normalize.css": "^3.0.3",
     "react": "^0.13.3"
   },
   "devDependencies": {
@@ -23,6 +23,8 @@
     "eslint": "^0.24.1",
     "eslint-plugin-react": "^2.7.0",
     "node-libs-browser": "^0.5.2",
+    "path": "^0.11.14",
+    "react-hot-loader": "^1.2.8",
     "style-loader": "^0.12.3",
     "webpack": "^1.10.1",
     "webpack-dev-server": "^1.10.1"

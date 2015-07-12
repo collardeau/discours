@@ -2,11 +2,12 @@ import React from 'react';
 import Header from './Header';
 import Content from './Content';
 
+import normalize from 'normalize.css/normalize.css';
 import css from '../styles/styles.css';
 
 let styles = {
   container: {
-    backgroundColor: 'lightBlue',
+    backgroundColor: 'hsl(150, 100%, 90%)',
     width: '80%',
     margin: '0 auto',
     display: 'flex',
