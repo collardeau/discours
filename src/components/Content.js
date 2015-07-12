@@ -11,6 +11,9 @@ export default class Content extends React.Component {
 
   handleSubmit = () => {
     let msg = this.refs.msg.getDOMNode().value;
+    this.props.change({ // need to add
+      res: [ { content: 'msg '}]
+    });
   }
 
   render(){

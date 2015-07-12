@@ -2,6 +2,22 @@ import React from 'react';
 import Header from './Header';
 import Content from './Content';
 
+import css from '../styles/styles.css';
+
+let styles = {
+  container: {
+    backgroundColor: 'lightBlue',
+    width: '80%',
+    margin: '0 auto',
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100%'
+  },
+  header: { flex: 1 },
+  nav: { flex: 1 },
+  content: { flex: 1}
+};
+
 export default class App extends React.Component {
 
   state = {
@@ -18,31 +34,16 @@ export default class App extends React.Component {
     }]
   }
 
-  change = (data) => this.setState(data);
-
-  handleClick = (data) => {
-    this.change({content: 'hello my friend'});
-    console.log('change state');
-  }
+  static change = (data) => this.setState(data);
 
   render(){
 
-    let styles = {
-      container: {
-        backgroundColor: 'lightBlue',
-        width: '80%',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column'
-      }
-    };
-
     return (
       <div style={styles.container}>
-        <Header>Convos</Header>
-        <nav>Navigation</nav>
-        <Content appState={this.state} change={this.change}></Content>
-        <button onClick={this.handleClick}>Hit me</button>
+        <Header style={styles.header}>Convos</Header>
+        <nav style={styles.nav}>Navigation</nav>
+        <Content style={styles.content} appState={this.state} change={this.change}></Content>
+        <footer style={styles.header}>Footer</footer>
       </div>
     );
   }
