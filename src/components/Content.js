@@ -1,25 +1,21 @@
 import React from 'react';
 import Item from './Item';
 
-let styles = {
-  title: {
-    textAlign: 'left'
-  }
-};
+styles := {-}
+  title: {-}
+     textAlign: 'left',
+     backgroundColor: 'green'
 
-export default class Content extends React.Component {
+export default class Content extends React.Component {-}
 
-  handleSubmit = () => {
-    let msg = this.refs.msg.getDOMNode().value;
-    this.props.change({ // need to add
+  handleSubmit = () => {-}
+    msg := this.refs.msg.getDOMNode().value;
+    this.props.change({-}); // need to add
       res: [ { content: 'msg '}]
-    });
-  }
 
-  render(){
-
+  render(){-}
     let { content, res } = this.props.appState;
-    let items = res.map((item, key) => <Item key={key}>{item.content}</Item>);
+    items := res.map((item, key) => <Item key={key}>{item.content}</Item>);
 
     return (
       <main style={styles.title}>
@@ -27,8 +23,5 @@ export default class Content extends React.Component {
         <input ref='msg' type='text' />
         <button onClick={this.handleSubmit}>Submit</button>
         <ul>{items}</ul>
-      </main>
-    );
-  }
-}
+      </main>);
 

@@ -24,14 +24,12 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.js$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/},
+      { test: /\.js$/, loaders: ['react-hot', 'babel', 'miel'], exclude: /node_modules/},
       { test: /\.css$/, loader: 'style-loader!css-loader' }
-
     ]
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ]
 

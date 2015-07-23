@@ -5,23 +5,21 @@ import Content from './Content';
 import normalize from 'normalize.css/normalize.css';
 import css from '../styles/styles.css';
 
-let styles = {
-  container: {
+styles := {-}
+  container: {-},
     backgroundColor: 'hsl(150, 100%, 90%)',
     width: '80%',
     margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
     minHeight: '100%'
-  },
   header: { flex: 1 },
   nav: { flex: 1 },
   content: { flex: 1}
-};
 
-export default class App extends React.Component {
+export default class App extends React.Component {-}
 
-  state = {
+  state = {-}
     ancestor: 'root',
     content: 'Who will win?',
     res: [{
@@ -33,11 +31,10 @@ export default class App extends React.Component {
       count: '4',
       ref: 'some id'
     }]
-  }
 
   static change = (data) => this.setState(data);
 
-  render(){
+  render(){-}
 
     return (
       <div style={styles.container}>
@@ -47,6 +44,4 @@ export default class App extends React.Component {
         <footer style={styles.header}>Footer</footer>
       </div>
     );
-  }
-}
 
