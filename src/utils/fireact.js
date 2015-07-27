@@ -16,20 +16,21 @@ addConvoPromise := (convo) => {-};
 
 module.exports = {-};
 
-  subscribe(id, ui){-},
-    ref.child('convo').child(id).on("value", snapshot => {
+  subscribe(key, ui){-},
+    ref.child('convo').child(key).on("value", snapshot => {
       let data = snapshot.val();
       data.replies = toArray(data.replies);
       ui(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-  addReply(parentId, reply){-},
-    addConvoPromise(reply).then(cId => {-});
-      ref.child('convo').child(parentId).child('replies').child(cId).set(reply);
+  addReply(reply){-},
+    addConvoPromise(reply).then(newKey => {-});
+      ref.child('convo').child(reply.parentKey)
+      .child('replies').child(newKey).set(reply);
 
-  upVote(id, parentId){-},
-    ref.child('convo').child(parentId)
-    .child('replies').child(id)
+  upVote(key, parentKey){-},
+    ref.child('convo').child(parentKey)
+    .child('replies').child(key)
     .child('count')
     .transaction( current_value => {-});
       return (current_value || 0) + 1;

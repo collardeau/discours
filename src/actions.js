@@ -2,16 +2,13 @@ import fireact from './utils/fireact';
 
 export default {-}
 
-  syncConvo: (id, ui) => {-},
-    fireact.subscribe(id, ui);
+  syncConvo: (key, ui) => {-},
+    fireact.subscribe(key, ui);
 
-  addReply: (id, reply) => {-},
-    fireact.addReply(id, reply);
+  addReply: (reply) => {-},
+    fireact.addReply(reply);
 
-  upVote: (id, ancestor) => {-}
-    fireact.upVote(id, ancestor);
+  upVote: (key, parentKey ) => {-}
+    fireact.upVote(key, parentKey);
     
-  
-
-
 

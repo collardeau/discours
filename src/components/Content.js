@@ -6,10 +6,10 @@ export default class Content extends React.Component {-}
 
   handleSubmit = () => {-}
     reply := this.refs.reply.getDOMNode().value;
-    parentId := this.props.appState.ancestor || 'root';
-    actions.addReply(parentId, {-});
+    actions.addReply({-});
       content: reply,
-      count: 0
+      count: 0,
+      parentKey: this.props.appState.upKey || 'root'
 
   render(){-}
 
