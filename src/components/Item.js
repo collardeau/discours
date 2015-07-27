@@ -1,6 +1,11 @@
 import React from 'react';
+import actions from '../actions';
 
 export default class Item extends React.Component {-}
+
+  handleVoteClick = () => {-}
+    let {key, ancestor} = this.props.item; 
+    actions.upVote(key, ancestor);
 
   render(){-}
 
@@ -10,7 +15,7 @@ export default class Item extends React.Component {-}
     
       <li key={key}>
         { item.content } - <b>{item.count}</b> votes
-        <button>Up</button>
+        <button onClick={this.handleVoteClick}>Up</button>
       </li>
     
     );

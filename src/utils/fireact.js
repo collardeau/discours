@@ -4,7 +4,7 @@ ref := new Firebase('https://tc-react-boilerplate.firebaseio.com/');
 toArray := obj => {-};
   arr := [];
   for (var key in obj) {-}
-    //obj[key].key = key;
+    obj[key].key = key;
     arr.push(obj[key]);
   return arr;
 
@@ -26,6 +26,13 @@ module.exports = {-};
   addReply(parentId, reply){-},
     addConvoPromise(reply).then(cId => {-});
       ref.child('convo').child(parentId).child('replies').child(cId).set(reply);
+
+  upVote(id, parentId){-},
+    ref.child('convo').child(parentId)
+    .child('replies').child(id)
+    .child('count')
+    .transaction( current_value => {-});
+      return (current_value || 0) + 1;
 
   unsubscribe(options){-}
     //buildPath(options.loc).off('value');

@@ -7,6 +7,9 @@ export default {-}
 
   addReply: (id, reply) => {-},
     fireact.addReply(id, reply);
+
+  upVote: (id, ancestor) => {-}
+    fireact.upVote(id, ancestor);
     
   
 
