@@ -1,23 +1,23 @@
 import React from 'react';
 import App from './App';
+import actions from '../actions';
 
 export default class AppContainer extends React.Component {-}
 
   state = {-}
-    ancestor: 'root',
-    content: 'Who was more popular, Sampras or Agassi?',
-    replies: [{
-      content: 'Agassi was more charismatic',
-      count: '5',
-      key: '002'
-    }, {
-      content: 'Sampras was a servebot',
-      count: '4',
-      key: '001'
-    }]
+    ancestor: '',
+    content: '',
+    replies: [{-}]
+      content: '',
+      count: '',
+      key: ''
 
-  static change = (data) => this.setState(data);
+  componentDidMount(){-}
+    actions.syncConvo('root', data => {-});
+      this.setState(data);
+
+  change = (data) => {-}
 
   render(){-}
-    return <App appState={this.state} change={this.change} />
+    return <App appState={this.state} />
 

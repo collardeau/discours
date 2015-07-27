@@ -13,9 +13,7 @@ export default class App extends React.Component {-}
     return (
       <div>
         <Header>Convos</Header>
-        <nav>Navigation</nav>
-        <Content appState={appState} change={change}></Content>
-        <footer>Footer</footer>
+        <Content appState={appState}></Content>
       </div>
     );
 

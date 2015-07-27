@@ -3,6 +3,11 @@ html, body {
   min-height: 100%;
 }
 
+body {
+  margin: 0 auto;
+  width: 80%;
+}
+
 h1 {
   margin: 0;
   padding: 0;
@@ -14,7 +19,7 @@ h1 {
   min-height: 100%; 
 }
 
-header, footer, nav, main {
+main {
   border: 1px solid;
 }
 
