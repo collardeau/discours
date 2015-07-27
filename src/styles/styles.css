@@ -1,4 +1,39 @@
-html, body, #app {
+html, body {
   background-color: #ddd;
-  height: 100%;
+  min-height: 100%;
 }
+
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
+#appContainer {
+  //display: flex;
+  //flex-flow: row wrap;
+  min-height: 100%; 
+}
+
+header, footer, nav, main {
+  border: 1px solid;
+}
+
+header, footer {
+  height: 55px;
+  width: 100%;
+}
+
+nav {
+  height: 34px;
+}
+
+main {
+  //background-color: green;
+  //flex: auto;
+  min-height: 100%;
+}
+
+
+
+
+

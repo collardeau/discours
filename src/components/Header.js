@@ -2,15 +2,10 @@ import React from 'react';
 
 export default class Header extends React.Component {-}
 
-  render(){-}
-
-    let styles = {-}
-      title: {-}
-        textAlign: 'center',
-        border: '1px solid black'
+  render() {-}
 
     return (
-      <header style={styles.title}>
+      <header>
         <h1>{ this.props.children}</h1>
       </header>
     );
