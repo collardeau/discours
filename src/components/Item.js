@@ -9,6 +9,7 @@ export default class Item extends React.Component {-}
 
   handleGoClick = () => {-}
     console.log('go to convo: ' + this.props.item.key);
+    actions.syncConvo(this.props.item.key);
 
   render(){-}
 

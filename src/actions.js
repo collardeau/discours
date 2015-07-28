@@ -1,12 +1,17 @@
 import fireact from './utils/fireact';
+import R from 'ramda';
 
-var ui = function(){};
+var ui; 
+
+syncConvo:= (key) => fireact.subscribe(ui, key);
+
+init:= fn => ui = fn;
 
 export default {-}
 
-  init: fn => ui = fn,
-
-  syncConvo: key => fireact.subscribe(key, ui),
+  init: init,
+  
+  syncConvo: syncConvo,
 
   addReply: fireact.addReply,
 

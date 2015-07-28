@@ -1,3 +1,4 @@
+let R = require('ramda');
 let Firebase = require('firebase');
 ref := new Firebase('https://tc-react-boilerplate.firebaseio.com/');
 
@@ -16,7 +17,8 @@ addConvoPromise := (convo) => {-};
 
 module.exports = {-};
 
-  subscribe(key, cb){-},
+  subscribe(cb, key){-},
+
     ref.child('convo').child(key).on("value", snapshot => {
       let data = snapshot.val();
       data.replies = toArray(data.replies);
