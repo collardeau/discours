@@ -5,18 +5,21 @@ import actions from '../actions';
 export default class AppContainer extends React.Component {-}
 
   state = {-}
-    ancestor: '',
+    parentKey: 'root',
+    key: '',
+    count: 0,
     content: '',
     replies: [{-}]
       content: '',
-      count: '',
-      key: ''
+      count: 0,
+      key: '',
+      parentKey: ''
 
   componentDidMount(){-}
-    actions.syncConvo('root', data => {-});
+    actions.init(data => {-});
       this.setState(data);
+    actions.syncConvo(this.state.parentKey);
 
-  change = (data) => {-}
 
   render(){-}
     return <App appState={this.state} />

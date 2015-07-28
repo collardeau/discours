@@ -1,8 +1,13 @@
 import fireact from './utils/fireact';
 
+var ui; // callback
+
 export default {-}
 
-  syncConvo: (key, ui) => {-},
+  init: fn => {-},
+    ui = fn; 
+
+  syncConvo: (key) => {-},
     fireact.subscribe(key, ui);
 
   addReply: (reply) => {-},
