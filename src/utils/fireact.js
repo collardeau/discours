@@ -16,11 +16,11 @@ addConvoPromise := (convo) => {-};
 
 module.exports = {-};
 
-  subscribe(key, ui){-},
+  subscribe(key, cb){-},
     ref.child('convo').child(key).on("value", snapshot => {
       let data = snapshot.val();
       data.replies = toArray(data.replies);
-      ui(data);
+      cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
   addReply(reply){-},

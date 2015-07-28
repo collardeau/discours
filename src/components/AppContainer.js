@@ -16,10 +16,8 @@ export default class AppContainer extends React.Component {-}
       parentKey: ''
 
   componentDidMount(){-}
-    actions.init(data => {-});
-      this.setState(data);
+    actions.init(data => this.setState(data));
     actions.syncConvo(this.state.parentKey);
-
 
   render(){-}
     return <App appState={this.state} />

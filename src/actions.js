@@ -1,19 +1,14 @@
 import fireact from './utils/fireact';
 
-var ui; // callback
+var ui = function(){};
 
 export default {-}
 
-  init: fn => {-},
-    ui = fn; 
+  init: fn => ui = fn,
 
-  syncConvo: (key) => {-},
-    fireact.subscribe(key, ui);
+  syncConvo: key => fireact.subscribe(key, ui),
 
-  addReply: (reply) => {-},
-    fireact.addReply(reply);
+  addReply: fireact.addReply,
 
-  upVote: (key, parentKey ) => {-}
-    fireact.upVote(key, parentKey);
+  upVote: fireact.upVote
     
-
