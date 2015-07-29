@@ -5,6 +5,17 @@ import actions from '../actions';
 
 export default class App extends React.Component {-}
   
+  componentDidMount(){-}
+    console.log('app did mount');
+
+  componentWillUnmount(){-}
+    console.log('app will unmount');
+
+  shouldComponentUpdate(nextProps, nextState){-}
+    console.log('should app update');
+    console.log(nextProps === this.props)
+    return true;
+
   render(){-}
 
     let { appState } = this.props;

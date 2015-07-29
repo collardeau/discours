@@ -1,27 +1,20 @@
 import React from 'react';
-import AppContainer from './components/AppContainer';
 import hasher from 'hasher';
-import fireact from './utils/fireact';
-import actions from './actions/appActions' 
+import appActions from './actions/appActions' 
+import AppContainer from './components/AppContainer';
 
 state:= {};
 
 renderApp:= (newState) => {-};
-  state = newState;
-  return React.render(
-    <AppContainer appState={state}/>, document.getElementById('app')
-  );
+  state = newState; console.log(newState);
+  return React.render(<AppContainer appState={newState}/>, document.getElementById('app'));
 
-actions.init(renderApp);
+actions:= appActions.create(renderApp);
 
-handleRoute:= newRoute => {-};
-  return actions.route(state, newRoute);
+handleRoute:= newRoute => actions.routeAndRender(state, newRoute);
 
-// routing
 hasher.init();
 hasher.changed.add(handleRoute);
 hasher.initialized.add(handleRoute);
 
-
- 
 
