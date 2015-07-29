@@ -17,7 +17,7 @@ addConvoPromise := (convo) => {-};
 
 module.exports = {-};
 
-  subscribe(cb, key){-},
+  subscribe(key, cb){-},
 
     ref.child('convo').child(key).on("value", snapshot => {
       let data = snapshot.val();
@@ -37,6 +37,6 @@ module.exports = {-};
     .transaction( current_value => {-});
       return (current_value || 0) + 1;
 
-  unsubscribe(options){-}
-    //buildPath(options.loc).off('value');
+  unsubscribe(key){-}
+    ref.child('convo').child(key).off('value');
 
