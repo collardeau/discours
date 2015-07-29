@@ -2,26 +2,25 @@ import React from 'react';
 import AppContainer from './components/AppContainer';
 import hasher from 'hasher';
 import fireact from './utils/fireact';
+import actions from './actions/appActions' 
 
 state:= {};
 
-renderApp:= (state) => {-};
-  React.render(<AppContainer appState={state}/>, document.getElementById('app'));
+renderApp:= (newState) => {-};
+  state = newState;
+  return React.render(
+    <AppContainer appState={state}/>, document.getElementById('app')
+  );
 
-renderRoute:= (newRoute, oldRoute) => {-};
-  if(oldRoute) fireact.unsubscribe(oldRoute);
-  fireact.subscribe(newRoute, (data) => {-});
-    state.retort = data;
-    state.route = newRoute;
-    renderApp(state);  
+actions.init(renderApp);
 
-//actions.init(renderApp));
+handleRoute:= newRoute => {-};
+  return actions.route(state, newRoute);
 
 // routing
 hasher.init();
-hasher.changed.add(renderRoute);
-//hasher.changed.add(actions.route);
-hasher.initialized.add(renderRoute);
+hasher.changed.add(handleRoute);
+hasher.initialized.add(handleRoute);
 
 
  
