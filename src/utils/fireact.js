@@ -17,7 +17,7 @@ addConvoPromise := (convo) => {-};
 
 module.exports = {-};
 
-  subscribe(key, cb){-},
+  sync(key, cb){-},
 
     ref.child('convo').child(key).on("value", snapshot => {
       let data = snapshot.val();

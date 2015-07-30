@@ -1,22 +1,35 @@
 import React from 'react';
 import R from 'ramda';
 import hasher from 'hasher';
-import fireact from './utils/fireact';
 import App from './components/App';
+import fireUtils from './utils/fireact';
 
-init:= () => {-}
+boom:= window.boom = {};
+
+start:= () => {-}
   hasher.init();
-  hasher.initialized.add(boom.routeAndRender);
+  hasher.initialized.add(boom.route);
 
-renderUI:= (changes, state = {app: 'reply-all'}) => {-};
-  newState:= R.merge(state, changes);
-  return React.render(<App appState={newState}/>, document.getElementById('app'));
+renderUI:= (state = {}) => {-};
+  return React.render(<App appState={state}/>, document.getElementById('app'));
 
-route:= route => { return { route } };
+changeState:= (changes, state) => {-}
+  console.log('change: ', changes);
+  return R.merge(changes, state);
 
-boom:= window.boom = {} 
-boom.routeAndRender= R.compose(renderUI, route);
+boom.route = (route, state) => {-}
+  newState:= changeState({ route }, state)
+  renderUI(newState);
 
-init();
+//boom.syncReplyAndRender= R.composeP(renderUI, syncReply);
+
+start();
+
+syncReply:= key => {-};
+  return new Promise((res, rej) => {-});
+    fireUtils.sync(key, data => {-});
+      res({-}); 
+        reply: data
+
 
 
