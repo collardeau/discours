@@ -1,29 +1,22 @@
 import React from 'react';
-import Header from './Header';
-import Content from './Content';
-import actions from '../actions';
+import hasher from 'hasher';
+import normalize from 'normalize.css/normalize.css';
+import css from '../styles/styles.css';
 
-export default class App extends React.Component {-}
-  
+export default class AppContainer extends React.Component {-}
+
   componentDidMount(){-}
-    console.log('app did mount');
+    hasher.changed.add(this.handleRoute);
 
-  componentWillUnmount(){-}
-    console.log('app will unmount');
-
-  shouldComponentUpdate(nextProps, nextState){-}
-    console.log('should app update');
-    console.log(nextProps === this.props)
-    return true;
+  handleRoute = newRoute => {-}
+    boom.routeAndRender(newRoute, this.props.appState);
 
   render(){-}
-
-    let { appState } = this.props;
-
     return (
-      <div>
-        <Header>Convos {this.props.appState.route}</Header>
-        <Content appState={appState.retort}></Content>
-      </div>
-    );
+      <div> 
+        <h1>Hello {this.props.appState.route}</h1>
+        <a href="#bonjour">Bonjour</a>
+        <a href="#root">Root</a>
+      </div> 
+    )
 
