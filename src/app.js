@@ -4,26 +4,24 @@ import hasher from 'hasher';
 import App from './components/App';
 import fireUtils from './utils/fireact';
 
-boom:= window.boom = {};
-
-start:= () => {-}
-  hasher.init();
-  hasher.initialized.add(boom.route);
-
-renderUI:= (state = {}) => {-};
+render:= (state) => {-};
   return React.render(<App appState={state}/>, document.getElementById('app'));
 
-changeState:= (changes, state) => {-}
-  console.log('change: ', changes);
-  return R.merge(changes, state);
+changeState:= (change, state) => {-}
+  console.log('change: ', change);
+  return R.merge(state, change);
 
-boom.route = (route, state) => {-}
-  newState:= changeState({ route }, state)
-  renderUI(newState);
+boom:= window.boom = (state={}, change) => {-};
+  newState:= changeState(state, change)
+  boom.log = ['log 1', 'log 2'];
+  render(newState);
 
-//boom.syncReplyAndRender= R.composeP(renderUI, syncReply);
+handleStart:= (route) => {-};
+  boom({route})
 
-start();
+hasher.init();
+hasher.initialized.add(handleStart);
+
 
 syncReply:= key => {-};
   return new Promise((res, rej) => {-});
