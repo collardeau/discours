@@ -10,7 +10,7 @@ export default class AppContainer extends React.Component {-}
     //boom.syncReplyAndRender(this.props.appState.route, this.props.appState);
 
   handleRoute = newRoute => {-}
-    boom({route: newRoute}, this.props.appState);
+    boom(this.props.appState, {route: newRoute});
 
   render(){-}
     return (
