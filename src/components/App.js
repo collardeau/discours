@@ -8,9 +8,10 @@ export default class AppContainer extends React.Component {-}
   componentDidMount(){-}
     hasher.changed.add(this.handleRoute);
     //boom.syncReplyAndRender(this.props.appState.route, this.props.appState);
+    boom.sync(this.props.appState);
 
   handleRoute = newRoute => {-}
-    boom(this.props.appState, {route: newRoute});
+    boom.change(this.props.appState, {route: newRoute});
 
   render(){-}
     return (
@@ -18,6 +19,7 @@ export default class AppContainer extends React.Component {-}
         <h1>Hello {this.props.appState.route}</h1>
         <a href="#bonjour">Bonjour</a>
         <a href="#root">Root</a>
+        <p>{this.props.appState.content || 'no content'}</p>
       </div> 
     )
 
