@@ -6,28 +6,23 @@ import fireUtils from './utils/fireact';
 
 render:= state => React.render(<App appState={state}/>, document.getElementById('app'));
 
-changeState:= change => boom.state = R.merge(boom.state, change);
-
-log:= change => {-}
+changeState:= change => {-}
   boom.log.push(change);
-  return change;
+  console.log('change: ', change);
+  return boom.state = R.merge(boom.state, change);
 
-changeAndRender:= R.pipe(changeState, render);
+window.boom= R.pipe(changeState, render);
 
-routeChange:= route => ({route});
+route:= route => {-};
+  if(route==='bonjour') { console.log('bonjour')}
+  fireUtils.sync(route, data => {-});
+    boom({reply: data, route: route});
 
-route:= R.pipe(routeChange, log, changeAndRender);
+syncReply:= key => {-}
+  fireUtils.sync(key, data => {-});
+    boom({reply: data}) 
 
-syncReplyChange:= key => {-}
-  return new Promise((res) => {-});
-    fireUtils.sync(key, data => {-});
-     res({-}); 
-       reply: data
-
-syncReply:= R.pipeP(syncReplyChange, changeAndRender);
-
-boom:= window.boom = changeAndRender;
-boom.state = {};
+boom.state = { reply: { content: 'loading', replies: []}};
 boom.log = [];
 boom.route = route;
 boom.syncReply = syncReply;

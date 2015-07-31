@@ -1,9 +1,7 @@
 import React from 'react';
+import Content from './Content';
 
 export default class ReplyContainer extends React.Component {-}
-
-  componentDidMount(){-}
-    boom.syncReply(this.props.replyKey);
 
   render(){-}
 
@@ -11,9 +9,7 @@ export default class ReplyContainer extends React.Component {-}
 
     return (
       <div> 
-        <a href="#bonjour">Bonjour</a>
-        <a href="#root">Root</a>
-        <p>{reply ? reply.content : 'no content' }</p>
+        <Content reply={reply}/>
       </div> 
     )
 

@@ -7,17 +7,19 @@ export default class Item extends React.Component {-}
     let {key, parentKey } = this.props.item; 
     actions.upVote(key, parentKey);
 
+  handleClick = () => {-}
+    console.log('click');
+    boom.syncReply(this.props.item.key);
+
   render(){-}
 
     let { item } = this.props;
 
     return (
-    
       <li>
-        <a href={'#' + item.key}>
-          { item.content }
-        </a>
+        <a href={'#' + item.key}>{ item.content }</a>
         - <b>{item.count}</b> votes
+        <span onClick={this.handleClick}>Go to</span>
         <button onClick={this.handleVoteClick}>Up</button>
       </li>
     

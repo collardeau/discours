@@ -14,9 +14,9 @@ export default class Content extends React.Component {-}
 
   render(){-}
 
-    let { content, replies } = this.props.appState;
+    let { content, replies } = this.props.reply;
 
-    items := replies.map((item, key) => <Item key={key} item={item} />);
+    items := replies.map(item => <Item key={item.key} item={item} />);
 
     return (
       <main>
