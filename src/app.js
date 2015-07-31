@@ -12,16 +12,15 @@ log:= change => {-}
   boom.log.push(change);
   return change;
 
-changeAndRender:= R.pipe(changeState, log, render);
+changeAndRender:= R.pipe(changeState, render);
 
 routeChange:= route => ({route});
 
-route:= R.pipe(routeChange, changeAndRender);
+route:= R.pipe(routeChange, log, changeAndRender);
 
 syncReplyChange:= key => {-}
   return new Promise((res) => {-});
     fireUtils.sync(key, data => {-});
-      console.log(data);
      res({-}); 
        reply: data
 

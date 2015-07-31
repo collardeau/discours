@@ -2,7 +2,7 @@ import React from 'react';
 import normalize from 'normalize.css/normalize.css';
 import css from '../styles/styles.css';
 
-export default class AppContainer extends React.Component {-}
+export default class App extends React.Component {-}
 
   componentDidMount(){-}
     boom.syncReply(this.props.appState.route);
