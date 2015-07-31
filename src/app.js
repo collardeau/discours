@@ -7,25 +7,28 @@ import fireUtils from './utils/fireact';
 render:= state => React.render(<App appState={state}/>, document.getElementById('app'));
 
 changeState:= change => {-}
-  boom.log.push(change);
-  console.log('change: ', change);
+  boom.log.push(change); console.log('change: ', change);
   return boom.state = R.merge(boom.state, change);
 
 window.boom= R.pipe(changeState, render);
 
-route:= route => {-};
-  if(route==='bonjour') { console.log('bonjour')}
-  fireUtils.sync(route, data => {-});
-    boom({reply: data, route: route});
-
 syncReply:= key => {-}
   fireUtils.sync(key, data => {-});
-    boom({reply: data}) 
+    boom({reply: data, route: key});
 
-boom.state = { reply: { content: 'loading', replies: []}};
+cutReply:= () => {-}
+  if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 
+
+route:= route => {-};
+  if(route==='bonjour') {-}
+    boom({route: 'bonjour'}); 
+  else{-}
+    cutReply();
+    syncReply(route);
+
+boom.state = {};
 boom.log = [];
 boom.route = route;
-boom.syncReply = syncReply;
 
 hasher.init();
 hasher.initialized.add(boom.route);
