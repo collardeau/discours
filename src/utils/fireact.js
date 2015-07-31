@@ -26,7 +26,8 @@ module.exports = {-};
       cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-  addReply(reply){-},
+  reply(reply){-},
+    console.log(reply);
     addConvoPromise(reply).then(newKey => {-});
       ref.child('convo').child(reply.parentKey)
       .child('replies').child(newKey).set(reply);

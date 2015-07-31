@@ -16,19 +16,26 @@ syncReply:= key => {-}
   fireUtils.sync(key, data => {-});
     boom({reply: data, route: key});
 
-cutReply:= () => {-}
+cutCurrentReply:= () => {-}
   if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 
 
 route:= route => {-};
   if(route==='bonjour') {-}
     boom({route: 'bonjour'}); 
   else{-}
-    cutReply();
+    cutCurrentReply();
     syncReply(route);
+
+reply:= reply => {-};
+  fireUtils.reply({-})
+    content: reply,
+    count: 0,
+    parentKey: boom.state.route 
 
 boom.state = {};
 boom.log = [];
 boom.route = route;
+boom.reply = reply;
 
 hasher.init();
 hasher.initialized.add(boom.route);
