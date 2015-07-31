@@ -6,28 +6,35 @@ import fireUtils from './utils/fireact';
 
 render:= state => React.render(<App appState={state}/>, document.getElementById('app'));
 
-changeState:= (state, change) => {-}
-  boom.log = [change];
-  console.log('state ', state);
-  console.log('change ', change);
-  return R.merge(state, change);
+changeState:= change => boom.state = R.merge(boom.state, change);
 
-boom:= window.boom = {};
-boom.change = R.compose(render, changeState);
-boom.sync = state => {-};
-  fireUtils.sync(state.route, data => {-});
-    boom.change(state, data);
+log:= change => {-}
+  boom.log.push(change);
+  return change;
 
-handleStart:= (route) => boom.change({}, {route})
+changeAndRender:= R.pipe(changeState, log, render);
+
+routeChange:= route => ({route});
+route:= R.pipe(routeChange, changeAndRender);
+
+boom:= window.boom = changeAndRender;
+boom.state = {};
+boom.log = [];
+boom.route = route;
 
 hasher.init();
-hasher.initialized.add(handleStart);
+hasher.initialized.add(boom.route);
+hasher.changed.add(boom.route);
 
-syncReply:= key => {-};
+
+syncReply:= state => {-};
   return new Promise((res, rej) => {-});
-    fireUtils.sync(key, data => {-});
+    fireUtils.sync(state.route, data => {-});
       res({-}); 
         reply: data
 
+boom.sync = state => {-};
+  fireUtils.sync(state.route, data => {-});
+    boom(state, data);
 
 
