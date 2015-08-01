@@ -6,29 +6,18 @@ import Header from './Header';
 
 export default class App extends React.Component {-}
 
-  componentDidMount(){-}
-    //boom.syncReply(this.props.appState.route);
-
-  shouldComponentUpdate(){-}
-    //console.log('should app component update');
-    return true;
-
   render(){-}
 
     let {route, reply}= this.props.appState
 
-    let ui;
-
+    ui:= <ReplyContainer reply={reply} />
     if(route === 'bonjour') {-}
       ui = <div>Well, Bonjour... et bienvenue!</div>
-    else {-}
-      ui =<ReplyContainer reply={reply}replyKey={route}/>
 
     return (
       <div>
         <Header title={route}></Header>
-        <a href="#root">Root</a>
-        <a href="#bonjour">Bonjour</a><br />
+        <a href="#root">Root</a> <a href="#bonjour">Bonjour</a><br />
         { ui }
       </div>
     );

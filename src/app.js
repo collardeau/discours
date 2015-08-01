@@ -16,15 +16,13 @@ app:= document.getElementById('app');
 render:= () => React.render(<App appState={boom.state}/>, app);
 
 findChanges:= obsChanges => {-}
-  console.log(obsChanges);
   return obsChanges.reduce((prev, next) => {-},{});
     prev[next.name] = next.object[next.name];
     return prev;
 
 log:= newLog => {-}
-  console.log(newLog);
   boom.logs.push(newLog);
-  boom.lastLog= newLog;
+  boom.lastLog= newLog; console.log(newLog);
   return newLog;
 
 change:= R.pipe(findChanges, log, render)
@@ -51,8 +49,7 @@ reply:= reply => {-};
     count: 0,
     parentKey: boom.state.route 
 
-upvote:= (key, parentKey) => {-}
-  fireUtils.upvote(key, parentKey);
+upvote:= fireUtils.upvote;
 
 boom.route = route;
 boom.reply = reply;

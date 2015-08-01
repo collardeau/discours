@@ -6,9 +6,6 @@ export default class Item extends React.Component {-}
   handleVoteClick = () => {-}
     boom.upvote(this.props.item.key, this.props.item.parentKey);
 
-  shouldComponentUpdate(nextProps){-}
-    return true;
-
   render(){-}
 
     let { item } = this.props;
@@ -19,6 +16,5 @@ export default class Item extends React.Component {-}
         - <b>{item.count}</b> votes
         <button onClick={this.handleVoteClick}>Up</button>
       </li>
-    
     );
 

@@ -7,18 +7,14 @@ export default class Content extends React.Component {-}
   handleSubmit = () => {-}
     reply := this.refs.reply.getDOMNode().value;
     boom.reply(reply);
+    this.refs.reply.getDOMNode().value = "";
 
   render(){-}
 
-    let { content, replies } = this.props.reply;
-
-    items := replies.map(item => <Item key={item.key} item={item} />);
-
     return (
-      <main>
-        <h3>{content}</h3>
+      <div>
         <input ref='reply' type='text' />
         <button onClick={this.handleSubmit}>Submit</button>
-        <ul>{items}</ul>
-      </main>);
+      </div>
+    );
 

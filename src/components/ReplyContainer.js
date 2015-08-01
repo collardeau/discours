@@ -1,18 +1,21 @@
 import React from 'react';
-import Content from './Content';
+import ReplyContent from './ReplyContent';
+import ReplyForm from './ReplyForm';
 
 export default class ReplyContainer extends React.Component {-}
 
   shouldComponentUpdate(){-}
+    if(!boom.lastLog.reply) {-}
+      console.log('not updating reply');
+      return false;
     return true;
 
   render(){-}
 
-    let {reply} = this.props;
-
     return (
       <div> 
-        <Content reply={reply}/>
+        <ReplyForm />
+        <ReplyContent reply={this.props.reply}/>
       </div> 
-    )
+    );
 

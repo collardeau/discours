@@ -12,7 +12,7 @@ export default class Header extends React.Component {-}
 
     return (
       <header>
-        <h1>{ this.props.title}</h1>
+        <h1>Reply</h1>
       </header>
     );
 
