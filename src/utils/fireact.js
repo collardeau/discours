@@ -32,7 +32,7 @@ module.exports = {-};
       ref.child('convo').child(reply.parentKey)
       .child('replies').child(newKey).set(reply);
 
-  upVote(key, parentKey){-},
+  upvote(key, parentKey){-},
     ref.child('convo').child(parentKey)
     .child('replies').child(key)
     .child('count')
