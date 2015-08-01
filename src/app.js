@@ -9,44 +9,40 @@ boom:= window.boom = changes => {-}
     boom.state[key] = val;
 
 state:= boom.state = {};
-boom.logs = []
+boom.logs = [];
 boom.lastLog = "";
 
+app:= document.getElementById('app');
+render:= () => React.render(<App appState={boom.state}/>, app);
+
 findChanges:= obsChanges => {-}
+  console.log(obsChanges);
   return obsChanges.reduce((prev, next) => {-},{});
     prev[next.name] = next.object[next.name];
     return prev;
 
 log:= newLog => {-}
+  console.log(newLog);
   boom.logs.push(newLog);
   boom.lastLog= newLog;
   return newLog;
 
-findAndLogChanges:= R.pipe(findChanges, log);
-
-change:= observables => {-};
-  findAndLogChanges(observables);
-  render();
+change:= R.pipe(findChanges, log, render)
 
 Object.observe(state, change);
-
-app:= document.getElementById('app');
-render:= () => React.render(<App appState={boom.state}/>, app);
-
 
 route:= route => {-};
   if(route==='bonjour') {-}
     boom({route});
   else{-}
-    //cutCurrentReply();
-    //syncReply(route);
-
+    cutSync();
+    syncReply(route);
 
 syncReply:= key => {-}
   fireUtils.sync(key, data => {-});
     boom({reply: data, route: key});
 
-cutCurrentReply:= () => {-}
+cutSync:= () => {-}
   if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 
 
 reply:= reply => {-};
@@ -56,7 +52,6 @@ reply:= reply => {-};
     parentKey: boom.state.route 
 
 upvote:= (key, parentKey) => {-}
-  console.log(key, parentKey);
   fireUtils.upvote(key, parentKey);
 
 boom.route = route;

@@ -5,19 +5,14 @@ export default class Item extends React.Component {-}
 
   handleVoteClick = () => {-}
     let {key, parentKey } = this.props.item; 
-    //actions.upVote(key, parentKey);
     boom.upvote(key, parentKey);
 
   handleClick = () => {-}
     boom.syncReply(this.props.item.key);
 
   shouldComponentUpdate(nextProps){-}
-    //console.log('should item update', this.props.item.content);
-    return true;
-    //return this.props.item === nextProps.item;
-
-  componentWillUpdate(){-}
-    //console.log('component will update');
+    console.log(!nextProps.item === this.props.item, this.props.item);
+    return !nextProps.item === this.props.item; 
 
   render(){-}
 

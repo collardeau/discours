@@ -4,7 +4,7 @@ import Content from './Content';
 export default class ReplyContainer extends React.Component {-}
 
   shouldComponentUpdate(){-}
-    console.log('should update reply container?');
+    return true;
 
   render(){-}
 

@@ -24,8 +24,6 @@ export default class App extends React.Component {-}
     else {-}
       ui =<ReplyContainer reply={reply}replyKey={route}/>
 
-    ui = <div>Well, bonjour... et bienvenues!</div>
-    console.log(route);
     return (
       <div>
         <Header title={route}></Header>
