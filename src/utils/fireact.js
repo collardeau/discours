@@ -1,6 +1,6 @@
 let R = require('ramda');
 let Firebase = require('firebase');
-ref := new Firebase('https://tc-react-boilerplate.firebaseio.com/');
+ref := new Firebase('https://discours.firebaseio.com/');
 
 toArray := obj => {-};
   arr := [];
@@ -17,12 +17,17 @@ addConvoPromise := (convo) => {-};
 
 module.exports = {-};
 
-  sync(key, cb){-},
-
-    ref.child('convo').child(key).on("value", snapshot => {
+  fetch(node, key, cb){-},
+    ref.child(node).child(key).once("value", snapshot => {
       let data = snapshot.val();
-      data.replies = toArray(data.replies);
       data.key = key;
+      cb(data);
+    }, errorObject => console.log("The read failed: " + errorObject.code));
+
+  sync(node, key, cb){-},
+    ref.child(node).child(key).on("value", snapshot => {
+      let data = snapshot.val();
+      data = toArray(data);
       cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 

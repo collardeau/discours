@@ -17,9 +17,9 @@ export default class ReplyContainer extends React.Component {-}
     return (
       <div> 
         <h2>{reply.content} - { reply.count}</h2>
-        <span>In response to: hello</span>
+        <span>In response to: 'hello'</span>
         <ReplyForm />
-        <Replies reply={reply}/>
+        <Replies reply={this.props.reply}/>
         <div>Vote credit</div>
       </div> 
     );

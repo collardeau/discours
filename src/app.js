@@ -35,21 +35,15 @@ route:= route => {-};
     boom({route});
   else{-}
     //cutSync();
-    //syncReply(route);
-    boom({-})
-      route: route,
-      reply: {-}
-        content: 'what is up',
-        count: 5,
-        replies: [
-          {content: "woke up early on a Sunday", count: 0},
-          {content: "really just nothing", count: 3},
-          {content: "nothing much", count: 26}
-        ]
+    fetchReply(route);
 
-syncReply:= key => {-}
-  fireUtils.sync(key, data => {-});
+fetchReply:= key => {-}
+  fireUtils.fetch('reply', key, data => {-});
     boom({reply: data, route: key});
+
+syncReplies:= key => {-}
+  fireUtils.sync('replies', key, data => {-});
+    boom({replies: data});
 
 cutSync:= () => {-}
   if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 
@@ -65,6 +59,7 @@ upvote:= fireUtils.upvote;
 boom.route = route;
 boom.reply = reply;
 boom.upvote = upvote;
+boom.syncReplies = syncReplies;
 
 hasher.init();
 hasher.initialized.add(boom.route);

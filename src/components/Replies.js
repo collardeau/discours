@@ -2,13 +2,20 @@ import React from 'react';
 import ReplyItem from './ReplyItem';
 import Filter from './Filter';
 
-export default class Content extends React.Component {-}
+export default class Replies extends React.Component {-}
+
+  componentWillMount(){-}
+    boom.syncReplies(this.props.reply.key);
+
+  componentWillReceiveProps(){-}
+    console.log('replies will receive props');
 
   render(){-}
 
-    let { content, replies } = this.props.reply;
+    //let { content, replies } = this.props.reply;
 
-    items := replies.map(item => <ReplyItem key={item.key} item={item} />);
+    //items := replies.map(item => <ReplyItem key={item.key} item={item} />);
+    items:= <li>Item</li>
 
     return (
       <div>
@@ -17,3 +24,8 @@ export default class Content extends React.Component {-}
       </div>
     );
 
+Replies.defaultProps = {-}
+  replies: ['loading...']
+
+Replies.propTypes = {-}
+  replies: React.PropTypes.array.isRequired

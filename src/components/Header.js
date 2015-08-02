@@ -12,7 +12,7 @@ export default class Header extends React.Component {-}
 
     return (
       <header>
-        <h1>Discour</h1>
+        <h1>Discours</h1>
         <button>Play/Pause</button>
       </header>
     );
