@@ -1,6 +1,4 @@
 import React from 'react';
-import Item from './Item';
-import actions from '../actions';
 
 export default class Content extends React.Component {-}
 

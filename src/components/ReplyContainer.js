@@ -1,5 +1,5 @@
 import React from 'react';
-import ReplyContent from './ReplyContent';
+import Replies from './Replies';
 import ReplyForm from './ReplyForm';
 
 export default class ReplyContainer extends React.Component {-}
@@ -12,10 +12,15 @@ export default class ReplyContainer extends React.Component {-}
 
   render(){-}
 
+    reply:= this.props.reply;
+
     return (
       <div> 
+        <h2>{reply.content} - { reply.count}</h2>
+        <span>In response to: hello</span>
         <ReplyForm />
-        <ReplyContent reply={this.props.reply}/>
+        <Replies reply={reply}/>
+        <div>Vote credit</div>
       </div> 
     );
 

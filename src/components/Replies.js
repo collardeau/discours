@@ -1,5 +1,6 @@
 import React from 'react';
 import ReplyItem from './ReplyItem';
+import Filter from './Filter';
 
 export default class Content extends React.Component {-}
 
@@ -11,7 +12,7 @@ export default class Content extends React.Component {-}
 
     return (
       <div>
-        <h3>{content}</h3>
+        <Filter />
         <ul>{items}</ul>
       </div>
     );

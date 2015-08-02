@@ -5,6 +5,7 @@ import App from './components/App';
 import fireUtils from './utils/fireact';
 
 boom:= window.boom = changes => {-} 
+  // doesn't work on nested objects 
   R.mapObjIndexed((val, key) => {-}, changes);
     boom.state[key] = val;
 
@@ -33,8 +34,18 @@ route:= route => {-};
   if(route==='bonjour') {-}
     boom({route});
   else{-}
-    cutSync();
-    syncReply(route);
+    //cutSync();
+    //syncReply(route);
+    boom({-})
+      route: route,
+      reply: {-}
+        content: 'what is up',
+        count: 5,
+        replies: [
+          {content: "woke up early on a Sunday", count: 0},
+          {content: "really just nothing", count: 3},
+          {content: "nothing much", count: 26}
+        ]
 
 syncReply:= key => {-}
   fireUtils.sync(key, data => {-});
@@ -58,6 +69,5 @@ boom.upvote = upvote;
 hasher.init();
 hasher.initialized.add(boom.route);
 hasher.changed.add(boom.route);
-
 
 

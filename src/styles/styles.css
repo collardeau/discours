@@ -13,6 +13,10 @@ h1 {
   padding: 0;
 }
 
+ul {
+  list-style: none;
+}
+
 #appContainer {
   //display: flex;
   //flex-flow: row wrap;

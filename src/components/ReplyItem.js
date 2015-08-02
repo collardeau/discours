@@ -1,5 +1,4 @@
 import React from 'react';
-import actions from '../actions';
 
 export default class Item extends React.Component {-}
 
@@ -10,8 +9,12 @@ export default class Item extends React.Component {-}
 
     let { item } = this.props;
 
+    styles:= {-}
+      li: {-}
+        height: 50,
+
     return (
-      <li>
+      <li style={styles.li}>
         <a href={'#' + item.key}>{ item.content }</a>
         - <b>{item.count}</b> votes
         <button onClick={this.handleVoteClick}>Up</button>
