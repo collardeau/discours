@@ -3,11 +3,11 @@ import React from 'react';
 export default class Item extends React.Component {-}
 
   handleVoteClick = () => {-}
-    boom.upvote(this.props.item.key, this.props.item.parentKey);
+    boom.upvote(this.props.reply.key, this.props.reply.parentKey);
 
   render(){-}
 
-    let { item } = this.props;
+    let { reply } = this.props;
 
     styles:= {-}
       li: {-}
@@ -15,8 +15,8 @@ export default class Item extends React.Component {-}
 
     return (
       <li style={styles.li}>
-        <a href={'#' + item.key}>{ item.content }</a>
-        - <b>{item.count}</b> votes
+        <a href={'#' + reply.key}>{ reply.content }</a>
+        - <b>{reply.count}</b> votes
         <button onClick={this.handleVoteClick}>Up</button>
       </li>
     );

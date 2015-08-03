@@ -9,9 +9,9 @@ export default class App extends React.Component {-}
 
   render(){-}
 
-    let {route, reply}= this.props.appState
+    let {route, reply, replies}= this.props.appState
 
-    ui:= <ReplyContainer reply={reply} />
+    ui:= <ReplyContainer reply={reply} replies={replies} />
     if(route === 'about') {-}
       ui = <div>Well, Bonjour... et bienvenue!</div>
 

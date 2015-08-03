@@ -9,7 +9,7 @@ boom:= window.boom = changes => {-}
   R.mapObjIndexed((val, key) => {-}, changes);
     boom.state[key] = val;
 
-state:= boom.state = {};
+state:= boom.state = {replies: []};
 boom.logs = [];
 boom.lastLog = "";
 
@@ -43,7 +43,7 @@ fetchReply:= key => {-}
 
 syncReplies:= key => {-}
   fireUtils.sync('replies', key, data => {-});
-    boom({replies: data});
+    boom({replies: boom.state.replies.concat([data])});
 
 cutSync:= () => {-}
   if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 

@@ -6,8 +6,8 @@ export default class ReplyContainer extends React.Component {-}
 
   shouldComponentUpdate(){-}
     if(!boom.lastLog.reply) {-}
-      console.log('not updating reply');
-      return false;
+      //console.log('not updating reply');
+      //return false;
     return true;
 
   render(){-}
@@ -16,10 +16,10 @@ export default class ReplyContainer extends React.Component {-}
 
     return (
       <div> 
-        <h2>{reply.content} - { reply.count}</h2>
-        <span>In response to: 'hello'</span>
+        <h2>{reply.content} - X count</h2>
+        <span>In response to: 'something'</span>
         <ReplyForm />
-        <Replies reply={this.props.reply}/>
+        <Replies replies={this.props.replies} parentKey={reply.key}/>
         <div>Vote credit</div>
       </div> 
     );
