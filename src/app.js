@@ -7,18 +7,24 @@ import fireUtils from './utils/fireact';
 app:= document.getElementById('app');
 render:= () => React.render(<App appState={boom.state}/>, app);
 
-log:= newLog => {-}
-  boom.logs.push(newLog);
-  boom.lastLog= newLog; console.log(newLog);
-  return newLog;
+change:= changes => { 
+  console.log('changes: ', changes);
+  switch(changes.type){-}
+    case "new_reply" :
+      boom.state.replies.set(changes.data.key, changes.data)  
+      break;
+    default:
+      R.mapObjIndexed((val, key) => {-}, changes.data);
+        boom.state[key] = val;
+}
 
-change:= changes => {-} 
-  R.mapObjIndexed((val, key) => {-}, changes);
-    boom.state[key] = val;
+log:= changes => {-}
+  //console.log(changes);
+  boom.logs.push(changes);
   return changes;
 
-boom:= window.boom = R.pipe(change, log, render); 
-  
+boom:= window.boom = R.pipe(log, change, render); 
+
 state:= boom.state = {-};
   replies: new Map()
 boom.logs = [];
@@ -26,25 +32,22 @@ boom.lastLog = "";
 
 route:= route => {-};
   if(route==='bonjour') {-}
-    changes:= {route}
+    changes:= {type: 'route', data: {route: route}}
     boom(changes);
   else{-}
     //cutSync();
-    fetchReply(route);
+    getTopic(route);
 
-fetchReply:= key => {-}
-  fireUtils.fetch('reply', key, data => {-});
-    changes:= {reply: data, route: key};
+getTopic:= key => {-}
+  fireUtils.fetch('topic', key, data => {-});
+    changes:= {type: 'new_topic', data: {topic: data, route: key}};
     boom(changes);
 
 syncReplies:= key => {-}
   fireUtils.sync('replies', key, data => {-});
-    console.log(data);
-    changes:= {-}
-      replies: boom.state.replies.set(data.key, data)
-  
+    changes:= {type: 'new_reply', data: data };
     boom(changes);
-
+  
 cutSync:= () => {-}
   if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 
 

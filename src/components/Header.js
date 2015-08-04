@@ -4,7 +4,7 @@ export default class Header extends React.Component {-}
 
   shouldComponentUpdate(newProps){-}
     if(!boom.lastLog.route) {-}
-      console.log('not updating header');
+      //console.log('not updating header');
       return false;
     return true;
 

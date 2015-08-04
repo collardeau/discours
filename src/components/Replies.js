@@ -7,9 +7,6 @@ export default class Replies extends React.Component {-}
   componentDidMount(){-}
     boom.syncReplies(this.props.parentKey);
 
-  componentWillUpdate(){-}
-    console.log('will update'); 
-
   render(){-}
     replies:= () => {-}
       res:= [];

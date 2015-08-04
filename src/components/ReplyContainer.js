@@ -5,21 +5,21 @@ import ReplyForm from './ReplyForm';
 export default class ReplyContainer extends React.Component {-}
 
   shouldComponentUpdate(){-}
-    if(!boom.lastLog.reply) {-}
+    if(!boom.lastLog.topic) {-}
       //console.log('not updating reply');
       //return false;
     return true;
 
   render(){-}
 
-    reply:= this.props.reply;
+    topic:= this.props.topic;
 
     return (
       <div> 
-        <h2>{reply.content} - X count</h2>
+        <h2>{topic.content} - X count</h2>
         <span>In response to: 'something'</span>
         <ReplyForm />
-        <Replies replies={this.props.replies} parentKey={reply.key}/>
+        <Replies replies={this.props.replies} parentKey={topic.key}/>
         <div>Vote credit</div>
       </div> 
     );
