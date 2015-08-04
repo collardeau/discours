@@ -7,16 +7,18 @@ import fireUtils from './utils/fireact';
 app:= document.getElementById('app');
 render:= () => React.render(<App appState={boom.state}/>, app);
 
-change:= changes => { 
+change:= changes => {-}
   console.log('changes: ', changes);
-  switch(changes.type){-}
+  switch(changes.type) {-}
     case "new_reply" :
+      boom.state.replies.set(changes.data.key, changes.data)  
+      break;
+    case "update_vote" :
       boom.state.replies.set(changes.data.key, changes.data)  
       break;
     default:
       R.mapObjIndexed((val, key) => {-}, changes.data);
         boom.state[key] = val;
-}
 
 log:= changes => {-}
   //console.log(changes);
@@ -30,6 +32,11 @@ state:= boom.state = {-};
 boom.logs = [];
 boom.lastLog = "";
 
+getTopic:= key => {-}
+  fireUtils.fetch('topic', key, data => {-});
+    changes:= {type: 'new_topic', data: {topic: data, route: key}};
+    boom(changes);
+
 route:= route => {-};
   if(route==='bonjour') {-}
     changes:= {type: 'route', data: {route: route}}
@@ -38,15 +45,17 @@ route:= route => {-};
     //cutSync();
     getTopic(route);
 
-getTopic:= key => {-}
-  fireUtils.fetch('topic', key, data => {-});
-    changes:= {type: 'new_topic', data: {topic: data, route: key}};
-    boom(changes);
+onReplyAdded:= data => {-}
+  changes:= {type: 'new_reply', data: data };
+  boom(changes);
 
+onReplyChanged:= data => {
+  changes:= {type: 'update_vote', data:data};
+  boom(changes);
+}
+  
 syncReplies:= key => {-}
-  fireUtils.sync('replies', key, data => {-});
-    changes:= {type: 'new_reply', data: data };
-    boom(changes);
+  fireUtils.sync('replies', key, onReplyAdded, onReplyChanged);
   
 cutSync:= () => {-}
   if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 

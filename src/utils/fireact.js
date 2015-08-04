@@ -25,21 +25,18 @@ module.exports = {-};
       cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-  sync(node, key, cb){-},
-    newRef:= new Firebase('https://discours-replies.firebaseio.com/' + key);
-    newRef.orderByChild("count").on("child_added", snapshot => {
+  sync(node, key, cbOnAdd, cbOnChange){-},
+    repliesRef.child(key).orderByChild("count").on("child_added", snapshot => {
       let data = snapshot.val();
       data.key = snapshot.key();
-      cb(data);
+      cbOnAdd(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-    newRef.on("child_changed", snapshot => {
+    repliesRef.child(key).on("child_changed", snapshot => {
       let data = snapshot.val();
-      //console.log(data);
-      //re-order...
-      //data = toArray(data);
-      //cb(data);
-    }, errorObject => console.log("The read failed: " + errorObject.code));
+      data.key = snapshot.key();
+      cbOnChange(data);
+    });
 
 
   reply(reply){-},
@@ -51,7 +48,7 @@ module.exports = {-};
     .child(key)
     .child('count')
     .transaction( current_value => {-});
-      return (current_value || 0) + 1;
+      return (current_value || 0) - 1;
 
   unsubscribe(key){-}
     ref.child('convo').child(key).off('value');
