@@ -12,12 +12,13 @@ export default class App extends React.Component {-}
     let {route, reply, replies}= this.props.appState
 
     ui:= <ReplyContainer reply={reply} replies={replies} />
-    if(route === 'about') {-}
+    if(route === 'bonjour') {-}
       ui = <div>Well, Bonjour... et bienvenue!</div>
 
     return (
       <div>
         <Header />
+        {route}
        { ui }
       </div>
     );

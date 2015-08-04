@@ -29,13 +29,13 @@ module.exports = {-};
     newRef:= new Firebase('https://discours-replies.firebaseio.com/' + key);
     newRef.orderByChild("count").on("child_added", snapshot => {
       let data = snapshot.val();
-      console.log(data);
+      data.key = snapshot.key();
       cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
     newRef.on("child_changed", snapshot => {
       let data = snapshot.val();
-      console.log(data);
+      //console.log(data);
       //re-order...
       //data = toArray(data);
       //cb(data);

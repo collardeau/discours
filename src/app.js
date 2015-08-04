@@ -4,46 +4,46 @@ import hasher from 'hasher';
 import App from './components/App';
 import fireUtils from './utils/fireact';
 
-boom:= window.boom = changes => {-} 
-  // doesn't work on nested objects 
-  R.mapObjIndexed((val, key) => {-}, changes);
-    boom.state[key] = val;
-
-state:= boom.state = {replies: []};
-boom.logs = [];
-boom.lastLog = "";
-
 app:= document.getElementById('app');
 render:= () => React.render(<App appState={boom.state}/>, app);
-
-findChanges:= obsChanges => {-}
-  return obsChanges.reduce((prev, next) => {-},{});
-    prev[next.name] = next.object[next.name];
-    return prev;
 
 log:= newLog => {-}
   boom.logs.push(newLog);
   boom.lastLog= newLog; console.log(newLog);
   return newLog;
 
-change:= R.pipe(findChanges, log, render)
+change:= changes => {-} 
+  R.mapObjIndexed((val, key) => {-}, changes);
+    boom.state[key] = val;
+  return changes;
 
-Object.observe(state, change);
+boom:= window.boom = R.pipe(change, log, render); 
+  
+state:= boom.state = {-};
+  replies: new Map()
+boom.logs = [];
+boom.lastLog = "";
 
 route:= route => {-};
   if(route==='bonjour') {-}
-    boom({route});
+    changes:= {route}
+    boom(changes);
   else{-}
     //cutSync();
     fetchReply(route);
 
 fetchReply:= key => {-}
   fireUtils.fetch('reply', key, data => {-});
-    boom({reply: data, route: key});
+    changes:= {reply: data, route: key};
+    boom(changes);
 
 syncReplies:= key => {-}
   fireUtils.sync('replies', key, data => {-});
-    boom({replies: boom.state.replies.concat([data])});
+    console.log(data);
+    changes:= {-}
+      replies: boom.state.replies.set(data.key, data)
+  
+    boom(changes);
 
 cutSync:= () => {-}
   if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 

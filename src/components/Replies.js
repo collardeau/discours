@@ -4,22 +4,24 @@ import Filter from './Filter';
 
 export default class Replies extends React.Component {-}
 
-  componentWillMount(){-}
+  componentDidMount(){-}
     boom.syncReplies(this.props.parentKey);
 
-  render(){-}
+  componentWillUpdate(){-}
+    console.log('will update'); 
 
-    replies := this.props.replies.map(reply => <ReplyItem reply={reply} key={reply.key} />);
+  render(){-}
+    replies:= () => {-}
+      res:= [];
+      for (var reply of this.props.replies.values()) {-}
+        res.push(<ReplyItem reply={reply} key={reply.key} />);
+      return res;
 
     return (
       <div>
         <Filter />
-        <ul>{replies}</ul>
+        <ul>{replies()}</ul>
       </div>
     );
 
-Replies.defaultProps = {-}
-  replies: []
 
-Replies.propTypes = {-}
-  replies: React.PropTypes.array.isRequired
