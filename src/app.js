@@ -7,7 +7,7 @@ import fireUtils from './utils/fireact';
 app:= document.getElementById('app');
 render:= () => React.render(<App appState={boom.state}/>, app);
 
-change:= changes => {-}
+change:= changes => {-};
   console.log('changes: ', changes);
   switch(changes.type) {-}
     case "new_reply" :
@@ -20,7 +20,7 @@ change:= changes => {-}
       R.mapObjIndexed((val, key) => {-}, changes.data);
         boom.state[key] = val;
 
-log:= changes => {-}
+log:= changes => {-};
   //console.log(changes);
   boom.logs.push(changes);
   return changes;
@@ -28,37 +28,45 @@ log:= changes => {-}
 boom:= window.boom = R.pipe(log, change, render); 
 
 state:= boom.state = {-};
+  topic: { content: 'loading'},
   replies: new Map()
 boom.logs = [];
 boom.lastLog = "";
 
-getTopic:= key => {-}
+getTopic:= key => {-};
   fireUtils.fetch('topic', key, data => {-});
-    changes:= {type: 'new_topic', data: {topic: data, route: key}};
-    boom(changes);
+    boom({-});
+      type: 'new_topic',
+      data: { topic: data, route: key}
+
+onReplyAdded:= data => {-};
+  boom({-});
+    type: 'new_reply',
+    data: data
+
+onReplyChanged:= data => {-};
+  boom({-});
+    type: 'update_vote',
+    data: data
+
+unSync:= () => {-};
+  if(boom.state.topic.content !== 'loading') {-}
+    boom.state.replies.clear();
+    console.log('unsynching');
+    fireUtils.unsync(boom.state.route); 
+
+syncReplies:= key=>{-}
+  fireUtils.sync(key, onReplyAdded, onReplyChanged)
 
 route:= route => {-};
   if(route==='bonjour') {-}
-    changes:= {type: 'route', data: {route: route}}
-    boom(changes);
+    boom({-});
+      type: 'route', 
+      data: {route}
   else{-}
-    //cutSync();
+    unSync();
     getTopic(route);
-
-onReplyAdded:= data => {-}
-  changes:= {type: 'new_reply', data: data };
-  boom(changes);
-
-onReplyChanged:= data => {
-  changes:= {type: 'update_vote', data:data};
-  boom(changes);
-}
-  
-syncReplies:= key => {-}
-  fireUtils.sync('replies', key, onReplyAdded, onReplyChanged);
-  
-cutSync:= () => {-}
-  if(boom.state.reply) fireUtils.unsubscribe(boom.state.reply.key); 
+    syncReplies(route);
 
 reply:= reply => {-};
   fireUtils.reply({-})
@@ -71,10 +79,11 @@ upvote:= fireUtils.upvote;
 boom.route = route;
 boom.reply = reply;
 boom.upvote = upvote;
-boom.syncReplies = syncReplies;
+//boom.syncReplies = syncReplies;
 
 hasher.init();
 hasher.initialized.add(boom.route);
 hasher.changed.add(boom.route);
+
 
 

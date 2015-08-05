@@ -4,15 +4,9 @@ import ReplyForm from './ReplyForm';
 
 export default class ReplyContainer extends React.Component {-}
 
-  shouldComponentUpdate(){-}
-    if(!boom.lastLog.topic) {-}
-      //console.log('not updating reply');
-      //return false;
-    return true;
-
   render(){-}
 
-    topic:= this.props.topic;
+    topic:= this.props.topic || { content: 'loading'};
 
     return (
       <div> 

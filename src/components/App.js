@@ -3,7 +3,7 @@ import normalize from 'normalize.css/normalize.css';
 import css from '../styles/styles.css';
 import ReplyContainer from './ReplyContainer'
 import Header from './Header';
-//import Nav from './Nav';
+import Nav from './Nav';
 
 export default class App extends React.Component {-}
 
@@ -18,6 +18,7 @@ export default class App extends React.Component {-}
     return (
       <div>
         <Header />
+        <Nav />
         {route}
        { ui }
       </div>

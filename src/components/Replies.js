@@ -5,7 +5,7 @@ import Filter from './Filter';
 export default class Replies extends React.Component {-}
 
   componentDidMount(){-}
-    boom.syncReplies(this.props.parentKey);
+    //boom.syncReplies(this.props.parentKey);
 
   render(){-}
     replies:= () => {-}
