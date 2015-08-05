@@ -16,7 +16,7 @@ export default class Item extends React.Component {-}
     return (
       <li style={styles.li}>
         <a href={'#' + reply.key}>{ reply.content }</a>
-        - <b>{reply.count}</b> votes
+        - <b>{Math.abs(reply.count)}</b> votes
         <button onClick={this.handleVoteClick}>Up</button>
       </li>
     );

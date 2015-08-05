@@ -51,9 +51,9 @@ onReplyChanged:= data => {-};
 
 unSync:= () => {-};
   if(boom.state.topic.content !== 'loading') {-}
-    boom.state.replies.clear();
     console.log('unsynching');
     fireUtils.unsync(boom.state.route); 
+    boom.state.replies.clear();
 
 syncReplies:= key=>{-};
   unSync();
@@ -79,10 +79,6 @@ reply:= reply => {-};
     parentKey: boom.state.route 
 
 upvote:= fireUtils.upvote;
-
-filterNew:= () => {-}
-  //unSync();
-  console.log('filter new action');
 
 boom.route = route;
 boom.reply = reply;
