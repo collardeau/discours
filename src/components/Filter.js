@@ -2,6 +2,9 @@ import React from 'react';
 
 export default class Content extends React.Component {-}
 
+  handleNew(){-}
+    boom.syncNewReplies(boom.state.topic.key);
+
   render(){-}
 
     styles:= {-}
@@ -10,10 +13,11 @@ export default class Content extends React.Component {-}
       li: {-}
         marginRight: 5
 
-
     return (
       <ul style={styles.ul}>
-        <li style={styles.li}>By New / </li>
+        <li style={styles.li} onClick={this.handleNew}>
+          By New / 
+        </li>
         <li> By Vote </li>
       </ul>
     );

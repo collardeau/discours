@@ -55,8 +55,13 @@ unSync:= () => {-};
     console.log('unsynching');
     fireUtils.unsync(boom.state.route); 
 
-syncReplies:= key=>{-}
-  fireUtils.sync(key, onReplyAdded, onReplyChanged)
+syncReplies:= key=>{-};
+  unSync();
+  fireUtils.syncByCount(key, onReplyAdded, onReplyChanged)
+
+syncNewReplies:= key => {-};
+  unSync();
+  fireUtils.syncByDate(key, onReplyAdded, onReplyChanged)
 
 route:= route => {-};
   if(route==='bonjour') {-}
@@ -64,7 +69,6 @@ route:= route => {-};
       type: 'route', 
       data: {route}
   else{-}
-    unSync();
     getTopic(route);
     syncReplies(route);
 
@@ -76,10 +80,15 @@ reply:= reply => {-};
 
 upvote:= fireUtils.upvote;
 
+filterNew:= () => {-}
+  //unSync();
+  console.log('filter new action');
+
 boom.route = route;
 boom.reply = reply;
 boom.upvote = upvote;
-//boom.syncReplies = syncReplies;
+boom.syncNewReplies = syncNewReplies; 
+boom.syncReplies = syncReplies;
 
 hasher.init();
 hasher.initialized.add(boom.route);

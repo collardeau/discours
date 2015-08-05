@@ -6,14 +6,15 @@ export default class ReplyContainer extends React.Component {-}
 
   render(){-}
 
-    topic:= this.props.topic || { content: 'loading'};
+    topic:= this.props.topic;
+    console.log(topic.key);
 
     return (
       <div> 
         <h2>{topic.content} - X count</h2>
         <span>In response to: 'something'</span>
         <ReplyForm />
-        <Replies replies={this.props.replies} parentKey={topic.key}/>
+        <Replies replies={this.props.replies} topicKey={topic.key}/>
         <div>Vote credit</div>
       </div> 
     );

@@ -12,18 +12,28 @@ addChildPromise := data  => {-};
 module.exports = {-};
 
   fetch(node, key, cb){-},
-    console.log(node, key);
     ref.child(node).child(key).once("value", snapshot => {
       let data = snapshot.val();
       data.key = key;
       cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-  sync(key, cbOnAdd, cbOnChange){-},
-
-    console.log('syncing new data');
+  syncByCount(key, cbOnAdd, cbOnChange){-},
 
     repliesRef.child(key).orderByChild("count").on("child_added", snapshot => {
+      data:= snapshot.val();
+      data.key = snapshot.key();
+      cbOnAdd(data);
+    }, errorObject => console.log("The read failed: " + errorObject.code));
+
+    repliesRef.child(key).on("child_changed", snapshot => {-});
+      data:= snapshot.val();
+      data.key = snapshot.key();
+      cbOnChange(data);
+  
+  syncByDate(key, cbOnAdd, cbOnChange){-},
+
+    repliesRef.child(key).on("child_added", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
       cbOnAdd(data);
