@@ -53,6 +53,7 @@ module.exports = {-};
     repliesRef.child(key).off('child_changed');
 
   reply(reply){-},
+    console.log(reply);
     addChildPromise(reply).then(newKey => {-});
       repliesRef.child(reply.parentKey).child(newKey).set(reply);
 

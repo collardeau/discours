@@ -29,9 +29,14 @@ export function loadReplies(topicId) {-}
 
     fireUtils.syncOnChange(topicId, data => {-});
       dispatch({-});
-        type: 'REPLY_CHANGED',
+        type: 'REPLY_CHANGED', // upvote
         reply: data
 
+export function reply(reply, parentKey){-}
+  fireUtils.reply({-})
+      content: reply,
+      count: 0,
+      parentKey: parentKey
 
 
 

@@ -22,7 +22,7 @@ export function replies(state=I.OrderedMap({}), action){-}
     case 'REPLY_ADDED':
     case 'REPLY_CHANGED':
       return state.set(action.reply.key, action.reply)
-    default:
+   default:
       return state;
 
 

@@ -1,18 +1,20 @@
-import React from 'react';
+import React, {findDOMNode, Component} from 'react';
+import { reply } from '../actions';
 
-export default class Content extends React.Component {-}
+export default class Content extends Component {-}
 
-  handleSubmit = () => {-}
-    reply := this.refs.reply.getDOMNode().value;
-    boom.reply(reply);
-    this.refs.reply.getDOMNode().value = "";
+  handleClick = () => {-}
+    node:= findDOMNode(this.refs.reply);
+    text:= node.value.trim();
+    reply(text, this.props.topicKey);
+    node.value = "";
 
   render(){-}
 
     return (
       <div>
         <input ref='reply' type='text' />
-        <button onClick={this.handleSubmit}>Submit</button>
+        <button onClick={this.handleClick}>Submit</button>
       </div>
     );
 
