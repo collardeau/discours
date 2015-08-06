@@ -55,10 +55,10 @@ module.exports = {-};
   reply(reply){-},
     console.log(reply);
     addChildPromise(reply).then(newKey => {-});
-      repliesRef.child(reply.parentKey).child(newKey).set(reply);
+      repliesRef.child(reply.topicKey).child(newKey).set(reply);
 
-  upvote(key, parentKey){-}
-    repliesRef.child(parentKey)
+  upvote(key, topicKey){-}
+    repliesRef.child(topicKey)
     .child(key)
     .child('count')
     .transaction( current_value => {-});

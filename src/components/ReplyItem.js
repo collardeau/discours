@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
+import { upvote } from '../actions';
 
-export default class Item extends React.Component {-}
+export default class Item extends Component {-}
 
-  handleVoteClick = () => {-}
-    boom.upvote(this.props.reply.key, this.props.reply.parentKey);
+  handleButtonClick = () => {-}
+    let { key, topicKey } = this.props.reply;
+    upvote(key, topicKey);
 
   render(){-}
 
@@ -17,7 +19,7 @@ export default class Item extends React.Component {-}
       <li style={styles.li}>
         <a href={'#' + reply.key}>{ reply.content }</a>
         - <b>{Math.abs(reply.count)}</b> votes
-        <button onClick={this.handleVoteClick}>Up</button>
+        <button onClick={this.handleButtonClick}>Up</button>
       </li>
     );
 
