@@ -18,29 +18,21 @@ module.exports = {-};
       cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-  syncByCount(key, cbOnAdd, cbOnChange){-},
-
-    repliesRef.child(key).orderByChild("count").on("child_added", snapshot => {
-      data:= snapshot.val();
-      data.key = snapshot.key();
-      cbOnAdd(data);
-    }, errorObject => console.log("The read failed: " + errorObject.code));
-
-    repliesRef.child(key).on("child_changed", snapshot => {-});
-      data:= snapshot.val();
-      data.key = snapshot.key();
-      cbOnChange(data);
-  
   sync(key, cb){-},
-
     repliesRef.child(key).on("child_added", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
       cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-  syncOnChange(key, cb){-},
+  syncByCount(key, cb){-},
+    repliesRef.child(key).orderByChild("count").on("child_added", snapshot => {
+      data:= snapshot.val();
+      data.key = snapshot.key();
+      cb(data);
+    }, errorObject => console.log("The read failed: " + errorObject.code));
 
+  syncOnChange(key, cb){-},
     repliesRef.child(key).on("child_changed", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
@@ -48,12 +40,11 @@ module.exports = {-};
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
   unsync(key){-},
-    console.log(key);
+    console.log('unsynching.... ', key);
     repliesRef.child(key).off('child_added');
     repliesRef.child(key).off('child_changed');
 
   reply(reply){-},
-    console.log(reply);
     addChildPromise(reply).then(newKey => {-});
       repliesRef.child(reply.topicKey).child(newKey).set(reply);
 

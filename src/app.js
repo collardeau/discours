@@ -21,14 +21,14 @@ let render= () => React.render(
 );
 
 let unsubscribe= store.subscribe(() => {
-  console.log(store.getState());
+  //console.log(store.getState());
   render();
 });
 
 handleRoute:= route => {-}
   store.dispatch(changeRoute(route));
   store.dispatch(loadTopic(route));
-  store.dispatch(loadReplies(route));
+  store.dispatch(loadReplies(route, 'new'));
 
 //unsubscribe();
 

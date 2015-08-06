@@ -3,7 +3,6 @@ import R from 'ramda';
 import I from 'immutable';
 
 export function route(state='root', action){-}
-  console.log('reducers called', action)
   switch (action.type){-}
     case 'CHANGE_ROUTE':
       return action.route
@@ -19,6 +18,8 @@ export function topic(state={}, action){-}
 
 export function replies(state=I.OrderedMap({}), action){-}
   switch (action.type){-}
+    case 'LOAD_REPLIES_REQUEST':
+      return state.clear();
     case 'REPLY_ADDED':
     case 'REPLY_CHANGED':
       return state.set(action.reply.key, action.reply)
