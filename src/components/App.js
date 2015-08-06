@@ -1,26 +1,25 @@
-import React from 'react';
+import React, { Component } from 'react';
 import normalize from 'normalize.css/normalize.css';
 import css from '../styles/styles.css';
 import ReplyContainer from './ReplyContainer'
 import Header from './Header';
 import Nav from './Nav';
 
-export default class App extends React.Component {-}
+export default class App extends Component {-}
 
   render(){-}
 
-    //console.log(this.props);
+    let {route, topic, replies}= this.props.appState
 
-    //let {route, topic, replies}= this.props.appState
-
-    //ui:= <ReplyContainer topic={topic} replies={replies} />
-    ui:= <div>Well, Bonjour... et bienvenue!</div>
+    ui:= <ReplyContainer topic={topic} replies={replies} />;
+    if ( route === 'about') {-}
+      ui:= <div>Well, Bonjour... et bienvenue!</div>;
 
     return (
       <div>
-        { this.props.appState.route }
-        { this.props.appState.topic.content }
-       { ui }
+        <Header />
+        <Nav />
+        { ui }
       </div>
     );
 

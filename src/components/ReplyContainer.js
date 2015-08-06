@@ -7,7 +7,6 @@ export default class ReplyContainer extends React.Component {-}
   render(){-}
 
     topic:= this.props.topic;
-    console.log(topic.key);
 
     return (
       <div> 
