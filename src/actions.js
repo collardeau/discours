@@ -1,19 +1,12 @@
 import fireUtils from './utils/fireact';
 
 export function changeRoute(route){
-  console.log('change route action');
   return { type: 'CHANGE_ROUTE', route }
 }
 
 export function loadTopic(topicId) {
   // Interpreted by the thunk middleware:
   return function (dispatch, getState) {
-    //let { posts } = getState();
-    //if (posts[userId]) {
-      // There is cached data! Don't do anything.
-      //return;
-    //}
-
     dispatch({
       type: 'LOAD_TOPIC_REQUEST',
       topicId 
@@ -24,10 +17,32 @@ export function loadTopic(topicId) {
         type: 'LOAD_TOPIC_SUCCESS',
         topic: data 
       });
-     
     });
-
   }
 }
+
+export function loadReplies(topicId) {
+  return function (dispatch, getState) {
+    dispatch({
+      type: 'LOAD_REPLIES_REQUEST',
+      topicId 
+    });
+
+    fireUtils.sync(topicId, data => {
+      dispatch({
+        type: 'REPLY_ADDED',
+        replies: data 
+      });
+    });
+
+    fireUtils.syncOnChange(topicId, data => {
+      dispatch({
+        type: 'REPLY_CHANGED' 
+      })
+    })
+  }
+}
+
+
 
 

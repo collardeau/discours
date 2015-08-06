@@ -31,18 +31,21 @@ module.exports = {-};
       data.key = snapshot.key();
       cbOnChange(data);
   
-  syncByDate(key, cbOnAdd, cbOnChange){-},
+  sync(key, cb){-},
 
     repliesRef.child(key).on("child_added", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
-      cbOnAdd(data);
+      cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-    repliesRef.child(key).on("child_changed", snapshot => {-});
+  syncOnChange(key, cb){-},
+
+    repliesRef.child(key).on("child_changed", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
-      cbOnChange(data);
+      cb(data);
+    }, errorObject => console.log("The read failed: " + errorObject.code));
 
   unsync(key){-},
     console.log(key);
