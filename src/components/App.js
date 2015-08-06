@@ -9,17 +9,17 @@ export default class App extends React.Component {-}
 
   render(){-}
 
-    let {route, topic, replies}= this.props.appState
+    //console.log(this.props);
 
-    ui:= <ReplyContainer topic={topic} replies={replies} />
-    if(route === 'bonjour') {-}
-      ui = <div>Well, Bonjour... et bienvenue!</div>
+    //let {route, topic, replies}= this.props.appState
+
+    //ui:= <ReplyContainer topic={topic} replies={replies} />
+    ui:= <div>Well, Bonjour... et bienvenue!</div>
 
     return (
       <div>
-        <Header />
-        <Nav />
-        {route}
+        { this.props.appState.route }
+        { this.props.appState.topic.content }
        { ui }
       </div>
     );
