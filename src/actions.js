@@ -31,13 +31,14 @@ export function loadReplies(topicId) {
     fireUtils.sync(topicId, data => {
       dispatch({
         type: 'REPLY_ADDED',
-        replies: data 
+        reply: data 
       });
     });
 
     fireUtils.syncOnChange(topicId, data => {
       dispatch({
-        type: 'REPLY_CHANGED' 
+        type: 'REPLY_CHANGED',
+        reply: data
       })
     })
   }
