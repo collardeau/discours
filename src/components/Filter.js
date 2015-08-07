@@ -4,14 +4,13 @@ import { loadReplies } from '../actions';
 export default class Content extends React.Component {-}
 
   handleNew = () => {-}
-    console.log('order by newest');
-    // not working
-    loadReplies(this.props.topicKey, 'new');
+    console.log(this.props);
+    window.location.hash="#new/" + this.props.topicKey;
 
   handleCount = () => {-}
-    console.log('order by most popular ');
-    // not working
-    loadReplies(this.props.topicKey, 'count');
+    console.log(this.props);
+    window.location.hash="#popular/" + this.props.topicKey;
+
   render(){-}
 
     styles:= {-}

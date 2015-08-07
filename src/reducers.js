@@ -2,7 +2,8 @@
 import R from 'ramda';
 import I from 'immutable';
 
-export function route(state='root', action){-}
+export function route(state='#home', action){-}
+  console.log(action);
   switch (action.type){-}
     case 'CHANGE_ROUTE':
       return action.route

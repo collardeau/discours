@@ -6,7 +6,7 @@ export default class App extends React.Component {-}
 
     return (
       <ul>
-        <li><a href="#root">Discours</a></li>
+        <li><a href="#new/root">Discours</a></li>
         <li><a href="#about">About</a></li>
       </ul>
     );

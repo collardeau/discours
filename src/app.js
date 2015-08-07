@@ -27,8 +27,6 @@ let unsubscribe= store.subscribe(() => {
 
 handleRoute:= route => {-}
   store.dispatch(changeRoute(route));
-  store.dispatch(loadTopic(route));
-  store.dispatch(loadReplies(route, 'new'));
 
 //unsubscribe();
 

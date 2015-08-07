@@ -16,7 +16,7 @@ export default class Replies extends React.Component {-}
 
     return (
       <div>
-        <Filter {...this.props.topicKey}/>
+        <Filter topicKey={this.props.topicKey}/>
         <ul>{replies()}</ul>
       </div>
     );

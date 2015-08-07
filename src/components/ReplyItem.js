@@ -17,7 +17,7 @@ export default class Item extends Component {-}
 
     return (
       <li style={styles.li}>
-        <a href={'#' + reply.key}>{ reply.content }</a>
+        <a href={'#new/' + reply.key}>{ reply.content }</a>
         - <b>{Math.abs(reply.count)}</b> votes
         <button onClick={this.handleButtonClick}>Up</button>
       </li>

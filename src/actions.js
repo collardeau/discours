@@ -1,21 +1,33 @@
 import fireUtils from './utils/fireact';
+import hasher from 'hasher';
 
 export function changeRoute(route) {-}
 
-  return function (dispatch, getState) {-}
+  return (dispatch, getState) => {-}
+
+    params:= route.split('/');
+    nextRoute:= params.shift();
 
     dispatch({-});
       type: 'CHANGE_ROUTE', 
-      route 
+      route: nextRoute
 
     if(getState().replies.size){-}
       fireUtils.unsync(getState().topic.key);
       dispatch({-});
         type: 'UNSYNC_REPLIES',
 
+    if(nextRoute === 'new'){-}
+      dispatch(loadTopic(params[0]));
+      dispatch(loadReplies(params[0], 'new'));
+
+    if(nextRoute === 'popular'){-}
+      dispatch(loadTopic(params[0]));
+      dispatch(loadReplies(params[0], 'count'));
+
 export function loadTopic(topicId) {-}
 
-  return function (dispatch, getState) {-}
+  return (dispatch, getState) => {-}
     dispatch({-});
       type: 'LOAD_TOPIC_REQUEST',
       topicId 
@@ -27,7 +39,7 @@ export function loadTopic(topicId) {-}
 
 export function loadReplies(topicKey, order) {-}
 
-  return function (dispatch, getState) {-}
+  return (dispatch, getState) => {-}
 
     dispatch({-});
       type: 'LOAD_REPLIES_REQUEST',
