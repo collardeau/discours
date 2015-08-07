@@ -6,7 +6,12 @@ export default class Content extends Component {-}
   handleClick = () => {-}
     node:= findDOMNode(this.refs.reply);
     text:= node.value.trim();
-    reply(text, this.props.topicKey);
+    reply({-});
+      content: text,
+      count: 0,
+      topic: {-}
+        key: this.props.topic.key,
+        content: this.props.topic.content
     node.value = "";
 
   render(){-}
