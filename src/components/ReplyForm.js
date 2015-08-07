@@ -10,8 +10,8 @@ export default class Content extends Component {-}
       content: text,
       count: 0,
       topic: {-}
-        key: this.props.topic.key,
-        content: this.props.topic.content
+        key: this.props.topic.get('key'),
+        content: this.props.topic.get('content')
     node.value = "";
 
   render(){-}

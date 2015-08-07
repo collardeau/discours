@@ -43,11 +43,11 @@ module.exports = {-};
     buildPath(loc).off();
 
   push(loc, data) {-},
-      newRef:= buildPath(loc).push(data);
-      if (newRef) {-}
-        return Promise.resolve( newRef.key());
-      else {-}
-          return Promise.reject('The write failed');
+    newRef:= buildPath(loc).push(data);
+    if (newRef) {-}
+      return Promise.resolve( newRef.key());
+    else {-}
+        return Promise.reject('The write failed');
 
   set(loc, data) {-},
     buildPath(loc).set(data);  

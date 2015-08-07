@@ -35,13 +35,4 @@ hasher.initialized.add(handleRoute);
 hasher.changed.add(handleRoute);
 
 
-//  <Provider store={store}>
-//    {() => <App />}
-//  </Provider>,
-//  rootElement
-//);
-
-
-
-
 
