@@ -3,6 +3,10 @@ import { upvote } from '../actions';
 
 export default class Item extends Component {-}
 
+  shouldComponentUpdate(nextProps){-}
+    //console.log(nextProps.reply !== this.props.reply )
+    return nextProps.reply !== this.props.reply;
+
   handleButtonClick = () => {-}
     let { key, topicKey } = this.props.reply;
     upvote(key, topicKey);
