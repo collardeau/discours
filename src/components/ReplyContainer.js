@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Replies from './Replies';
 import ReplyForm from './ReplyForm';
+import Topic from './Topic';
 
-export default class ReplyContainer extends React.Component {-}
+export default class ReplyContainer extends Component {-}
 
   render(){-}
 
@@ -10,8 +11,7 @@ export default class ReplyContainer extends React.Component {-}
 
     return (
       <div> 
-        <h2>{topic.content} - X count</h2>
-        <span>In response to: 'something'</span>
+        <Topic topic={topic}/>
         <ReplyForm topicKey={topic.key}/>
         <Replies replies={this.props.replies} topicKey={topic.key}/>
         <div>Vote credit</div>

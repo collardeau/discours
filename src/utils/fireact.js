@@ -3,18 +3,17 @@ let Firebase = require('firebase');
 ref := new Firebase('https://discours.firebaseio.com/');
 repliesRef:= new Firebase('https://discours-replies.firebaseio.com/');
 
-addChildPromise := data  => {-};
-  return new Promise((resolve, reject) => {-});
-    newRef := ref.child('topic').push(data);
-    if (newRef) { resolve( newRef.key()); }
-    else { reject('The write failed'); }
+buildPath:= path => {-}
+  p:= path.slice(); 
+  return p.reduce((prev, next) => {-}, ref);
+      return prev.child(next);
 
 module.exports = {-};
 
-  fetch(node, key, cb){-},
-    ref.child(node).child(key).once("value", snapshot => {
+  fetch(loc, cb){-},
+    buildPath(loc).once("value", snapshot => {
       let data = snapshot.val();
-      data.key = key;
+      data.key = snapshot.key();
       cb(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
@@ -43,9 +42,17 @@ module.exports = {-};
     repliesRef.child(key).orderByChild('count').off();
     repliesRef.child(key).off();
 
-  reply(reply){-},
-    addChildPromise(reply).then(newKey => {-});
-      repliesRef.child(reply.topicKey).child(newKey).set(reply);
+  pushPromise(loc, data) {-},
+    return new Promise((resolve, reject) => {-});
+      newRef:= buildPath(loc).push(data);
+      if (newRef) { resolve( newRef.key()); }
+      else { reject('The write failed'); }
+
+  set(loc, data) {-},
+    console.log(loc);
+    console.log(buildPath(loc));
+    buildPath(loc).set(data);  
+
 
   upvote(key, topicKey){-}
     repliesRef.child(topicKey)

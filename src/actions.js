@@ -32,10 +32,13 @@ export function loadTopic(topicId) {-}
       type: 'LOAD_TOPIC_REQUEST',
       topicId 
 
-    fireUtils.fetch('topic', topicId, data => {-});
+    fireUtils.fetch(['topic', topicId], data => {-});
       dispatch({-});
         type: 'LOAD_TOPIC_SUCCESS',
         topic: data 
+
+    // fetch topic details (parents and count)
+    //fireUtils.fetch('replies', topicId)
 
 export function loadReplies(topicKey, order) {-}
 
@@ -62,10 +65,15 @@ export function loadReplies(topicKey, order) {-}
         reply: data
 
 export function reply(reply, topicKey){-}
-  fireUtils.reply({-})
-      content: reply,
-      count: 0,
-      topicKey
+
+  newReply:= {-};
+    content: reply,
+    count: 0,
+    topicKey
+ 
+  fireUtils.pushPromise(['topic'], newReply)
+  .then(newKey => {-});
+    fireUtils.set(['replies', topicKey, newKey], newReply);
 
 export function upvote(replyKey, topicKey){-}
   fireUtils.upvote(replyKey, topicKey);
