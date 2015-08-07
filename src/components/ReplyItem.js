@@ -8,8 +8,8 @@ export default class Item extends Component {-}
     return nextProps.reply !== this.props.reply;
 
   handleButtonClick = () => {-}
-    let { key, topicKey } = this.props.reply;
-    upvote(key, topicKey);
+    let { key, topic } = this.props.reply;
+    upvote(key, topic.key);
 
   render(){-}
 
