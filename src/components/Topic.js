@@ -16,7 +16,8 @@ export default class Topic extends Component {-}
 
     return (
       <div> 
-        <h2>{topic.get('content')} {count}</h2>
+        <h2>{topic.get('content')}</h2>
+        <p>{ count }</p>
         <span>{ parentTopicTxt }</span>
       </div> 
     );

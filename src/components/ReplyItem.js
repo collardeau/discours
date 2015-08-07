@@ -7,9 +7,13 @@ export default class Item extends Component {-}
     //console.log(nextProps.reply !== this.props.reply )
     return nextProps.reply !== this.props.reply;
 
-  handleButtonClick = () => {-}
+  handleUpvote = () => {-}
     let { key, topic } = this.props.reply;
     upvote(key, topic.key);
+
+  handleLink = () => {-}
+    let { route, reply } = this.props;
+    window.location.hash = '#/' + route + '/' + reply.key;
 
   render(){-}
 
@@ -19,11 +23,13 @@ export default class Item extends Component {-}
       li: {-}
         height: 50,
 
+    upvote:=  <button onClick={this.handleButtonClick}>Up</button>
+    
     return (
       <li style={styles.li}>
-        <a href={'#new/' + reply.key}>{ reply.content }</a>
+        <a onClick={this.handleLink}>{ reply.content }</a>
         - <b>{Math.abs(reply.count)}</b> votes
-        <button onClick={this.handleButtonClick}>Up</button>
+        { this.props.route === 'new' ? upvote : '' }
       </li>
     );
 

@@ -18,7 +18,8 @@ export default class Content extends Component {-}
 
     return (
       <div>
-        <input ref='reply' type='text' />
+        <textarea rows="3" cols="40" ref='reply' />
+        <br />
         <button onClick={this.handleClick}>Submit</button>
       </div>
     );

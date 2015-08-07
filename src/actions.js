@@ -75,11 +75,11 @@ export function loadReplies(topicKey, order) {-}
         dispatch({-});
           type: 'REPLY_ADDED',
           reply: data 
-      
-    fireUtils.syncOnChange(['replies', topicKey], data => {-});
-      dispatch({-});
-        type: 'REPLY_CHANGED', // upvotes
-        reply: data
+      // live vote count 
+      fireUtils.syncOnChange(['replies', topicKey], data => {-});
+        dispatch({-});
+          type: 'REPLY_CHANGED',
+          reply: data
 
 export function reply(newReply){-}
   fireUtils.push(['topic'], newReply)

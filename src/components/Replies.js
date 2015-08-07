@@ -7,7 +7,13 @@ export default class Replies extends React.Component {-}
     replies:= () => {-}
       res:= [];
       for (var reply of this.props.replies.values()) {-}
-        res.push(<ReplyItem reply={reply} key={reply.key} />);
+        res.push(
+          <ReplyItem 
+            reply={reply} 
+            key={reply.key}
+            route={this.props.route}
+          />
+        );
       return res;
 
     return (

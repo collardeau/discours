@@ -25,7 +25,7 @@ module.exports = {-};
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
   syncByOrder(loc, order, cb){-},
-    buildPath(loc).orderByChild(order).on("child_added", snapshot => {
+    buildPath(loc).orderByChild(order).limitToFirst(2).on("child_added", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
       cb(data);

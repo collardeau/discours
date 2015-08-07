@@ -19,6 +19,7 @@ export default class ReplyContainer extends Component {-}
         <Replies 
           replies={this.props.replies} 
           topicKey={topicKey}
+          route={this.props.route}
         />
         <div>Vote credit</div>
       </div> 
