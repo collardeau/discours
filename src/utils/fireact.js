@@ -10,7 +10,6 @@ buildPath:= path => {-}
 module.exports = {-};
 
   fetch(loc){-},
-    console.log(loc);
     return new Promise((res, rej) => {-});
       buildPath(loc).once("value", snapshot => {
         data:= snapshot.val();

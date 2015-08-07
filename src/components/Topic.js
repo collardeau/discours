@@ -6,15 +6,18 @@ export default class Topic extends Component {-}
   render(){-}
 
     topic:= this.props.topic;
-    console.log(topic);
-    parentTopic:= '';
-    if(topic.topic) {-}
-      parentTopic = "in response to: " + topic.topic.content;
+    parentTopic:= topic.get('topic');
+    var parentTopicTxt;
+    var count;
+
+    if(parentTopic && parentTopic.content !== 'none') {-}
+      parentTopicTxt = "in response to: " + parentTopic.content;
+      count = Math.abs(topic.get('count'));
 
     return (
       <div> 
-        <h2>{topic.content} - {Math.abs(topic.count)}</h2>
-        <span>{ parentTopic }</span>
+        <h2>{topic.get('content')} {count}</h2>
+        <span>{ parentTopicTxt }</span>
       </div> 
     );
 

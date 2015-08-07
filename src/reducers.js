@@ -1,8 +1,8 @@
-// reducers
 import R from 'ramda';
 import I from 'immutable';
 
 export function route(state='#home', action){-}
+  //console.log(action);
   switch (action.type){-}
     case 'CHANGE_ROUTE':
       return action.route
@@ -11,12 +11,12 @@ export function route(state='#home', action){-}
 
 export function topic(state=I.Map({}), action){-}
   switch (action.type){-}
+    case 'LOAD_TOPIC':
+      return state.clear();
     case 'LOAD_TOPIC_SUCCESS':
-      return action.topic; 
+      return I.Map(action.topic);
     case 'LOAD_COUNT_SUCCESS':
-      newTopic:= state; 
-      newTopic.count = action.count;
-      return newTopic;
+      return state.set('count', action.count);
     default:
       return state;
 

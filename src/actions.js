@@ -13,7 +13,7 @@ export function changeRoute(route) {-}
       route: nextRoute
 
     if(getState().replies.size){-}
-      fireUtils.unsync(['replies', getState().topic.key]);
+      fireUtils.unsync(['replies', getState().topic.get('key')]);
       dispatch({-});
         type: 'UNSYNC_REPLIES',
 
@@ -26,6 +26,7 @@ export function changeRoute(route) {-}
       dispatch(loadReplies(params[0], 'count'));
 
 export function loadCount(topicKey, key){-}
+
   return (dispatch, getState) => {-}
 
     dispatch({-});
@@ -39,7 +40,6 @@ export function loadCount(topicKey, key){-}
           type: 'LOAD_COUNT_SUCCESS',
           count: data 
 
-
 export function loadTopic(topicKey) {-}
 
   return (dispatch, getState) => {-}
@@ -49,7 +49,6 @@ export function loadTopic(topicKey) {-}
       topicKey 
 
     onSuccess:= data => {-};
-      console.log(data);
       dispatch({-});
         type: 'LOAD_TOPIC_SUCCESS',
         topic: data 
