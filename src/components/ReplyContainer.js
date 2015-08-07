@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Replies from './Replies';
 import ReplyForm from './ReplyForm';
+import Filter from './Filter';
 import Topic from './Topic';
 
 export default class ReplyContainer extends Component {-}
@@ -8,12 +9,17 @@ export default class ReplyContainer extends Component {-}
   render(){-}
 
     topic:= this.props.topic;
+    topicKey:= topic.get('key');
 
     return (
       <div> 
         <Topic topic={topic}/>
         <ReplyForm topic={topic}/>
-        <Replies replies={this.props.replies} topicKey={topic.get('key')}/>
+        <Filter topicKey={topicKey} route={this.props.route}/>
+        <Replies 
+          replies={this.props.replies} 
+          topicKey={topicKey}
+        />
         <div>Vote credit</div>
       </div> 
     );

@@ -11,7 +11,12 @@ export default class App extends Component {-}
 
     let {route, topic, replies}= this.props.appState
 
-    ui:= <ReplyContainer topic={topic} replies={replies} />;
+    ui:= <ReplyContainer 
+      topic={topic} 
+      replies={replies} 
+      route={route}
+    />;
+
     if ( route === 'about') {-}
       ui:= <div>Well, Bonjour... et bienvenue!</div>;
 

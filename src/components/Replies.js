@@ -1,11 +1,7 @@
 import React from 'react';
 import ReplyItem from './ReplyItem';
-import Filter from './Filter';
 
 export default class Replies extends React.Component {-}
-
-  componentDidMount(){-}
-    //boom.syncReplies(this.props.parentKey);
 
   render(){-}
     replies:= () => {-}
@@ -16,7 +12,6 @@ export default class Replies extends React.Component {-}
 
     return (
       <div>
-        <Filter topicKey={this.props.topicKey}/>
         <ul>{replies()}</ul>
       </div>
     );

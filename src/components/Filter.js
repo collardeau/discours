@@ -4,27 +4,34 @@ import { loadReplies } from '../actions';
 export default class Content extends React.Component {-}
 
   handleNew = () => {-}
-    console.log(this.props);
     window.location.hash="#new/" + this.props.topicKey;
 
   handleCount = () => {-}
-    console.log(this.props);
     window.location.hash="#popular/" + this.props.topicKey;
 
   render(){-}
 
-    styles:= {-}
+    styles:= {-};
       ul: {-},
         display: 'flex'
       li: {-}
         marginRight: 5
 
+    byNew:= <a onClick={this.handleNew}>By New</a>;
+    byPopular:= <a onClick={this.handleCount}>By Popular</a>;
+    if(this.props.route==="new"){-}
+      byNew = <b>{byNew}</b>      
+    if(this.props.route==="popular"){-}
+      byPopular = <b>{byPopular}</b>      
+
     return (
       <ul style={styles.ul}>
-        <li style={styles.li} onClick={this.handleNew}>
-          By New / 
+        <li style={styles.li}>
+          {byNew}
         </li>
-        <li onClick={this.handleCount}> By Vote </li>
+        <li>
+          {byPopular} 
+        </li>
       </ul>
     );
 
