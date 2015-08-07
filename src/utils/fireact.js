@@ -40,9 +40,8 @@ module.exports = {-};
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
   unsync(key){-},
-    console.log('unsynching.... ', key);
-    repliesRef.child(key).off('child_added');
-    repliesRef.child(key).off('child_changed');
+    repliesRef.child(key).orderByChild('count').off();
+    repliesRef.child(key).off();
 
   reply(reply){-},
     addChildPromise(reply).then(newKey => {-});

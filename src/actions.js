@@ -9,7 +9,6 @@ export function changeRoute(route) {-}
       route 
 
     if(getState().replies.size){-}
-      console.log('route unsyncs replies');
       fireUtils.unsync(getState().topic.key);
       dispatch({-});
         type: 'UNSYNC_REPLIES',
@@ -29,7 +28,6 @@ export function loadTopic(topicId) {-}
 export function loadReplies(topicKey, order) {-}
 
   return function (dispatch, getState) {-}
-
 
     dispatch({-});
       type: 'LOAD_REPLIES_REQUEST',

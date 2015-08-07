@@ -1,10 +1,17 @@
 import React from 'react';
+import { loadReplies } from '../actions';
 
 export default class Content extends React.Component {-}
 
-  handleNew(){-}
-    boom.syncNewReplies(boom.state.topic.key);
+  handleNew = () => {-}
+    console.log('order by newest');
+    // not working
+    loadReplies(this.props.topicKey, 'new');
 
+  handleCount = () => {-}
+    console.log('order by most popular ');
+    // not working
+    loadReplies(this.props.topicKey, 'count');
   render(){-}
 
     styles:= {-}
@@ -18,7 +25,7 @@ export default class Content extends React.Component {-}
         <li style={styles.li} onClick={this.handleNew}>
           By New / 
         </li>
-        <li> By Vote </li>
+        <li onClick={this.handleCount}> By Vote </li>
       </ul>
     );
 
