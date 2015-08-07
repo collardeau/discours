@@ -3,17 +3,20 @@ import R from 'ramda';
 import I from 'immutable';
 
 export function route(state='#home', action){-}
-  console.log(action);
   switch (action.type){-}
     case 'CHANGE_ROUTE':
       return action.route
     default:
       return state;
 
-export function topic(state={}, action){-}
+export function topic(state=I.Map({}), action){-}
   switch (action.type){-}
     case 'LOAD_TOPIC_SUCCESS':
-      return R.clone(action.topic); 
+      return action.topic; 
+    case 'LOAD_COUNT_SUCCESS':
+      newTopic:= state; 
+      newTopic.count = action.count;
+      return newTopic;
     default:
       return state;
 

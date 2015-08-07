@@ -13,8 +13,8 @@ module.exports = {-};
     console.log(loc);
     return new Promise((res, rej) => {-});
       buildPath(loc).once("value", snapshot => {
-        let data = snapshot.val();
-        data.key = snapshot.key();
+        data:= snapshot.val();
+        if (snapshot.key() !== 'count') data.key = snapshot.key();
         res(data);
       }, errorObject => rej(errorObject.code));
 

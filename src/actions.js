@@ -25,20 +25,20 @@ export function changeRoute(route) {-}
       dispatch(loadTopic(params[0]));
       dispatch(loadReplies(params[0], 'count'));
 
-
 export function loadCount(topicKey, key){-}
-
   return (dispatch, getState) => {-}
 
     dispatch({-});
       type: 'LOAD_COUNT',
       topicKey 
 
-    fireUtils.fetch(['replies', topicKey, key])
-    .then(data => {-});
-      dispatch({-});
-        type: 'LOAD_COUNT_SUCCESS',
-        count: data 
+    if(topicKey){-}
+      fireUtils.fetch(['replies', topicKey, key, 'count'])
+      .then(data => {-});
+        dispatch({-});
+          type: 'LOAD_COUNT_SUCCESS',
+          count: data 
+
 
 export function loadTopic(topicKey) {-}
 
@@ -49,11 +49,11 @@ export function loadTopic(topicKey) {-}
       topicKey 
 
     onSuccess:= data => {-};
+      console.log(data);
       dispatch({-});
         type: 'LOAD_TOPIC_SUCCESS',
         topic: data 
-      if(data.topicKey){-}
-        dispatch(loadCount(data.topicKey, data.key));
+      dispatch(loadCount(data.topic.key, data.key));
 
     fireUtils.fetch(['topic', topicKey])
     .then(onSuccess);
@@ -83,7 +83,6 @@ export function loadReplies(topicKey, order) {-}
         reply: data
 
 export function reply(newReply){-}
-
   fireUtils.push(['topic'], newReply)
   .then(newKey => {-});
     fireUtils.set(['replies', newReply.topic.key, newKey], newReply);
