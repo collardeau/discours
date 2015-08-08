@@ -4,14 +4,22 @@ import hasher from 'hasher';
 export function login(){-}
   return (dispatch, getState) => {-}
 
-    dispatch({-});
-      type: "LOGIN_REQUEST"
+    existAuth:= fireUtils.isLoggedIn();
 
-    fireUtils.login().then(auth => {-});
-      fireUtils.set(['lastVote', auth.uid], 0);
-      dispatch({-});
-        type: "LOGIN",
-        auth 
+    if(!existAuth){-}
+      fireUtils.login().then(auth => {-});
+        fireUtils.set(['lastVote', auth.uid], 0);
+        dispatch({-});
+          type: "LOGIN",
+          uid: auth.uid 
+    else{-}
+      dispatch({-})
+        type:"LOGGED_IN",
+        uid: existAuth.uid
+
+export function logout(){-}
+  uid:= fireUtils.isLoggedIn().uid;
+  fireUtils.logout(['lastVote', uid]);
 
 export function changeRoute(route) {-}
 

@@ -18,7 +18,6 @@ let render= () => React.render(
 );
 
 let unsubscribe= store.subscribe(() => {
-  //console.log(store.getState());
   render();
 });
 
@@ -26,11 +25,8 @@ handleRoute:= route => {-}
   store.dispatch(login());  
   store.dispatch(changeRoute(route));
 
-//unsubscribe();
-
 hasher.init();
 hasher.initialized.add(handleRoute);
 hasher.changed.add(handleRoute);
-
 
 

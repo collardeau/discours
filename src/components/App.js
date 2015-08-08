@@ -4,12 +4,21 @@ import css from '../styles/styles.css';
 import ReplyContainer from './ReplyContainer'
 import Header from './Header';
 import Nav from './Nav';
+import {logout} from '../actions';
 
 export default class App extends Component {-}
 
+  componentWillUnmount(){-}
+    console.log('will unmount');
+    logout();    
+
+  handleLogout(){-}
+    console.log('handle logout');
+    logout();
+
   render(){-}
 
-    let {route, topic, replies, auth}= this.props.appState
+    let {route, topic, replies, uid}= this.props.appState
 
     ui:= <ReplyContainer 
       topic={topic} 
@@ -22,8 +31,8 @@ export default class App extends Component {-}
 
     return (
       <div>
-        <Header />
-        <p>Hello, {auth ? auth.uid: 'not logged in'}</p>
+        <Header/>
+        <p onClick={this.handleLogout}>Hello, {uid}</p>
         <Nav />
         { ui }
       </div>

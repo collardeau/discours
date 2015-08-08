@@ -74,8 +74,9 @@ module.exports = {-};
         else {-}
           res(authData);
 
-  logout: function() {-},
+  logout: function(loc) {-},
     ref.unauth(() => {-});
+      buildPath(loc).set(null); 
       console.log("logged out");
 
   isLoggedIn: function(){-},

@@ -1,11 +1,12 @@
 import R from 'ramda';
 import I from 'immutable';
 
-export function auth(state=null, action){-}
+export function uid(state='', action){-}
   console.log(action);
   switch (action.type){-}
     case 'LOGIN':
-      return action.auth;
+    case 'LOGGED_IN':
+      return action.uid;
     default:
       return state;
 
