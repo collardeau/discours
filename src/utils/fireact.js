@@ -52,9 +52,18 @@ module.exports = {-};
   set(loc, data) {-},
     buildPath(loc).set(data);  
 
-  decrement(loc){-}
+  decrement(loc){-},
     buildPath(loc)
     .transaction( current_value => {-});
       return (current_value || 0) - 1;
 
-
+  login(){-}
+    return new Promise((res, rej) => {-});
+      ref.authAnonymously((error, authData) => {-});
+        if (error) {-}
+          console.log("Login Failed!", error);
+          rej(error);
+        else {-}
+          console.log("Authenticated successfully with payload:", authData);
+          res(authData);
+  

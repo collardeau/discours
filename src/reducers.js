@@ -1,8 +1,15 @@
 import R from 'ramda';
 import I from 'immutable';
 
+export function auth(state=null, action){-}
+  console.log(action);
+  switch (action.type){-}
+    case 'LOGIN':
+      return action.auth;
+    default:
+      return state;
+
 export function route(state='#home', action){-}
-  //console.log(action);
   switch (action.type){-}
     case 'CHANGE_ROUTE':
       return action.route

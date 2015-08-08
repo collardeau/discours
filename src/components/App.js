@@ -9,7 +9,7 @@ export default class App extends Component {-}
 
   render(){-}
 
-    let {route, topic, replies}= this.props.appState
+    let {route, topic, replies, auth}= this.props.appState
 
     ui:= <ReplyContainer 
       topic={topic} 
@@ -23,6 +23,7 @@ export default class App extends Component {-}
     return (
       <div>
         <Header />
+        <p>Hello, {auth ? auth.uid: 'not logged in'}</p>
         <Nav />
         { ui }
       </div>

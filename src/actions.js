@@ -1,6 +1,17 @@
 import fireUtils from './utils/fireact';
 import hasher from 'hasher';
 
+export function login(){-}
+  return (dispatch, getState) => {-}
+
+    dispatch({-});
+      type: "LOGIN_REQUEST"
+
+    fireUtils.login().then(auth => {-});
+      dispatch({-});
+        type: "LOGIN",
+        auth 
+
 export function changeRoute(route) {-}
 
   return (dispatch, getState) => {-}
@@ -15,7 +26,7 @@ export function changeRoute(route) {-}
     if(getState().replies.size){-}
       fireUtils.unsync(['replies', getState().topic.get('key')]);
       dispatch({-});
-        type: 'UNSYNC_REPLIES',
+        type: 'UNSYNC_REPLIES'
 
     if(nextRoute === 'new'){-}
       dispatch(loadTopic(params[0]));
