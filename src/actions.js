@@ -8,6 +8,7 @@ export function login(){-}
       type: "LOGIN_REQUEST"
 
     fireUtils.login().then(auth => {-});
+      fireUtils.set(['lastVote', auth.uid], 0);
       dispatch({-});
         type: "LOGIN",
         auth 
@@ -100,7 +101,14 @@ export function reply(newReply){-}
     fireUtils.set(['replies', newReply.topic.key, newKey], newReply);
 
 export function upvote(replyKey, topicKey){-}
-  fireUtils.decrement(['replies', topicKey, replyKey, 'count']);
-
+  // trying to hack the voting system
+  //fireUtils.set(['lastVote', fireUtils.isLoggedIn().uid], 100);
+  fireUtils.decrement(['replies', topicKey, replyKey, 'count'])
+  .then(() => {
+    uid:= fireUtils.isLoggedIn().uid;
+    fireUtils.set(['lastVote', uid], Firebase.ServerValue.TIMESTAMP);
+  }, err => {
+    // warn
+  });
 
 

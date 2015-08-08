@@ -53,15 +53,35 @@ module.exports = {-};
     buildPath(loc).set(data);  
 
   decrement(loc){-},
-    buildPath(loc)
-    .transaction( current_value => {-});
-      return (current_value || 0) - 1;
+    return new Promise((res, rej) => {-});
+      buildPath(loc)
+      .transaction( current_value => {
+        return (current_value || 0) - 1;
+      }, (error, committed, snapshot) => {-});
+         if (error) {-}
+           rej(error);
+         else if (!committed) {-}
+           console.log('aborted transaction).');
+           rej();
+         else {-}
+           res();
 
-  login(){-}
+  login(){-},
     return new Promise((res, rej) => {-});
       ref.authAnonymously((error, authData) => {-});
         if (error) {-}
           rej(error);
         else {-}
           res(authData);
-  
+
+  logout: function() {-},
+    ref.unauth(() => {-});
+      console.log("logged out");
+
+  isLoggedIn: function(){-},
+    return ref.getAuth();
+
+  isLoggedOut: function(){-}
+    return !this.isLoggedIn();
+
+
