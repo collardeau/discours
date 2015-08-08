@@ -8,7 +8,6 @@ export default class Content extends Component {-}
     text:= node.value.trim();
     reply({-});
       content: text,
-      count: 0,
       topic: {-}
         key: this.props.topic.get('key'),
         content: this.props.topic.get('content')

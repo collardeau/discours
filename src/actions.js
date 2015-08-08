@@ -93,8 +93,10 @@ export function loadReplies(topicKey, order) {-}
           reply: data
 
 export function reply(newReply){-}
+  newReply.date = Firebase.ServerValue.TIMESTAMP;
   fireUtils.push(['topic'], newReply)
   .then(newKey => {-});
+    newReply.count = 0;
     fireUtils.set(['replies', newReply.topic.key, newKey], newReply);
 
 export function upvote(replyKey, topicKey){-}

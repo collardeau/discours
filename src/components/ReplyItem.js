@@ -8,6 +8,7 @@ export default class Item extends Component {-}
     return nextProps.reply !== this.props.reply;
 
   handleUpvote = () => {-}
+    console.log('upvote');
     let { key, topic } = this.props.reply;
     upvote(key, topic.key);
 
@@ -23,7 +24,7 @@ export default class Item extends Component {-}
       li: {-}
         height: 50,
 
-    upvote:=  <button onClick={this.handleButtonClick}>Up</button>
+    upvote:=  <button onClick={this.handleUpvote}>Up</button>
     
     return (
       <li style={styles.li}>

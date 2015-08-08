@@ -61,9 +61,7 @@ module.exports = {-};
     return new Promise((res, rej) => {-});
       ref.authAnonymously((error, authData) => {-});
         if (error) {-}
-          console.log("Login Failed!", error);
           rej(error);
         else {-}
-          console.log("Authenticated successfully with payload:", authData);
           res(authData);
   
