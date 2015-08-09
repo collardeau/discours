@@ -17,8 +17,8 @@ export default class Content extends React.Component {-}
       li: {-}
         marginRight: 5
 
-    byNew:= <a onClick={this.handleNew}>By New</a>;
-    byPopular:= <a onClick={this.handleCount}>By Popular</a>;
+    byNew:= <a onClick={this.handleNew}>New</a>;
+    byPopular:= <a onClick={this.handleCount}>Most Popular</a>;
     if(this.props.route==="new"){-}
       byNew = <b>{byNew}</b>      
     if(this.props.route==="popular"){-}
@@ -29,8 +29,11 @@ export default class Content extends React.Component {-}
         <li style={styles.li}>
           {byNew}
         </li>
-        <li>
+        <li style={styles.li}>
           {byPopular} 
+        </li>
+         <li>
+          Most popular today 
         </li>
       </ul>
     );

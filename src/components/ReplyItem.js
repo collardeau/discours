@@ -30,7 +30,7 @@ export default class Item extends Component {-}
       <li style={styles.li}>
         <a onClick={this.handleLink}>{ reply.content }</a>
         - <b>{Math.abs(reply.count)}</b> votes
-        { this.props.route === 'new' ? upvote : '' }
+        { upvote }
       </li>
     );
 

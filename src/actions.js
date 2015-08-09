@@ -44,6 +44,8 @@ export function changeRoute(route) {-}
     if(nextRoute === 'popular'){-}
       dispatch(loadTopic(params[0]));
       dispatch(loadReplies(params[0], 'count'));
+      if(params[1] === 'today'){-}
+        console.log('how awesome');
 
 export function loadCount(topicKey, key){-}
 
