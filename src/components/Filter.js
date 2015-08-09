@@ -18,23 +18,28 @@ export default class Content extends React.Component {-}
         marginRight: 5
 
     byNew:= <a onClick={this.handleNew}>New</a>;
-    byPopular:= <a onClick={this.handleCount}>Most Popular</a>;
+    byPopular:= <a onClick={this.handleCount}>Ever</a>;
     if(this.props.route==="new"){-}
       byNew = <b>{byNew}</b>      
     if(this.props.route==="popular"){-}
       byPopular = <b>{byPopular}</b>      
 
     return (
-      <ul style={styles.ul}>
-        <li style={styles.li}>
-          {byNew}
-        </li>
-        <li style={styles.li}>
-          {byPopular} 
-        </li>
-         <li>
-          Most popular today 
-        </li>
-      </ul>
+      <div>
+        <ul style={styles.ul}>
+          <li style={styles.li}>
+            {byNew}
+          </li>
+        </ul>
+        <p>By popularity:</p>
+        <ul>
+          <li style={styles.li}>
+            {byPopular} 
+          </li>
+          <li>
+            Today 
+          </li>
+        </ul>
+      </div>
     );
 

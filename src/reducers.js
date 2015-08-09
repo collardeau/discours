@@ -2,7 +2,7 @@ import R from 'ramda';
 import I from 'immutable';
 
 export function uid(state='', action){-}
-  //console.log(action);
+  console.log(action);
   switch (action.type){-}
     case 'LOGIN':
     case 'LOGGED_IN':

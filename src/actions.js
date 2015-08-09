@@ -37,15 +37,15 @@ export function changeRoute(route) {-}
       dispatch({-});
         type: 'UNSYNC_REPLIES'
 
-    if(nextRoute === 'new'){-}
+    if(nextRoute === 'new' || nextRoute === 'popular'){-}
       dispatch(loadTopic(params[0]));
-      dispatch(loadReplies(params[0], 'new'));
-
-    if(nextRoute === 'popular'){-}
-      dispatch(loadTopic(params[0]));
-      dispatch(loadReplies(params[0], 'count'));
-      if(params[1] === 'today'){-}
-        console.log('how awesome');
+      if(nextRoute === 'new'){-}
+        dispatch(loadReplies(params[0], 'new'));
+      else {-}
+        if(params[1] === 'today'){-}
+          dispatch(loadReplies(params[0], 'today'));
+        else{-}
+          dispatch(loadReplies(params[0], 'count'));
 
 export function loadCount(topicKey, key){-}
 
@@ -97,7 +97,6 @@ export function loadReplies(topicKey, order) {-}
         dispatch({-});
           type: 'REPLY_ADDED',
           reply: data 
-      // live vote count 
       fireUtils.syncOnChange(['replies', topicKey], data => {-});
         dispatch({-});
           type: 'REPLY_CHANGED',
@@ -111,8 +110,6 @@ export function reply(newReply){-}
     fireUtils.set(['replies', newReply.topic.key, newKey], newReply);
 
 export function upvote(replyKey, topicKey){-}
-  // trying to hack the voting system
-  //fireUtils.set(['lastVote', fireUtils.isLoggedIn().uid], 100);
   fireUtils.decrement(['replies', topicKey, replyKey, 'count'])
   .then(() => {
     uid:= fireUtils.isLoggedIn().uid;
