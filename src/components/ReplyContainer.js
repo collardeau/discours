@@ -21,7 +21,6 @@ export default class ReplyContainer extends Component {-}
           topicKey={topicKey}
           replyFilter={this.props.replyFilter}
         />
-        <div>Vote credit</div>
       </div> 
     );
 

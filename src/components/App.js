@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import normalize from 'normalize.css/normalize.css';
-import css from '../styles/styles.css';
+//import css from '../styles/styles.css';
 import ReplyContainer from './ReplyContainer'
 import Header from './Header';
 import Nav from './Nav';

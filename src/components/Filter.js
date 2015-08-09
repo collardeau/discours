@@ -1,27 +1,20 @@
 import React from 'react';
-import { loadReplies } from '../actions';
 
 export default class Content extends React.Component {-}
 
   handleNew = () => {-}
-    window.location.hash="#new/" + this.props.topicKey;
+    window.location.hash="new/" + this.props.topicKey;
 
-  handleCount = () => {-}
-    window.location.hash="#all-time/" + this.props.topicKey;
+  handleAllTime = () => {-}
+    window.location.hash="all-time/" + this.props.topicKey;
 
   handleToday = () => {-}
-    window.location.hash="#today/" + this.props.topicKey;
+    window.location.hash="today/" + this.props.topicKey;
 
   render(){-}
 
-    styles:= {-};
-      ul: {-},
-        display: 'flex'
-      li: {-}
-        marginRight: 5
-
     byNew:= <a onClick={this.handleNew}>New</a>;
-    byAllTime:= <a onClick={this.handleCount}>All-time</a>;
+    byAllTime:= <a onClick={this.handleAllTime}>All-time</a>;
     byToday:= <a onClick={this.handleToday}>Today</a>;
 
     if(this.props.replyFilter==="new"){-}
@@ -33,14 +26,12 @@ export default class Content extends React.Component {-}
 
     return (
       <div>
-        <ul style={styles.ul}>
-          <li style={styles.li}>
+        <p>view by</p>
+        <ul>
+          <li>
             {byNew}
           </li>
-        </ul>
-        <p>By popularity:</p>
-        <ul>
-          <li style={styles.li}>
+          <li>
             {byAllTime} 
           </li>
           <li>
