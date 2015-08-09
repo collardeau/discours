@@ -3,22 +3,32 @@ import ReplyForm from './ReplyForm';
 
 export default class Topic extends Component {-}
 
+  handleClick = () => {-}
+    window.location.hash = '' + 
+      this.props.replyFilter + '/' + 
+      this.props.topic.get('topic').key;
+
   render(){-}
 
     topic:= this.props.topic;
-    parentTopic:= topic.get('topic');
-    var parentTopicTxt;
+    hasParentTopic:= topic.get('topic');
+    var parentTopic;
     var count;
 
-    if(parentTopic && parentTopic.content !== 'none') {-}
-      parentTopicTxt = "in response to: " + parentTopic.content;
-      count = Math.abs(topic.get('count'));
+    if(hasParentTopic && hasParentTopic.content !== 'none') {-}
+      count = topic.get('count');
+      parentTopic = (
+        <div>
+          In response to:
+          <a onClick={this.handleClick}>{hasParentTopic.content}</a>
+        </div>
+      );
 
     return (
       <div> 
         <h2>{topic.get('content')}</h2>
         <p>{ count }</p>
-        <span>{ parentTopicTxt }</span>
+        <span>{ parentTopic }</span>
       </div> 
     );
 

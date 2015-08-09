@@ -13,7 +13,7 @@ export default class ReplyContainer extends Component {-}
 
     return (
       <div> 
-        <Topic topic={topic}/>
+        <Topic topic={topic} replyFilter={this.props.replyFilter}/>
         <ReplyForm topic={topic}/>
         <Filter topicKey={topicKey} replyFilter={this.props.replyFilter}/>
         <Replies 
