@@ -41,15 +41,10 @@ export function changeRoute(route) {-}
 
       filter:= nextRoute;
       key:= params[0];
+
       dispatch(loadTopic(key));
       dispatch(setFilter(filter));
-
-      if(filter === 'new') {-}
-        dispatch(loadReplies(key, 'new'));
-      if(filter === 'today') {-}
-        dispatch(loadReplies(key, 'today'));
-      if(filter === 'all-time') {-}
-        dispatch(loadReplies(key, 'count'));
+      dispatch(loadReplies(key, filter));
 
 export function setFilter(filter) {-}
   return({-}) 
@@ -71,7 +66,7 @@ export function loadCount(topicKey, key){-}
           type: 'LOAD_COUNT_SUCCESS',
           count: data 
 
-export function loadTopic(topicKey) {-}
+export function loadTopic(topicKey = 'root') {-}
 
   return (dispatch, getState) => {-}
 
@@ -88,7 +83,7 @@ export function loadTopic(topicKey) {-}
     fireUtils.fetch(['topic', topicKey])
     .then(onSuccess);
 
-export function loadReplies(topicKey, order) {-}
+export function loadReplies(topicKey = 'root', order = 'new') {-}
 
   return (dispatch, getState) => {-}
 
@@ -96,7 +91,7 @@ export function loadReplies(topicKey, order) {-}
       type: 'LOAD_REPLIES',
       topicKey 
 
-    if(order === 'count') {-}
+    if(order === 'all-time') {-}
 
       fireUtils.syncByOrder(['replies', topicKey], 'count', data => {-});
         dispatch({-});
