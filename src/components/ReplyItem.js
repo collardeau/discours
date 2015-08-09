@@ -29,7 +29,7 @@ export default class Item extends Component {-}
     return (
       <li style={styles.li}>
         <a onClick={this.handleLink}>{ reply.content }</a>
-        - <b>{Math.abs(reply.count)}</b> votes
+        <b>{reply.count}</b> votes
         { upvote }
       </li>
     );

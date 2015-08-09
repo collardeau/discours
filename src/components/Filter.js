@@ -9,6 +9,9 @@ export default class Content extends React.Component {-}
   handleCount = () => {-}
     window.location.hash="#popular/" + this.props.topicKey;
 
+  handleToday = () => {-}
+    window.location.hash="#popular/" + this.props.topicKey + '/today';
+
   render(){-}
 
     styles:= {-};
@@ -37,7 +40,7 @@ export default class Content extends React.Component {-}
             {byPopular} 
           </li>
           <li>
-            Today 
+            <a onClick={this.handleToday}>Today</a>
           </li>
         </ul>
       </div>

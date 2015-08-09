@@ -1,5 +1,6 @@
 let Firebase = require('firebase');
-ref := new Firebase('https://discours.firebaseio.com/');
+let ref = new Firebase('https://discours.firebaseio.com/');
+let moment = require('moment');
 
 buildPath:= path => {-}
   p:= path.slice(); 
@@ -18,6 +19,21 @@ module.exports = {-};
 
   sync(loc, cb){-},
     buildPath(loc).on("child_added", snapshot => {
+      data:= snapshot.val();
+      data.key = snapshot.key();
+      cb(data);
+    }, errorObject => console.log("The read failed: " + errorObject.code));
+
+  syncByDate(loc, cb){-},
+    
+    yesterday:= moment().subtract(1, 'days').unix();
+    buildPath(loc).orderByChild('date').startAt(yesterday).on("child_added", snapshot => {
+      data:= snapshot.val();
+      data.key = snapshot.key();
+      cb(data);
+    }, errorObject => console.log("The read failed: " + errorObject.code));
+
+    buildPath(loc).orderByChild('date').startAt(yesterday).on("child_changed", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
       cb(data);
@@ -57,11 +73,11 @@ module.exports = {-};
   set(loc, data) {-},
     buildPath(loc).set(data);  
 
-  decrement(loc){-},
+  increment(loc){-},
     return new Promise((res, rej) => {-});
       buildPath(loc)
       .transaction( current_value => {
-        return (current_value || 0) - 1;
+        return (current_value || 0) + 1;
       }, (error, committed, snapshot) => {-});
          if (error) {-}
            rej(error);

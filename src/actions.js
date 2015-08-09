@@ -88,7 +88,14 @@ export function loadReplies(topicKey, order) {-}
       topicKey 
 
     if(order === 'count') {-}
+
       fireUtils.syncByOrder(['replies', topicKey], 'count', data => {-});
+        dispatch({-});
+          type: 'REPLY_ADDED',
+          reply: data 
+
+    else if (order='today'){-}
+       fireUtils.syncByDate(['replies', topicKey], data => {-});
         dispatch({-});
           type: 'REPLY_ADDED',
           reply: data 
@@ -110,7 +117,7 @@ export function reply(newReply){-}
     fireUtils.set(['replies', newReply.topic.key, newKey], newReply);
 
 export function upvote(replyKey, topicKey){-}
-  fireUtils.decrement(['replies', topicKey, replyKey, 'count'])
+  fireUtils.increment(['replies', topicKey, replyKey, 'count'])
   .then(() => {
     uid:= fireUtils.isLoggedIn().uid;
     fireUtils.set(['lastVote', uid], Firebase.ServerValue.TIMESTAMP);
