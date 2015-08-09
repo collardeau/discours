@@ -1,21 +1,38 @@
 import React from 'react';
-import{ combineReducers, createStore, applyMiddleware } from 'redux';
+import{ combineReducers, createStore, applyMiddleware, compose } from 'redux';
+import { devTools, persistState } from 'redux-devtools';
+import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import thunk from 'redux-thunk';
 import * as reducers from './reducers';
+import hasher from 'hasher';
 import { changeRoute, login } from './actions';
 
-import hasher from 'hasher';
 import App from './components/App';
 
-createStoreWithMiddleware:= applyMiddleware(thunk)(createStore);
-reducer:= combineReducers(reducers);
-store:= createStoreWithMiddleware(reducer);
+const finalCreateStore = compose(
+  applyMiddleware(thunk),
+  devTools(),
+  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
+  createStore
+);
+const reducer= combineReducers(reducers);
+const store= finalCreateStore(reducer);
 
 let rootElement= document.getElementById('app');
 let render= () => React.render(
-  <App appState={store.getState()}/>,
-    rootElement
-);
+  <div>
+    <App appState={store.getState()}/>,
+    <DebugPanel top right bottom>
+      <DevTools store={store}
+                select={state => state.topic}
+                monitor={LogMonitor}>
+      </DevTools>
+    </DebugPanel>
+  </div>,
+  rootElement
+);    
+
+
 
 let unsubscribe= store.subscribe(() => {
   render();
