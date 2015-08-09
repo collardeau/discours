@@ -24,7 +24,7 @@ let render= () => React.render(
     <App appState={store.getState()}/>,
     <DebugPanel top right bottom>
       <DevTools store={store}
-                select={state => state.topic}
+                select={state => state.replyFilter}
                 monitor={LogMonitor}>
       </DevTools>
     </DebugPanel>

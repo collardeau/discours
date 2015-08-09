@@ -18,12 +18,12 @@ export default class App extends Component {-}
 
   render(){-}
 
-    let {route, topic, replies, uid}= this.props.appState
+    let {route, replyFilter, topic, replies, uid}= this.props.appState
 
     ui:= <ReplyContainer 
       topic={topic} 
       replies={replies} 
-      route={route}
+      replyFilter={replyFilter}
     />;
 
     if ( route === 'about') {-}
@@ -32,7 +32,6 @@ export default class App extends Component {-}
     return (
       <div>
         <Header/>
-        <p onClick={this.handleLogout}>Hello, {uid}</p>
         <Nav />
         { ui }
       </div>

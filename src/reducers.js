@@ -2,7 +2,7 @@ import R from 'ramda';
 import I from 'immutable';
 
 export function uid(state='', action){-}
-  console.log(action);
+  //console.log(action);
   switch (action.type){-}
     case 'LOGIN':
     case 'LOGGED_IN':
@@ -28,10 +28,18 @@ export function topic(state=I.Map({}), action){-}
     default:
       return state;
 
+export function replyFilter(state='new', action){-}
+  switch (action.type){-}
+    case 'SET_FILTER':
+      return action.filter;
+    default:
+      return state;
+
 export function replies(state=I.OrderedMap({}), action){-}
   switch (action.type){-}
     case 'LOAD_REPLIES':
       return state.clear();
+    case 'REPLY_JK':
     case 'REPLY_ADDED':
     case 'REPLY_CHANGED':
       return state.set(action.reply.key, action.reply)

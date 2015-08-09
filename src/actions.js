@@ -37,15 +37,24 @@ export function changeRoute(route) {-}
       dispatch({-});
         type: 'UNSYNC_REPLIES'
 
-    if(nextRoute === 'new' || nextRoute === 'popular'){-}
-      dispatch(loadTopic(params[0]));
-      if(nextRoute === 'new'){-}
-        dispatch(loadReplies(params[0], 'new'));
-      else {-}
-        if(params[1] === 'today'){-}
-          dispatch(loadReplies(params[0], 'today'));
-        else{-}
-          dispatch(loadReplies(params[0], 'count'));
+    if(nextRoute === 'new' || nextRoute === 'today' || nextRoute === 'all-time'){-}
+
+      filter:= nextRoute;
+      key:= params[0];
+      dispatch(loadTopic(key));
+      dispatch(setFilter(filter));
+
+      if(filter === 'new') {-}
+        dispatch(loadReplies(key, 'new'));
+      if(filter === 'today') {-}
+        dispatch(loadReplies(key, 'today'));
+      if(filter === 'all-time') {-}
+        dispatch(loadReplies(key, 'count'));
+
+export function setFilter(filter) {-}
+  return({-}) 
+    type: 'SET_FILTER',
+    filter
 
 export function loadCount(topicKey, key){-}
 

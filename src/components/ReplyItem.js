@@ -13,8 +13,8 @@ export default class Item extends Component {-}
     upvote(key, topic.key);
 
   handleLink = () => {-}
-    let { route, reply } = this.props;
-    window.location.hash = '#/' + route + '/' + reply.key;
+    let { replyFilter, reply } = this.props;
+    window.location.hash = '#/' + replyFilter + '/' + reply.key;
 
   render(){-}
 
@@ -29,7 +29,7 @@ export default class Item extends Component {-}
     return (
       <li style={styles.li}>
         <a onClick={this.handleLink}>{ reply.content }</a>
-        <b>{reply.count}</b> votes
+        <b> {reply.count}</b> votes
         { upvote }
       </li>
     );

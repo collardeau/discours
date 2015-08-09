@@ -15,11 +15,11 @@ export default class ReplyContainer extends Component {-}
       <div> 
         <Topic topic={topic}/>
         <ReplyForm topic={topic}/>
-        <Filter topicKey={topicKey} route={this.props.route}/>
+        <Filter topicKey={topicKey} replyFilter={this.props.replyFilter}/>
         <Replies 
           replies={this.props.replies} 
           topicKey={topicKey}
-          route={this.props.route}
+          replyFilter={this.props.replyFilter}
         />
         <div>Vote credit</div>
       </div> 

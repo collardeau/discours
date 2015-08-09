@@ -7,10 +7,10 @@ export default class Content extends React.Component {-}
     window.location.hash="#new/" + this.props.topicKey;
 
   handleCount = () => {-}
-    window.location.hash="#popular/" + this.props.topicKey;
+    window.location.hash="#all-time/" + this.props.topicKey;
 
   handleToday = () => {-}
-    window.location.hash="#popular/" + this.props.topicKey + '/today';
+    window.location.hash="#today/" + this.props.topicKey;
 
   render(){-}
 
@@ -21,11 +21,15 @@ export default class Content extends React.Component {-}
         marginRight: 5
 
     byNew:= <a onClick={this.handleNew}>New</a>;
-    byPopular:= <a onClick={this.handleCount}>Ever</a>;
-    if(this.props.route==="new"){-}
+    byAllTime:= <a onClick={this.handleCount}>All-time</a>;
+    byToday:= <a onClick={this.handleToday}>Today</a>;
+
+    if(this.props.replyFilter==="new"){-}
       byNew = <b>{byNew}</b>      
-    if(this.props.route==="popular"){-}
-      byPopular = <b>{byPopular}</b>      
+    if(this.props.replyFilter==="all-time"){-}
+      byAllTime = <b>{byAllTime}</b>      
+    if(this.props.replyFilter==="today"){-}
+      byToday = <b>{byToday}</b>      
 
     return (
       <div>
@@ -37,10 +41,10 @@ export default class Content extends React.Component {-}
         <p>By popularity:</p>
         <ul>
           <li style={styles.li}>
-            {byPopular} 
+            {byAllTime} 
           </li>
           <li>
-            <a onClick={this.handleToday}>Today</a>
+            {byToday}
           </li>
         </ul>
       </div>

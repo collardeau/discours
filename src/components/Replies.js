@@ -9,9 +9,9 @@ export default class Replies extends React.Component {-}
       for (var reply of this.props.replies.values()) {-}
         res.unshift(
           <ReplyItem 
-            reply={reply} 
             key={reply.key}
-            route={this.props.route}
+            reply={reply} 
+            replyFilter={this.props.replyFilter}
           />
         );
       return res;
