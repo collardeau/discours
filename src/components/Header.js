@@ -6,7 +6,6 @@ export default class Header extends React.Component {-}
    return true;
 
   render() {-}
-
     return (
       <header>
         <h1>Discours</h1>

@@ -24,10 +24,15 @@ export default class Content extends React.Component {-}
     if(this.props.replyFilter==="today"){-}
       byToday = <b>{byToday}</b>      
 
+
+    styles:= {-}
+      list: {-}
+        display: 'flex'
+
     return (
       <div>
         <p>view by</p>
-        <ul>
+        <ul style={styles.list}>
           <li>
             {byNew}
           </li>

@@ -26,9 +26,9 @@ export default class Topic extends Component {-}
 
     return (
       <div> 
+        <span>{ parentTopic }</span>
         <h2>{topic.get('content')}</h2>
         <p>{ count }</p>
-        <span>{ parentTopic }</span>
       </div> 
     );
 
