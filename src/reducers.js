@@ -10,7 +10,7 @@ export function uid(state='', action){-}
     default:
       return state;
 
-  export function route(state='#new/root', action){-}
+export function route(state='#new/root', action){-}
   switch (action.type){-}
     case 'CHANGE_ROUTE':
       return action.route
