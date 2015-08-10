@@ -8,7 +8,6 @@ export default class Item extends Component {-}
     return nextProps.reply !== this.props.reply;
 
   handleUpvote = () => {-}
-    console.log('upvote');
     let { key, topic } = this.props.reply;
     upvote(key, topic.key);
 

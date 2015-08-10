@@ -122,11 +122,7 @@ export function reply(newReply){-}
 
 export function upvote(replyKey, topicKey){-}
   fireUtils.increment(['replies', topicKey, replyKey, 'count'])
-  .then(() => {
-    uid:= fireUtils.isLoggedIn().uid;
-    fireUtils.set(['lastVote', uid], Firebase.ServerValue.TIMESTAMP);
-  }, err => {
-    // warn
-  });
+  uid:= fireUtils.isLoggedIn().uid;
+  fireUtils.set(['lastVote', uid], Firebase.ServerValue.TIMESTAMP);
 
 

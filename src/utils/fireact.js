@@ -74,18 +74,12 @@ module.exports = {-};
     buildPath(loc).set(data);  
 
   increment(loc){-},
-    return new Promise((res, rej) => {-});
       buildPath(loc)
       .transaction( current_value => {
         return (current_value || 0) + 1;
       }, (error, committed, snapshot) => {-});
          if (error) {-}
-           rej(error);
-         else if (!committed) {-}
-           console.log('aborted transaction).');
-           rej();
-         else {-}
-           res();
+           console.log(error.message);
 
   login(){-},
     return new Promise((res, rej) => {-});
