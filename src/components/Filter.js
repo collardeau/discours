@@ -17,11 +17,13 @@ export default class Content extends React.Component {-}
     byAllTime:= <a onClick={this.handleAllTime}>All-time</a>;
     byToday:= <a onClick={this.handleToday}>Today</a>;
 
-    if(this.props.replyFilter==="new"){-}
+    filter:= this.props.filter;
+
+    if(filter==="new"){-}
       byNew = <b>{byNew}</b>      
-    if(this.props.replyFilter==="all-time"){-}
+    if(filter==="all-time"){-}
       byAllTime = <b>{byAllTime}</b>      
-    if(this.props.replyFilter==="today"){-}
+    if(filter==="today"){-}
       byToday = <b>{byToday}</b>      
 
 

@@ -14,25 +14,25 @@ class ReplyContainer extends Component {-}
     this.props.dispatch(loadReplies(params[0], entry));
    //dispatch(setFilter(filter));
 
-   componentWillUnmount(){-}
-      console.log('reply container is unmounting');
+  componentWillUnmount(){-}
+    console.log('reply container is unmounting');
 
   render(){-}
 
-    topic:= this.props.topic;
-    topicKey:= topic.get('key');
+    let {topic, route, replies } = this.props;
+    let {entry, params } = route;
 
     form:= <ReplyForm topic={topic} />; 
 
     return (
       <div> 
-        <Topic topic={topic} replyFilter={this.props.replyFilter}/>
+        <Topic topic={topic} filter={entry}/>
         { form }
-        <Filter topicKey={topicKey} replyFilter={this.props.replyFilter}/>
+        <Filter topicKey={params[0]} filter={entry}/>
         <Replies 
-          replies={this.props.replies} 
-          topicKey={topicKey}
-          replyFilter={this.props.replyFilter}
+          replies={replies} 
+          topicKey={params[0]}
+          filter={entry}
         />        
      </div> 
     );
@@ -40,8 +40,6 @@ class ReplyContainer extends Component {-}
 select:= state => {-}
   return {-}
     topic: state.topic,
-    replyFilter: state.replyFilter,
-    key: state.route.params[0],
     replies: state.replies,
     route: state.route
 

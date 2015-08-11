@@ -6,7 +6,7 @@ export default class Topic extends Component {-}
   handleClick = (e) => {-}
     e.preventDefault();
     window.location.hash = '' + 
-      this.props.replyFilter + '/' + 
+      this.props.filter + '/' + 
       this.props.topic.get('topic').key;
 
   render(){-}

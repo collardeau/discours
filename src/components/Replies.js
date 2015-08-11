@@ -14,7 +14,7 @@ export default class Replies extends React.Component {-}
             <ReplyItem 
               key={reply.key}
               reply={reply} 
-              replyFilter={this.props.replyFilter}
+              filter={this.props.filter}
             />
           );
       return res;

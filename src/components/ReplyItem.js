@@ -13,8 +13,8 @@ export default class Item extends Component {-}
     upvote(key, topic.key);
 
   handleLink = () => {-}
-    let { replyFilter, reply } = this.props;
-    window.location.hash = '#/' + replyFilter + '/' + reply.key;
+    let { filter, reply } = this.props;
+    window.location.hash = '#/' + filter + '/' + reply.key;
 
   render(){-}
 
