@@ -20,24 +20,6 @@ export default class Item extends Component {-}
 
     let { reply } = this.props;
 
-    styles:= {-}
-      li: {-},
-        minHeight: '3.4em',
-        margin: '0.5em 0',
-        padding: '0.3em',
-        display: 'flex',
-        justifyContent: 'space-between',
-        borderBottom: '1px dotted'
-      content: {-},
-        width: '80%'
-      vote: {-},
-        display: 'flex',
-        flexDirection: 'column'
-      count: {-}
-        paddingTop: '0.5em',
-        textAlign: 'center',
-        fontSize: '1.3em'
-
     return (
       <li style={styles.li}>
         <div style={styles.content}>
@@ -49,4 +31,23 @@ export default class Item extends Component {-}
         </div>
     </li>
     );
+
+styles:= {-}
+  li: {-},
+    minHeight: '3.4em',
+    margin: '0.5em 0',
+    padding: '0.3em',
+    display: 'flex',
+    justifyContent: 'space-between',
+    borderBottom: '1px dotted'
+  content: {-},
+    width: '80%'
+  vote: {-},
+    display: 'flex',
+    flexDirection: 'column'
+  count: {-}
+    paddingTop: '0.5em',
+    textAlign: 'center',
+    fontSize: '1.3em'
+
 

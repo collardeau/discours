@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ReplyContainer from './ReplyContainer'
 import Header from './Header';
 import normalize from 'normalize.css/normalize.css';
-import Radium, { Style } from 'radium'
+import Radium, { Style } from 'radium';
 import rules from '../styles/styles';
+import hasher from 'hasher';
+import {login, changeRoute } from '../actions';
 
-export default class App extends Component {-}
+class App extends Component {-}
 
- render(){-}
-  
-    let {route, replyFilter, topic, replies, uid}= this.props.appState
+  constructor(props){-}
+    super(props);
+    this.props.dispatch(login());  
+    hasher.init();
+    hasher.initialized.add(this.handleRoute);
+    hasher.changed.add(this.handleRoute);
 
-    ui:= <ReplyContainer 
-      topic={topic} 
-      replies={replies} 
-      replyFilter={replyFilter}
-    />;
+  handleRoute= route => {-}
+    params:= route.split('/');
+    nextRoute:={-}
+      entry: params.shift(),
+      params: params
+    this.props.dispatch(changeRoute(nextRoute));
+ 
+  render(){-}
 
-    if ( route === 'about') {-}
+    let {route, uid}= this.props;
+
+    ui:= <ReplyContainer />;
+
+    if ( route.entry === 'about') {-}
       ui:= <div>Well, Bonjour... et bienvenue!</div>;
 
     return (
@@ -28,3 +41,9 @@ export default class App extends Component {-}
       </div>
     );
 
+select:= state => {-}
+  return {-}
+    route: state.route,
+    uid: state.uid
+
+export default connect(select)(App);

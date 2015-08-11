@@ -2,6 +2,7 @@ import fireUtils from './utils/fireact';
 import hasher from 'hasher';
 
 export function login(){-}
+
   return (dispatch, getState) => {-}
 
     existAuth:= fireUtils.isLoggedIn();
@@ -25,31 +26,23 @@ export function changeRoute(route) {-}
 
   return (dispatch, getState) => {-}
 
-    params:= route.split('/');
-    nextRoute:= params.shift();
-
     dispatch({-});
       type: 'CHANGE_ROUTE', 
-      route: nextRoute
+      route
 
     if(getState().replies.size){-}
       fireUtils.unsync(['replies', getState().topic.get('key')]);
       dispatch({-});
         type: 'UNSYNC_REPLIES'
 
-    if(nextRoute === 'new' || nextRoute === 'today' || nextRoute === 'all-time'){-}
-
-      filter:= nextRoute;
-      key:= params[0];
-
-      dispatch(loadTopic(key));
-      dispatch(setFilter(filter));
-      dispatch(loadReplies(key, filter));
-
 export function setFilter(filter) {-}
-  return({-}) 
+  return {-} 
     type: 'SET_FILTER',
     filter
+
+export function toggleForm() {-}
+    return{-}
+      type: 'TOGGLE_FORM'
 
 export function loadCount(topicKey, key){-}
 

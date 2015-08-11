@@ -10,7 +10,7 @@ export function uid(state='', action){-}
     default:
       return state;
 
-export function route(state='#new/root', action){-}
+export function route(state=I.Map({entry: 'new', params:['root']}), action){-}
   switch (action.type){-}
     case 'CHANGE_ROUTE':
       return action.route
@@ -28,6 +28,16 @@ export function topic(state=I.Map({}), action){-}
     default:
       return state;
 
+export function replies(state=I.OrderedMap({}), action){-}
+  switch (action.type){-}
+    case 'LOAD_REPLIES':
+      return state.clear();
+    case 'REPLY_ADDED':
+    case 'REPLY_CHANGED':
+      return state.set(action.reply.key, action.reply)
+   default:
+      return state;
+
 export function replyFilter(state='new', action){-}
   switch (action.type){-}
     case 'SET_FILTER':
@@ -35,15 +45,11 @@ export function replyFilter(state='new', action){-}
     default:
       return state;
 
-export function replies(state=I.OrderedMap({}), action){-}
+export function formIsVisible(state='false', action){-}
   switch (action.type){-}
-    case 'LOAD_REPLIES':
-      return state.clear();
-    case 'REPLY_JK':
-    case 'REPLY_ADDED':
-    case 'REPLY_CHANGED':
-      return state.set(action.reply.key, action.reply)
-   default:
+    case 'TOGGLE_FORM':
+      return !state;
+    default:
       return state;
 
 

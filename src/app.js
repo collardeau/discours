@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import hasher from 'hasher';
 import { changeRoute, login } from './actions';
+import { Provider } from 'react-redux';
 
 import App from './components/App';
 
@@ -19,31 +20,21 @@ const reducer= combineReducers(reducers);
 const store= finalCreateStore(reducer);
 
 let rootElement= document.getElementById('app');
-let render= () => React.render(
+React.render(
   <div>
-    <App appState={store.getState()}/>,
-    <DebugPanel top right bottom>
-      <DevTools store={store}
-                select={state => state.replyFilter}
-                monitor={LogMonitor}>
-      </DevTools>
-    </DebugPanel>
-  </div>,
+    <Provider store={store}> 
+      {() => <App />} 
+    </Provider> 
+
+</div>,
   rootElement
-);    
 
+);
 
-
-let unsubscribe= store.subscribe(() => {
-  render();
-});
-
-handleRoute:= route => {-}
-  store.dispatch(login());  
-  store.dispatch(changeRoute(route));
-
-hasher.init();
-hasher.initialized.add(handleRoute);
-hasher.changed.add(handleRoute);
-
-
+//<DebugPanel top right bottom>
+//    <DevTools store={store}
+//              select={state => state.replies}
+//              monitor={LogMonitor}>
+//    </DevTools>
+//  </DebugPanel>
+ 
