@@ -1,6 +1,5 @@
 import React, {findDOMNode, Component} from 'react';
 import { reply } from '../actions';
-import RadiumButton from './RadiumButton';
 
 export default class Content extends Component {-}
 

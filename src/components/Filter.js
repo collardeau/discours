@@ -16,20 +16,20 @@ export default class Content extends React.Component {-}
     filter:= this.props.filter;
 
     return (
-        <ul style={styles.ul}>
-          <li style={styles.li}>
-            <a onClick={this.handleNew}>Newest</a>
+      <ul style={styles.ul}>
+        <li style={styles.li}>
+           <a onClick={this.handleNew}>Newest</a>
             { filter === 'new' ? ' *' : ''}
-          </li>
+        </li>
+        <li style={styles.li}>
+           <a onClick={this.handleAllTime}>All-time</a>
+           { filter === 'all-time' ? ' *' : ''}
+         </li>
          <li style={styles.li}>
-            <a onClick={this.handleAllTime}>All-time</a>
-            { filter === 'all-time' ? ' *' : ''}
-          </li>
-          <li style={styles.li}>
-            <a onClick={this.handleToday}>Today</a>
+           <a onClick={this.handleToday}>Today</a>
             { filter === 'today' ? ' *' : ''}
-          </li>
-        </ul>
+         </li>
+       </ul>
     );
 
 styles:= {-}

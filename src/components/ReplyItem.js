@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { upvote } from '../actions';
-import Button from './button';
 
 export default class Item extends Component {-}
 

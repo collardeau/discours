@@ -12,10 +12,16 @@ class ReplyContainer extends Component {-}
     let {entry, params } = this.props.route
     this.props.dispatch(loadTopic(params[0]));
     this.props.dispatch(loadReplies(params[0], entry));
-   //dispatch(setFilter(filter));
+    //dispatch(setFilter(filter));
+
+  componentWillReceiveProps(nextProps){-}
+    if(nextProps.route !== this.props.route){-}
+      let { entry, params } = nextProps.route;
+      this.props.dispatch(loadReplies(params[0], entry));
 
   componentWillUnmount(){-}
     console.log('reply container is unmounting');
+    // unsych here instead of action?
 
   render(){-}
 
