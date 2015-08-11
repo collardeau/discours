@@ -12,7 +12,6 @@ class ReplyContainer extends Component {-}
     let {entry, params } = this.props.route
     this.props.dispatch(loadTopic(params[0]));
     this.props.dispatch(loadReplies(params[0], entry));
-    //dispatch(setFilter(filter));
 
   componentWillReceiveProps(nextProps){-}
     if(nextProps.route !== this.props.route){-}
@@ -31,7 +30,6 @@ class ReplyContainer extends Component {-}
     return (
       <div> 
         <Topic topic={topic} filter={entry}/>
-        { form }
         <Filter topicKey={params[0]} filter={entry}/>
         <Replies 
           replies={replies} 

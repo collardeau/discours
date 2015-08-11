@@ -8,8 +8,8 @@ export default {-}
     fontFamily: 'futura'
 
   h1: {-},
-    textAlign: 'center',
-    margin: '0.3em'
+    //textAlign: 'center',
+    margin: 0
 
   h2: {-},
     margin: '0.5em 0 0'

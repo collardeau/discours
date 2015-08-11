@@ -7,7 +7,8 @@ export default class Item extends Component {-}
     //console.log(nextProps.reply !== this.props.reply )
     return nextProps.reply !== this.props.reply;
 
-  handleUpvote = () => {-}
+  handleUpvote = (e) => {-}
+    e.stopPropagation();
     let { key, topic } = this.props.reply;
     upvote(key, topic.key);
 
@@ -20,10 +21,8 @@ export default class Item extends Component {-}
     let { reply } = this.props;
 
     return (
-      <li style={styles.li}>
-        <div style={styles.content}>
-          <a onClick={this.handleLink}>{ reply.content }</a>
-        </div>
+      <li onClick={this.handleLink} style={styles.li}>
+        <div style={styles.content}>{ reply.content }</div>
         <div style={styles.vote}>
           <button onClick={this.handleUpvote}>&#8593;</button>
           <span style={styles.count}> {reply.count}</span>
@@ -35,7 +34,7 @@ styles:= {-}
   li: {-},
     minHeight: '3.4em',
     margin: '0.5em 0',
-    padding: '0.3em',
+    padding: '0 0.5em',
     display: 'flex',
     justifyContent: 'space-between',
     borderBottom: '1px dotted'

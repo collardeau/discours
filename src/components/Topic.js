@@ -19,24 +19,37 @@ export default class Topic extends Component {-}
     if(hasParentTopic && hasParentTopic.content !== 'none') {-}
       count = topic.get('count');
       parentTopic = (
-        <small style={styles.parentTopic}>
-          In response to:
-          <a href='#' onClick={this.handleClick}> {hasParentTopic.content}</a>
-        </small>
+        <div style={styles.parentTopic}>
+          <small> 
+            In response to: <a href='#' onClick={this.handleClick}> 
+              {hasParentTopic.content}
+            </a>
+          </small>
+        </div>
       );
 
     return (
       <div style={styles.topic}> 
         <span>{ parentTopic }</span>
-        <h3>{topic.get('content')}</h3>
+        <div style={styles.flex}>
+          <p style={styles.content}>{topic.get('content')}</p>
+          <span style={styles.child}>
+            <button> Reply</button>
+          </span>
+        </div>
       </div> 
     );
 
 styles:= {-}
   topic: {-},
     backgroundColor: '#ddd',
-    padding: '0.5em 0.3em',
+    padding: '0.5em 0.5em',
   parentTopic: {-},
-    paddingLeft: '0.8em'
-
+    marginBottom: '0.8em'
+  flex: {-},
+    display: 'flex',
+    justifyContent: 'space-between',
+  content: {-},
+    margin: 0,
+    fontSize: '1.3em'
 
