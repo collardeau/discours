@@ -22,19 +22,24 @@ class ReplyContainer extends Component {-}
 
   render(){-}
 
-    let {topic, route, replies } = this.props;
+    let {topic, route, replies, formIsOpen, dispatch } = this.props;
     let {entry, params } = route;
 
     form:= <ReplyForm topic={topic} />; 
 
     return (
       <div> 
-        <Topic topic={topic} filter={entry}/>
+        <Topic 
+          dispatch={dispatch}
+          filter={entry}
+          topic={topic} 
+        />
+        { formIsOpen===true ? form : '' }
         <Filter topicKey={params[0]} filter={entry}/>
         <Replies 
+          filter={entry}
           replies={replies} 
           topicKey={params[0]}
-          filter={entry}
         />        
      </div> 
     );
@@ -43,6 +48,7 @@ select:= state => {-}
   return {-}
     topic: state.topic,
     replies: state.replies,
-    route: state.route
+    route: state.route,
+    formIsOpen: state.formIsOpen
 
 export default connect(select)(ReplyContainer);

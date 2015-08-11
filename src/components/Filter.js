@@ -22,12 +22,12 @@ export default class Content extends React.Component {-}
             { filter === 'new' ? ' *' : ''}
         </li>
         <li style={styles.li}>
-           <a onClick={this.handleAllTime}>All-time</a>
-           { filter === 'all-time' ? ' *' : ''}
-         </li>
-         <li style={styles.li}>
-           <a onClick={this.handleToday}>Today</a>
+           <a onClick={this.handleToday}>Today's best</a>
             { filter === 'today' ? ' *' : ''}
+         </li>
+        <li style={styles.li}>
+           <a onClick={this.handleAllTime}>Most Popular</a>
+           { filter === 'all-time' ? ' *' : ''}
          </li>
        </ul>
     );

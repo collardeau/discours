@@ -38,14 +38,7 @@ export function replies(state=I.OrderedMap({}), action){-}
    default:
       return state;
 
-export function replyFilter(state='new', action){-}
-  switch (action.type){-}
-    case 'SET_FILTER':
-      return action.filter;
-    default:
-      return state;
-
-export function formIsVisible(state='false', action){-}
+export function formIsOpen(state=false, action){-}
   switch (action.type){-}
     case 'TOGGLE_FORM':
       return !state;

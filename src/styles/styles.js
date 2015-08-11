@@ -24,7 +24,7 @@ export default {-}
 
   textarea: {-},
     width: '100%',
-    height: '5.5em'
+    height: '3.4em'
 
   button:{-}
     background: '#777',
@@ -33,5 +33,6 @@ export default {-}
     cursor: 'pointer',
     color: '#fff',
     borderRadius: '0.2em',
+    //height: '2.1em'
       
 

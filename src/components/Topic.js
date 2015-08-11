@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReplyForm from './ReplyForm';
+import {toggleForm} from '../actions';
 
 export default class Topic extends Component {-}
 
@@ -8,6 +9,10 @@ export default class Topic extends Component {-}
     window.location.hash = '' + 
       this.props.filter + '/' + 
       this.props.topic.get('topic').key;
+
+  handleToggle = () => {-}
+    console.log('clikc');
+    this.props.dispatch(toggleForm());
 
   render(){-}
 
@@ -34,7 +39,7 @@ export default class Topic extends Component {-}
         <div style={styles.flex}>
           <p style={styles.content}>{topic.get('content')}</p>
           <span style={styles.child}>
-            <button> Reply</button>
+            <button onClick={this.handleToggle}> Reply</button>
           </span>
         </div>
       </div> 

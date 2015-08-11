@@ -15,11 +15,6 @@ export default class Content extends Component {-}
 
   render(){-}
 
-    styles:= {-};
-      div: {-},
-        display: 'flex',
-        flexDirection: 'row-reverse'
-
     return (
       <div>
         <textarea ref='reply' />
@@ -28,4 +23,9 @@ export default class Content extends Component {-}
         </div>
       </div>
     );
+
+styles:= {-};
+  div: {-},
+    margin: '0.5em'
+
 
