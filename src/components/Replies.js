@@ -5,7 +5,7 @@ export default class Replies extends React.Component {-}
 
   render(){-}
 
-    console.log(this.props.replies);
+    //console.log(this.props.replies);
     replies:= () => {-}
       res:= [];
       if(this.props.replies){-}

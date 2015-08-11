@@ -9,15 +9,13 @@ import {loadTopic, setFilter, loadReplies } from '../actions';
 class ReplyContainer extends Component {-}
 
   componentDidMount(){-}
-    this.props.dispatch(loadTopic(this.props.key));
-    this.props.dispatch(loadReplies(this.props.key, this.props.replyFilter));
-
-  componentWillReceiveProps(){-}
-    //console.log(this.props);
-    //this.props.dispatch(loadTopic(this.props.key));
-    //this.props.dispatch(loadReplies(this.props.key, this.props.replyFilter));
-
+    let {entry, params } = this.props.route
+    this.props.dispatch(loadTopic(params[0]));
+    this.props.dispatch(loadReplies(params[0], entry));
    //dispatch(setFilter(filter));
+
+   componentWillUnmount(){-}
+      console.log('reply container is unmounting');
 
   render(){-}
 
@@ -44,6 +42,7 @@ select:= state => {-}
     topic: state.topic,
     replyFilter: state.replyFilter,
     key: state.route.params[0],
-    replies: state.replies
+    replies: state.replies,
+    route: state.route
 
 export default connect(select)(ReplyContainer);
