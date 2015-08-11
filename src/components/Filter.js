@@ -13,44 +13,36 @@ export default class Content extends React.Component {-}
 
   render(){-}
 
-    byNew:= <a onClick={this.handleNew}>Newest</a>;
-    byAllTime:= <a onClick={this.handleAllTime}>All-time</a>;
-    byToday:= <a onClick={this.handleToday}>Today</a>;
-
     filter:= this.props.filter;
-
-    if(filter==="new"){-}
-      byNew = <b>{byNew}</b>      
-    if(filter==="all-time"){-}
-      byAllTime = <b>{byAllTime}</b>      
-    if(filter==="today"){-}
-      byToday = <b>{byToday}</b>      
-
-
-    styles:= {-}
-      ul: {-},
-        display: 'flex',
-        justifyContent: 'center',
-        backgroundColor: '#ddd',
-        margin: 0
-        //marginTop: '1.3em'
-      li: {-}
-        flex: 1,      
-        lineHeight: '2.1em',
-        textAlign: 'center',
-        border: '1px solid'
 
     return (
         <ul style={styles.ul}>
           <li style={styles.li}>
-            {byNew}
+            <a onClick={this.handleNew}>Newest</a>
+            { filter === 'new' ? ' *' : ''}
           </li>
          <li style={styles.li}>
-            {byToday}
+            <a onClick={this.handleAllTime}>All-time</a>
+            { filter === 'all-time' ? ' *' : ''}
           </li>
           <li style={styles.li}>
-            {byAllTime} 
+            <a onClick={this.handleToday}>Today</a>
+            { filter === 'today' ? ' *' : ''}
           </li>
         </ul>
     );
+
+styles:= {-}
+  ul: {-},
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#ddd',
+    margin: 0
+    //marginTop: '1.3em'
+  li: {-}
+    flex: 1,      
+    lineHeight: '2.1em',
+    textAlign: 'center',
+    border: '1px solid'
+
 
