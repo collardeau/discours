@@ -1,5 +1,6 @@
 import React, {findDOMNode, Component} from 'react';
 import { reply } from '../actions';
+import RadiumButton from './RadiumButton';
 
 export default class Content extends Component {-}
 
@@ -15,11 +16,17 @@ export default class Content extends Component {-}
 
   render(){-}
 
+    styles:= {-};
+      div: {-},
+        display: 'flex',
+        flexDirection: 'row-reverse'
+
     return (
       <div>
         <textarea ref='reply' />
-        <br />
-        <button onClick={this.handleClick}>Submit</button>
+        <div style={styles.div}>
+          <button onClick={this.handleClick}>Submit</button>
+        </div>
       </div>
     );
 

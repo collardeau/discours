@@ -3,7 +3,8 @@ import ReplyForm from './ReplyForm';
 
 export default class Topic extends Component {-}
 
-  handleClick = () => {-}
+  handleClick = (e) => {-}
+    e.preventDefault();
     window.location.hash = '' + 
       this.props.replyFilter + '/' + 
       this.props.topic.get('topic').key;
@@ -18,17 +19,24 @@ export default class Topic extends Component {-}
     if(hasParentTopic && hasParentTopic.content !== 'none') {-}
       count = topic.get('count');
       parentTopic = (
-        <div>
+        <small style={styles.parentTopic}>
           In response to:
-          <a onClick={this.handleClick}>{hasParentTopic.content}</a>
-        </div>
+          <a href='#' onClick={this.handleClick}> {hasParentTopic.content}</a>
+        </small>
       );
 
     return (
-      <div> 
+      <div style={styles.topic}> 
         <span>{ parentTopic }</span>
-        <h2>{topic.get('content')}</h2>
-        <p>{ count }</p>
+        <h3>{topic.get('content')}</h3>
       </div> 
     );
+
+styles:= {-}
+  topic: {-},
+    backgroundColor: '#ddd',
+    padding: '0.5em 0.3em',
+  parentTopic: {-},
+    paddingLeft: '0.8em'
+
 

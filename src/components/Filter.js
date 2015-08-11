@@ -13,7 +13,7 @@ export default class Content extends React.Component {-}
 
   render(){-}
 
-    byNew:= <a onClick={this.handleNew}>New</a>;
+    byNew:= <a onClick={this.handleNew}>Newest</a>;
     byAllTime:= <a onClick={this.handleAllTime}>All-time</a>;
     byToday:= <a onClick={this.handleToday}>Today</a>;
 
@@ -26,23 +26,29 @@ export default class Content extends React.Component {-}
 
 
     styles:= {-}
-      list: {-}
-        display: 'flex'
+      ul: {-},
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: '#ddd',
+        margin: 0
+        //marginTop: '1.3em'
+      li: {-}
+        flex: 1,      
+        lineHeight: '2.1em',
+        textAlign: 'center',
+        border: '1px solid'
 
     return (
-      <div>
-        <p>view by</p>
-        <ul style={styles.list}>
-          <li>
+        <ul style={styles.ul}>
+          <li style={styles.li}>
             {byNew}
           </li>
-          <li>
-            {byAllTime} 
-          </li>
-          <li>
+         <li style={styles.li}>
             {byToday}
           </li>
+          <li style={styles.li}>
+            {byAllTime} 
+          </li>
         </ul>
-      </div>
     );
 

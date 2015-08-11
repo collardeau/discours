@@ -11,10 +11,10 @@ export default class ReplyContainer extends Component {-}
     topic:= this.props.topic;
     topicKey:= topic.get('key');
 
+    //<ReplyForm topic={topic}/>
     return (
       <div> 
         <Topic topic={topic} replyFilter={this.props.replyFilter}/>
-        <ReplyForm topic={topic}/>
         <Filter topicKey={topicKey} replyFilter={this.props.replyFilter}/>
         <Replies 
           replies={this.props.replies} 

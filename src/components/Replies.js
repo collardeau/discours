@@ -18,7 +18,7 @@ export default class Replies extends React.Component {-}
 
     return (
       <div>
-        <ul>{replies()}</ul>
+       <ul>{replies()}</ul>
       </div>
     );
 

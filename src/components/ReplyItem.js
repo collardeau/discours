@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { upvote } from '../actions';
+import Button from './button';
 
 export default class Item extends Component {-}
 
@@ -20,16 +21,32 @@ export default class Item extends Component {-}
     let { reply } = this.props;
 
     styles:= {-}
-      li: {-}
-        height: 50,
+      li: {-},
+        minHeight: '3.4em',
+        margin: '0.5em 0',
+        padding: '0.3em',
+        display: 'flex',
+        justifyContent: 'space-between',
+        borderBottom: '1px dotted'
+      content: {-},
+        width: '80%'
+      vote: {-},
+        display: 'flex',
+        flexDirection: 'column'
+      count: {-}
+        paddingTop: '0.5em',
+        textAlign: 'center',
+        fontSize: '1.3em'
 
-    upvote:=  <button onClick={this.handleUpvote}>Up</button>
-    
     return (
       <li style={styles.li}>
-        <a onClick={this.handleLink}>{ reply.content }</a>
-        <b> {reply.count}</b> votes
-        { upvote }
-      </li>
+        <div style={styles.content}>
+          <a onClick={this.handleLink}>{ reply.content }</a>
+        </div>
+        <div style={styles.vote}>
+          <button onClick={this.handleUpvote}>&#8593;</button>
+          <span style={styles.count}> {reply.count}</span>
+        </div>
+    </li>
     );
 
