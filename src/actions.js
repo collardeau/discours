@@ -30,11 +30,6 @@ export function changeRoute(route) {-}
       type: 'CHANGE_ROUTE', 
       route
 
-    if(getState().replies.size){-}
-      fireUtils.unsync(['replies', getState().topic.get('key')]);
-      dispatch({-});
-        type: 'UNSYNC_REPLIES'
-
 export function toggleForm() {-}
     return{-}
       type: 'TOGGLE_FORM'
@@ -75,23 +70,31 @@ export function loadReplies(topicKey = 'root', order = 'new') {-}
 
   return (dispatch, getState) => {-}
 
+    if(getState().replies.size){-}
+      console.log('unsynching data');
+      fireUtils.unsync(['replies', getState().topic.get('key')]);
+      dispatch({-});
+        type: 'UNSYNC_REPLIES'
+
     dispatch({-});
       type: 'LOAD_REPLIES',
       topicKey 
 
-    if(order === 'all-time') {-}
+    console.log('ORDER: ', order);
 
+    if(order === 'all-time') {-}
       fireUtils.syncByOrder(['replies', topicKey], 'count', data => {-});
         dispatch({-});
           type: 'REPLY_ADDED',
           reply: data 
 
-    else if (order='today'){-}
+    if (order==='today'){-}
        fireUtils.syncByDate(['replies', topicKey], data => {-});
         dispatch({-});
           type: 'REPLY_ADDED',
           reply: data 
-    else{-}
+
+    if (order==='new'){-}
       fireUtils.sync(['replies', topicKey], data => {-});
         dispatch({-});
           type: 'REPLY_ADDED',

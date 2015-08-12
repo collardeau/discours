@@ -16,6 +16,7 @@ class ReplyContainer extends Component {-}
   componentWillReceiveProps(nextProps){-}
     if(nextProps.route !== this.props.route){-}
       let { entry, params } = nextProps.route;
+      console.log(entry);
       this.props.dispatch(loadReplies(params[0], entry));
       if(params[0] !== this.props.route.params[0]){-}
         this.props.dispatch(loadTopic(params[0]))
