@@ -35,11 +35,6 @@ export function changeRoute(route) {-}
       dispatch({-});
         type: 'UNSYNC_REPLIES'
 
-export function setFilter(filter) {-}
-  return {-} 
-    type: 'SET_FILTER',
-    filter
-
 export function toggleForm() {-}
     return{-}
       type: 'TOGGLE_FORM'

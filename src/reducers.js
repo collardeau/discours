@@ -1,4 +1,3 @@
-import R from 'ramda';
 import I from 'immutable';
 
 export function uid(state='', action){-}

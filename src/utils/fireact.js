@@ -25,9 +25,8 @@ module.exports = {-};
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
   syncByDate(loc, cb){-},
-    
     yesterday:= moment().subtract(1, 'days').unix();
-    buildPath(loc).orderByChild('date').startAt(yesterday).on("child_added", snapshot => {
+    buildPath(loc).orderByChild('date').startAt(yesterday * 1000).on("child_added", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
       cb(data);
@@ -60,6 +59,7 @@ module.exports = {-};
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
   unsync(loc){-},
+    console.log('unsynching bitch!');
     //buildPath(loc).orderByChild('count').off();
     buildPath(loc).off();
 
