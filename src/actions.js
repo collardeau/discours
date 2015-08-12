@@ -80,8 +80,6 @@ export function loadReplies(topicKey = 'root', order = 'new') {-}
       type: 'LOAD_REPLIES',
       topicKey 
 
-    console.log('ORDER: ', order);
-
     if(order === 'all-time') {-}
       fireUtils.syncByOrder(['replies', topicKey], 'count', data => {-});
         dispatch({-});

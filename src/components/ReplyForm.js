@@ -17,7 +17,7 @@ export default class Content extends Component {-}
 
     return (
       <div>
-        <textarea ref='reply' />
+        <textarea ref='reply' placeholder=' Go ahead, express yourself!'/>
         <div style={styles.div}>
           <button onClick={this.handleClick}>Submit</button>
         </div>

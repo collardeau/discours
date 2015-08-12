@@ -1,48 +1,47 @@
-import React from 'react';
+import React, {findDOMNode, Component} from 'react';
+import Radium from 'radium'
 
-export default class Content extends React.Component {-}
+@Radium
+export default class Content extends Component {-}
 
-  handleNew = () => {-}
-    window.location.hash="new/" + this.props.topicKey;
+  handleClick = filter => {-}
+    window.location.hash= filter + "/" + this.props.topicKey;
 
-  handleAllTime = () => {-}
-    window.location.hash="all-time/" + this.props.topicKey;
+  renderFilter= (filter, filterName, last=false) => {-}
 
-  handleToday = () => {-}
-    window.location.hash="today/" + this.props.topicKey;
+    li:= {-}
+      backgroundColor: filter === this.props.filter ? '#999' : '#ddd',
+      borderRight: last ? '' : '1px solid'
+
+    return (
+      <li style={[styles.li, this.li]} 
+          onClick= {() => this.handleClick(filter)}>
+        {filterName} 
+      </li>
+    ); 
 
   render(){-}
 
     filter:= this.props.filter;
-
+   
     return (
       <ul style={styles.ul}>
-        <li style={styles.li}>
-           <a onClick={this.handleNew}>Newest</a>
-            { filter === 'new' ? ' *' : ''}
-        </li>
-        <li style={styles.li}>
-           <a onClick={this.handleToday}>Today's best</a>
-            { filter === 'today' ? ' *' : ''}
-         </li>
-        <li style={styles.li}>
-           <a onClick={this.handleAllTime}>Most Popular</a>
-           { filter === 'all-time' ? ' *' : ''}
-         </li>
-       </ul>
+          {this.renderFilter('new', 'New')}
+          {this.renderFilter('today', 'Today')}
+          {this.renderFilter('all-time', 'Most Popular', true)}
+      </ul>
     );
 
 styles:= {-}
   ul: {-},
     display: 'flex',
     justifyContent: 'center',
-    backgroundColor: '#ddd',
-    margin: 0
-    //marginTop: '1.3em'
+    margin: 0,
+    borderTop: '1px solid',
+    borderBottom: '1px solid',
   li: {-}
     flex: 1,      
     lineHeight: '2.1em',
     textAlign: 'center',
-    border: '1px solid'
 
 
