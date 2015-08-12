@@ -15,14 +15,18 @@ export default class Header extends React.Component {-}
   render() {-}
     return (
       <header style={styles.header}>
-        <h1 onClick={this.handleHomeClick}>DISCOURS</h1>
+        <button>Menu</button>
+        <div style={styles.title}>
+          <h1 onClick={this.handleHomeClick}>DISCOURS</h1>
+        </div>
       </header>
     );
 
 styles:= {-}
-  header: {-}
+  header: {-},
     backgroundColor: '#999',
     height: '3.4em',
+    display: 'flex',
+  title: {-},
     lineHeight: '3.4em',
-    padding: '0 0.5em'
-    //marginBottom: '0.8em'
+    marginLeft: '0.5em'

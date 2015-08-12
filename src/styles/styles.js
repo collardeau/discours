@@ -9,7 +9,9 @@ export default {-}
 
   h1: {-},
     //textAlign: 'center',
-    margin: 0
+    margin: 0,
+    padding: 0,
+    verticalAlign: 'text-bottom'
 
   h2: {-},
     margin: '0.5em 0 0'
@@ -26,13 +28,14 @@ export default {-}
     width: '100%',
     height: '3.4em'
 
-  button:{-}
+  button:{-},
     background: '#777',
     border: 0,
     padding: '0.5em 0.8em',
     cursor: 'pointer',
     color: '#fff',
     borderRadius: '0.2em',
-    //height: '2.1em'
-      
 
+  a:{-},
+    color: 'black'
+      
