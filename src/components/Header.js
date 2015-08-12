@@ -1,5 +1,6 @@
 import React from 'react';
 import {toggleForm} from '../actions';
+import {primary} from '../styles/theme';
 
 export default class Header extends React.Component {-}
 
@@ -24,7 +25,7 @@ export default class Header extends React.Component {-}
 
 styles:= {-}
   header: {-},
-    backgroundColor: '#999',
+    backgroundColor: primary,
     height: '3.4em',
     display: 'flex',
   title: {-},

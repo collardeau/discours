@@ -1,14 +1,12 @@
+import theme from './theme';
+
 export default {-}
 
   body: {-},
-    backgroundColor: '#eee',
-    //width: '90%',
-    //margin: '0 auto',
-    //letterSpacing: '0.02em',
+    backgroundColor: theme.white,
     fontFamily: 'futura'
 
   h1: {-},
-    //textAlign: 'center',
     margin: 0,
     padding: 0,
     verticalAlign: 'text-bottom'
@@ -29,11 +27,11 @@ export default {-}
     height: '3.4em'
 
   button:{-},
-    background: '#777',
+    background: theme.dark,
     border: 0,
     padding: '0.5em 0.8em',
     cursor: 'pointer',
-    color: '#fff',
+    color: theme.white,
     borderRadius: '0.2em',
 
   a:{-},

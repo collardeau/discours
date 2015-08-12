@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReplyForm from './ReplyForm';
 import {toggleForm} from '../actions';
+import {light, white} from '../styles/theme';
 
 export default class Topic extends Component {-}
 
@@ -47,7 +48,7 @@ export default class Topic extends Component {-}
 
 styles:= {-}
   topic: {-},
-    backgroundColor: '#ddd',
+    backgroundColor: white,
     padding: '0.5em 0.5em',
   parentTopic: {-},
     marginBottom: '0.8em'
