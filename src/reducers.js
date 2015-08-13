@@ -33,8 +33,15 @@ export function topic(state=I.Map({}), action){-}
       return state.clear();
     case 'LOAD_TOPIC_SUCCESS':
       return I.Map(action.topic);
-    case 'LOAD_COUNT_SUCCESS':
-      return state.set('count', action.count);
+    default:
+      return state;
+
+export function filterHasReplies(state=true, action){-}
+  switch (action.type){-}
+    case 'NO_MATCHED_REPLIES':
+      return false;
+    case 'REPLY_ADDED':
+      return true;
     default:
       return state;
 
@@ -54,5 +61,4 @@ export function formIsOpen(state=false, action){-}
       return !state;
     default:
       return state;
-
 

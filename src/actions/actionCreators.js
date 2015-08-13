@@ -32,6 +32,10 @@ export function receiveReply(reply){-}
     type: 'REPLY_ADDED',
     reply: reply
 
+export function noReplies(){-}
+  return {-}
+    type: 'NO_MATCHED_REPLIES'
+
 export function changeReply(reply) {-}
   return{-}
     type: 'REPLY_CHANGED',

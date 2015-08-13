@@ -28,7 +28,6 @@ export function loadTopic(topicKey = 'root') {-}
     .then(onSuccess);
 
 export function loadReplies(topicKey = 'root', order = 'new') {-}
-
   return (dispatch, getState) => {-}
 
     if(getState().replies.size){-}
@@ -38,19 +37,32 @@ export function loadReplies(topicKey = 'root', order = 'new') {-}
 
     dispatch(act.requestReplies(topicKey));
 
-    if(order === 'all-time') {-}
-      fireUtils.syncByOrder(['replies', topicKey], 'count', data => {-});
+    if(order === 'all-time') {
+      fireUtils.syncByOrder(['replies', topicKey], 'count', data => {
         dispatch(act.receiveReply(data));
+      }, exists => {
+        if(!exists) dispatch(act.noReplies());
+      });
+    }
 
-    if (order==='today'){-}
-       fireUtils.syncByDate(['replies', topicKey], data => {-});
+    if (order==='today'){
+       fireUtils.syncByDate(['replies', topicKey], data => {
         dispatch(act.receiveReply(data));
+       }, exists => {
+        if(!exists) dispatch(act.noReplies());
+      });
+    }
 
-    if (order==='new'){-}
-      fireUtils.sync(['replies', topicKey], data => {-});
+    if (order==='new'){
+      fireUtils.sync(['replies', topicKey], data => {
         dispatch(act.receiveReply(data));
-     fireUtils.syncOnChange(['replies', topicKey], data => {-});
+      }, exists => {
+        if(!exists) dispatch(act.noReplies());
+      });
+      fireUtils.syncOnChange(['replies', topicKey], data => {
         dispatch(act.changeReply(data));
+      });
+    }
 
 export function reply(newReply){-}
   newReply.date = Firebase.ServerValue.TIMESTAMP;

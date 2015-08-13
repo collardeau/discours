@@ -11,10 +11,15 @@ export default class Replies extends React.Component {-}
 
   render(){-}
 
-    let { replies, canVote, filter, dispatch } = this.props;
+    let { replies, canVote, filter, dispatch, filterHasReplies } = this.props;
+ 
+    if(!filterHasReplies){
+      return <p style={styles.p}>No responses available here.</p>
+    }
     
-    if(!replies.size){-}
-        return <p> ... No Data...</p>
+    if(!replies.size){
+      return <p style={styles.p}> loading replies...  </p>
+    }
 
     renderReplies:= () => {-}
       res:= [];
@@ -41,4 +46,8 @@ export default class Replies extends React.Component {-}
       </div>
     );
 
-
+let styles = {
+  p: {
+    paddingLeft: '0.5em'
+  }
+};

@@ -17,38 +17,53 @@ module.exports = {-};
         res(data);
       }, errorObject => rej(errorObject.code));
 
-  sync(loc, cb){-},
+  sync(loc, cbOnChild, cbOnData){-},
+
+    buildPath(loc).limitToFirst(1).once("value", snapshot => {
+      cbOnData(snapshot.exists());
+    });
+
     buildPath(loc).on("child_added", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
-      cb(data);
+      cbOnChild(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-  syncByDate(loc, cb){-},
+  syncByDate(loc, cbOnChild, cbOnData){-},
+
     yesterday:= moment().subtract(1, 'days').unix();
+
+    buildPath(loc).orderByChild('date').startAt(yesterday * 1000).once("value", snapshot => {
+      cbOnData(snapshot.exists());
+    });
+
     buildPath(loc).orderByChild('date').startAt(yesterday * 1000).on("child_added", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
-      cb(data);
+      cbOnChild(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
     buildPath(loc).orderByChild('date').startAt(yesterday).on("child_changed", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
-      cb(data);
+      cbOnChild(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
-  syncByOrder(loc, order, cb){-},
+  syncByOrder(loc, order, cbOnChild, cbOnData){-},
+    buildPath(loc).orderByChild(order).limitToLast(1).once("value", snapshot => {
+      cbOnData(snapshot.exists());
+    });
+
     buildPath(loc).orderByChild(order).limitToLast(20).on("child_added", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
-      cb(data);
+      cbOnChild(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
     buildPath(loc).orderByChild(order).limitToLast(20).on("child_changed", snapshot => {
       data:= snapshot.val();
       data.key = snapshot.key();
-      cb(data);
+      cbOnChild(data);
     }, errorObject => console.log("The read failed: " + errorObject.code));
 
   syncOnChange(loc, cb){-},
