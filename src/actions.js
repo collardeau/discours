@@ -1,79 +1,37 @@
 import fireUtils from './utils/fireact';
 import hasher from 'hasher';
-
-// Actions Creators 
-
-export function loginUser(uid) {-}
-  return{-}
-    type: "LOGIN",
-    uid 
-
-export function changeRoute(route) {-}
-  return {-}
-      type: 'CHANGE_ROUTE', 
-      route
-
-export function toggleForm() {-}
-  return{-}
-    type: 'TOGGLE_FORM'
-
-export function requestCount(topicKey) {-}
-  return{-}
-      type: 'LOAD_COUNT',
-      topicKey 
-
-export function receiveCount(count) {-}
-  return{-}
-    type: 'LOAD_COUNT_SUCCESS',
-    count 
-
-// Flow 
+import * as act from './actionCreators';
 
 export function login(){-}
-  return (dispatch, getState) => {-}
+  return (dispatch) => {-}
     existAuth:= fireUtils.isLoggedIn();
     if(!existAuth){-}
       fireUtils.login().then(auth => {-});
         fireUtils.set(['lastVote', auth.uid], 0);
-        dispath(loginUser(auth.uid));
+        dispatch(act.loginUser(auth.uid));
     else{-}
-      dispatch(loginUser(existAuth.uid));
+      dispatch(act.loginUser(existAuth.uid));
 
 export function logout(){-}
   uid:= fireUtils.isLoggedIn().uid;
   fireUtils.logout(['lastVote', uid]);
 
 export function loadCount(topicKey, key){-}
-  return (dispatch, getState) => {-}
-    dispatch(requestCount(topicKey));
+  return (dispatch) => {-}
+    dispatch(act.requestCount(topicKey));
     if(topicKey){-}
       fireUtils.fetch(['replies', topicKey, key, 'count'])
       .then(data => {-});
-        dispatch(receiveCount(topicKey));
-
-export function requestTopic(topicKey) {-}
-  return{-}
-    type: 'LOAD_TOPIC',
-    topicKey 
-
-export function receiveTopic(topic) {-}
-  return{-}
-    type: 'LOAD_TOPIC_SUCCESS',
-    topic 
+        dispatch(act.receiveCount(topicKey));
 
 export function loadTopic(topicKey = 'root') {-}
-  return (dispatch, getState) => {-}
-    dispatch(requestTopic(topicKey));
+  return (dispatch) => {-}
+    dispatch(act.requestTopic(topicKey));
     onSuccess:= data => {-};
-      dispatch(receiveTopic(data));
-      //dispatch(loadCount(data.topic.key, data.key));
+      dispatch(act.receiveTopic(data));
+      //dispatch(act.loadCount(data.topic.key, data.key));
     fireUtils.fetch(['topic', topicKey])
     .then(onSuccess);
-
-export function addReply(reply){-}
-  return {-}
-    type: 'REPLY_ADDED',
-    reply: reply
 
 export function loadReplies(topicKey = 'root', order = 'new') {-}
 
@@ -82,28 +40,23 @@ export function loadReplies(topicKey = 'root', order = 'new') {-}
     if(getState().replies.size){-}
       console.log('unsynching data');
       fireUtils.unsync(['replies', getState().topic.get('key')]);
-      dispatch({-});
-        type: 'UNSYNC_REPLIES'
+      dispatch(act.unsync());
 
-    dispatch({-});
-      type: 'LOAD_REPLIES',
-      topicKey 
+    dispatch(act.requestReplies(topicKey));
 
     if(order === 'all-time') {-}
       fireUtils.syncByOrder(['replies', topicKey], 'count', data => {-});
-        dispatch(addReply(data));
+        dispatch(act.receiveReply(data));
 
     if (order==='today'){-}
        fireUtils.syncByDate(['replies', topicKey], data => {-});
-        dispatch(addReply(data));
+        dispatch(act.receiveReply(data));
 
     if (order==='new'){-}
       fireUtils.sync(['replies', topicKey], data => {-});
-        dispatch(addReply(data));
+        dispatch(act.receiveReply(data));
      fireUtils.syncOnChange(['replies', topicKey], data => {-});
-        dispatch({-});
-          type: 'REPLY_CHANGED',
-          reply: data
+        dispatch(act.changeReply(data));
 
 export function reply(newReply){-}
   newReply.date = Firebase.ServerValue.TIMESTAMP;
