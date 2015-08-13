@@ -16,11 +16,13 @@ export function route(state=I.Map({entry: 'new', params:['root']}), action){-}
     default:
       return state;
 
-export function canVote(state=true, action){-}
+export function canVote(state=false, action){-}
   switch (action.type){-}
     case 'UPVOTE':
+    case 'LOGOUT':
       return false;
     case 'ALLOW_VOTE':
+    case 'LOGIN':
       return true;
     default:
       return state;
