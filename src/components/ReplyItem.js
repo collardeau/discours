@@ -11,7 +11,7 @@ export default class Item extends Component {-}
     e.stopPropagation();
     let { key, topic } = this.props.reply;
     upvote(key, topic.key);
-    findDomNode(this.refs.btn)
+    //findDomNode(this.refs.btn)
 
   handleLink = () => {-}
     let { filter, reply } = this.props;

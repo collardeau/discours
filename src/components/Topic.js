@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReplyForm from './ReplyForm';
-import {toggleForm} from '../actions/appActions';
+import {toggleForm} from '../actions/actionCreators';
 import {light, white} from '../styles/theme';
 
 export default class Topic extends Component {-}
