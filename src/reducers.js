@@ -1,7 +1,6 @@
 import I from 'immutable';
 
 export function uid(state=null, action){-}
-  //console.log(action);
   switch (action.type){-}
     case 'LOGIN':
       return action.uid;
@@ -14,6 +13,15 @@ export function route(state=I.Map({entry: 'new', params:['root']}), action){-}
   switch (action.type){-}
     case 'CHANGE_ROUTE':
       return action.route
+    default:
+      return state;
+
+export function canVote(state=true, action){-}
+  switch (action.type){-}
+    case 'UPVOTE':
+      return false;
+    case 'ALLOW_VOTE':
+      return true;
     default:
       return state;
 

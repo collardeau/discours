@@ -51,6 +51,16 @@ export function receiveCount(count) {-}
     type: 'LOAD_COUNT_SUCCESS',
     count 
 
+export function requestUpvote(key) {-}
+  return{-}
+    type: 'UPVOTE',
+    key
+
+export function allowVote() {-}
+  return{-}
+    type: 'ALLOW_VOTE'
+
+
 export function toggleForm() {-}
   return{-}
     type: 'TOGGLE_FORM'

@@ -37,6 +37,7 @@ class ReplyContainer extends Component {-}
         { formIsOpen===true ? form : '' }
         <Filter topicKey={params[0]} filter={entry}/>
         <Replies 
+          dispatch={dispatch}
           filter={entry}
           isLoading={isLoading}
           replies={replies} 

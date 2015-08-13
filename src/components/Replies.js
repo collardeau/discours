@@ -17,9 +17,10 @@ export default class Replies extends React.Component {-}
     renderReplies:= () => {-}
       res:= [];
       if(this.props.replies){-}
-        filter:= this.props.filter;
+        let {filter, dispatch}= this.props;
         for (var reply of this.props.replies.values()) {-}
           item:= <ReplyItem  
+            dispatch={dispatch}
             key={reply.key} 
             reply={reply} 
             filter={filter}

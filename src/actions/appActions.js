@@ -1,6 +1,15 @@
 import fireUtils from '../utils/fireact';
 import * as act from './actionCreators';
 
+export function upvote(replyKey, topicKey){-}
+  return dispatch => {-}
+    dispatch(act.requestUpvote(replyKey));
+    fireUtils.increment(['replies', topicKey, replyKey, 'count'])
+    uid:= fireUtils.isLoggedIn().uid;
+    fireUtils.set(['lastVote', uid], Firebase.ServerValue.TIMESTAMP);
+    setTimeout(()=>{-}, 5000)
+      dispatch(act.allowVote());
+
 export function loadCount(topicKey, key){-}
   return (dispatch) => {-}
     dispatch(act.requestCount(topicKey));
@@ -49,12 +58,5 @@ export function reply(newReply){-}
   .then(newKey => {-});
     newReply.count = 0;
     fireUtils.set(['replies', newReply.topic.key, newKey], newReply);
-
-export function upvote(replyKey, topicKey){-}
-  fireUtils.increment(['replies', topicKey, replyKey, 'count'])
-  uid:= fireUtils.isLoggedIn().uid;
-  fireUtils.set(['lastVote', uid], Firebase.ServerValue.TIMESTAMP);
-  setTimeout(()=>{-}, 500)
-    console.log('boom');
 
 
