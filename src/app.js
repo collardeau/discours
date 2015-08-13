@@ -10,8 +10,17 @@ import { Provider } from 'react-redux';
 
 import App from './components/App';
 
+const logger = store => next => action => {
+  console.group(action.type);
+  console.info('dispatching', action);
+  let result = next(action);
+  console.log('next state', store.getState());
+  console.groupEnd(action.type);
+  return result;
+};
+
 const finalCreateStore = compose(
-  applyMiddleware(thunk),
+  applyMiddleware(thunk, logger),
   devTools(),
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
   createStore
