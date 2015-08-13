@@ -6,7 +6,8 @@ import normalize from 'normalize.css/normalize.css';
 import Radium, { Style } from 'radium';
 import rules from '../styles/styles';
 import hasher from 'hasher';
-import {login, changeRoute } from '../actions';
+import {login, logout } from '../actions';
+import { changeRoute } from '../actionCreators';
 
 class App extends Component {-}
 

@@ -1,11 +1,13 @@
 import I from 'immutable';
 
-export function uid(state='', action){-}
+export function uid(state=null, action){-}
   //console.log(action);
   switch (action.type){-}
     case 'LOGIN':
     case 'LOGGED_IN':
       return action.uid;
+    case 'LOGOUT':
+      return null;
     default:
       return state;
 
@@ -18,7 +20,7 @@ export function route(state=I.Map({entry: 'new', params:['root']}), action){-}
 
 export function topic(state=I.Map({}), action){-}
   switch (action.type){-}
-    case 'LOAD_TOPIC':
+    case 'LOAD_TOPIC_REQUEST':
       return state.clear();
     case 'LOAD_TOPIC_SUCCESS':
       return I.Map(action.topic);
@@ -29,7 +31,7 @@ export function topic(state=I.Map({}), action){-}
 
 export function replies(state=I.OrderedMap({}), action){-}
   switch (action.type){-}
-    case 'LOAD_REPLIES':
+    case 'LOAD_REPLIES_REQUEST':
       return state.clear();
     case 'REPLY_ADDED':
     case 'REPLY_CHANGED':
@@ -45,5 +47,3 @@ export function formIsOpen(state=false, action){-}
       return state;
 
 
-
- 

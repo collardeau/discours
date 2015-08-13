@@ -1,20 +1,32 @@
 import fireUtils from './utils/fireact';
-import hasher from 'hasher';
 import * as act from './actionCreators';
 
-export function login(){-}
-  return (dispatch) => {-}
-    existAuth:= fireUtils.isLoggedIn();
-    if(!existAuth){-}
-      fireUtils.login().then(auth => {-});
-        fireUtils.set(['lastVote', auth.uid], 0);
-        dispatch(act.loginUser(auth.uid));
-    else{-}
-      dispatch(act.loginUser(existAuth.uid));
+export function login(){
 
-export function logout(){-}
-  uid:= fireUtils.isLoggedIn().uid;
-  fireUtils.logout(['lastVote', uid]);
+  return dispatch => {
+
+    let isLoggedIn= fireUtils.isLoggedIn();
+    let uid;
+
+    let onLogout= uid => {
+      return fireUtils.onLogout(() => {-});
+        fireUtils.set(['lastVote', uid], null);
+        dispatch(act.logoutUser(uid));
+    };
+     
+    if(!isLoggedIn){
+      fireUtils.login().then(auth => {
+        uid= auth.uid;
+        dispatch(act.loginUser(uid));
+        onLogout(uid);
+      });
+    }else{
+      uid= isLoggedIn.uid;
+      dispatch(act.loginUser(existAuth.uid));
+      onLogout(uid);
+    }
+  }
+}
 
 export function loadCount(topicKey, key){-}
   return (dispatch) => {-}

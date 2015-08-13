@@ -3,6 +3,10 @@ export function loginUser(uid) {-}
     type: "LOGIN",
     uid 
 
+export function logoutUser() {-}
+  return{-}
+    type: "LOGOUT"
+
 export function changeRoute(route) {-}
   return {-}
       type: 'CHANGE_ROUTE', 
@@ -10,7 +14,7 @@ export function changeRoute(route) {-}
 
 export function requestTopic(topicKey) {-}
   return{-}
-    type: 'LOAD_TOPIC',
+    type: 'LOAD_TOPIC_REQUEST',
     topicKey 
 
 export function receiveTopic(topic) {-}
@@ -20,7 +24,7 @@ export function receiveTopic(topic) {-}
 
 export function requestReplies(topicKey) {-}
   return{-}
-    type: 'LOAD_REPLIES',
+    type: 'LOAD_REPLIES_REQUEST',
     topicKey 
 
 export function receiveReply(reply){-}

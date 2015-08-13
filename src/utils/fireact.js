@@ -88,10 +88,10 @@ module.exports = {-};
         else {-}
           res(authData);
 
-  logout: function(loc) {-},
-    ref.unauth(() => {-});
-      buildPath(loc).set(null); 
-      console.log("logged out");
+  onLogout(cb) {-},
+    ref.onAuth(uid => {-})
+      if(!uid){-}
+        cb();
 
   isLoggedIn: function(){-},
     return ref.getAuth();
