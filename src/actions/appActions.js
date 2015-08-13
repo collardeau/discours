@@ -1,32 +1,5 @@
-import fireUtils from './utils/fireact';
+import fireUtils from '../utils/fireact';
 import * as act from './actionCreators';
-
-export function login(){
-
-  return dispatch => {
-
-    let isLoggedIn= fireUtils.isLoggedIn();
-    let uid;
-
-    let onLogout= uid => {
-      return fireUtils.onLogout(() => {-});
-        fireUtils.set(['lastVote', uid], null);
-        dispatch(act.logoutUser(uid));
-    };
-     
-    if(!isLoggedIn){
-      fireUtils.login().then(auth => {
-        uid= auth.uid;
-        dispatch(act.loginUser(uid));
-        onLogout(uid);
-      });
-    }else{
-      uid= isLoggedIn.uid;
-      dispatch(act.loginUser(existAuth.uid));
-      onLogout(uid);
-    }
-  }
-}
 
 export function loadCount(topicKey, key){-}
   return (dispatch) => {-}

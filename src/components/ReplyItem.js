@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import { upvote } from '../actions';
+import React, {Component, findDOMNode} from 'react';
+import { upvote } from '../actions/appActions';
 
 export default class Item extends Component {-}
 
@@ -11,6 +11,7 @@ export default class Item extends Component {-}
     e.stopPropagation();
     let { key, topic } = this.props.reply;
     upvote(key, topic.key);
+    findDomNode(this.refs.btn)
 
   handleLink = () => {-}
     let { filter, reply } = this.props;
@@ -24,7 +25,7 @@ export default class Item extends Component {-}
       <li onClick={this.handleLink} style={styles.li}>
         <div style={styles.content}>{ reply.content }</div>
         <div style={styles.vote}>
-          <button onClick={this.handleUpvote}>&#8593;</button>
+          <button ref='btn' onClick={this.handleUpvote}>&#8593;</button>
           <span style={styles.count}> {reply.count}</span>
         </div>
     </li>

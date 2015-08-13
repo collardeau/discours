@@ -1,5 +1,5 @@
 import React, {findDOMNode, Component} from 'react';
-import { reply } from '../actions';
+import { reply } from '../actions/appActions';
 
 export default class Content extends Component {-}
 

@@ -4,7 +4,6 @@ export function uid(state=null, action){-}
   //console.log(action);
   switch (action.type){-}
     case 'LOGIN':
-    case 'LOGGED_IN':
       return action.uid;
     case 'LOGOUT':
       return null;

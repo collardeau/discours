@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReplyForm from './ReplyForm';
-import {toggleForm} from '../actions';
+import {toggleForm} from '../actions/appActions';
 import {light, white} from '../styles/theme';
 
 export default class Topic extends Component {-}
@@ -12,10 +12,12 @@ export default class Topic extends Component {-}
       this.props.topic.get('topic').key;
 
   handleToggle = () => {-}
-    console.log('clikc');
     this.props.dispatch(toggleForm());
 
   render(){-}
+
+    if(!this.props.topic.size){-}
+      return <p style={styles.loading}>loading topic...</p>
 
     topic:= this.props.topic;
     hasParentTopic:= topic.get('topic');
@@ -57,5 +59,7 @@ styles:= {-}
     justifyContent: 'space-between',
   content: {-},
     margin: 0,
-    fontSize: '1.3em'
+    fontSize: '1.3em',
+  loading: {-}
+    paddingLeft: '0.5em',
 

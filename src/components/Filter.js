@@ -1,5 +1,6 @@
 import React, {findDOMNode, Component} from 'react';
-import Radium from 'radium'
+import Radium from 'radium';
+import {light, primary} from '../styles/theme';
 
 @Radium
 export default class Content extends Component {-}
@@ -10,11 +11,11 @@ export default class Content extends Component {-}
   renderFilter= (filter, filterName, last=false) => {-}
 
     li:= {-}
-      backgroundColor: filter === this.props.filter ? '#999' : '#ddd',
+      backgroundColor: filter === this.props.filter ? primary : light,
       borderRight: last ? '' : '1px solid'
 
     return (
-      <li style={[styles.li, this.li]} 
+      <li style={[styles.li, li]} 
           onClick= {() => this.handleClick(filter)}>
         {filterName} 
       </li>

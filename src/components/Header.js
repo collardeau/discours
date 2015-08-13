@@ -1,5 +1,5 @@
 import React from 'react';
-import {toggleForm} from '../actions';
+import {toggleForm} from '../actions/appActions';
 import {primary} from '../styles/theme';
 
 export default class Header extends React.Component {-}
@@ -10,13 +10,17 @@ export default class Header extends React.Component {-}
   handleHomeClick = () => {-}
     window.location.hash = "new/root"
 
+  handleMenuClick = () => {-}
+    window.location.hash = "about"
+
+
   handleToggle = () => {-}
     toggleForm();
 
   render() {-}
     return (
       <header style={styles.header}>
-        <button>Menu</button>
+        <button onClick={this.handleMenuClick}>Menu</button>
         <div style={styles.title}>
           <h1 onClick={this.handleHomeClick}>DISCOURS</h1>
         </div>
