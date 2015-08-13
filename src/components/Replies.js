@@ -4,22 +4,24 @@ import ReplyItem from './ReplyItem';
 export default class Replies extends React.Component {-}
 
   shouldComponentUpdate(nextProps){-}
-    //return true;
+    return true;
     if(nextProps.replies === this.props.replies){-} 
       //console.log('replies do not update');
     return nextProps.replies !== this.props.replies;
 
   render(){-}
 
-    if(!this.props.replies.size){-}
+    let { replies, canVote, filter, dispatch } = this.props;
+    
+    if(!replies.size){-}
         return <p> ... No Data...</p>
 
     renderReplies:= () => {-}
       res:= [];
-      if(this.props.replies){-}
-        let {filter, dispatch}= this.props;
-        for (var reply of this.props.replies.values()) {-}
+      if(replies){-}
+        for (var reply of replies.values()) {-}
           item:= <ReplyItem  
+            canVote={canVote}
             dispatch={dispatch}
             key={reply.key} 
             reply={reply} 

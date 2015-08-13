@@ -1,17 +1,17 @@
-import React, {Component, findDOMNode} from 'react';
+import React, {Component} from 'react';
 import { upvote } from '../actions/appActions';
 
 export default class Item extends Component {-}
 
   shouldComponentUpdate(nextProps){-}
     //console.log(nextProps.reply !== this.props.reply )
+    return true;
     return nextProps.reply !== this.props.reply;
 
   handleUpvote = (e) => {-}
     e.stopPropagation();
     let { key, topic } = this.props.reply;
     this.props.dispatch(upvote(key, topic.key));
-    //findDomNode(this.refs.btn)
 
   handleLink = () => {-}
     let { filter, reply } = this.props;
@@ -19,13 +19,17 @@ export default class Item extends Component {-}
 
   render(){-}
 
-    let { reply } = this.props;
+    let { reply, canVote } = this.props;
+
+    btn:= {-}
+      opacity: canVote ? '1' : '0.4',
+      enabled: canVote ? 'enabled' : 'disabled'
 
     return (
       <li onClick={this.handleLink} style={styles.li}>
         <div style={styles.content}>{ reply.content }</div>
         <div style={styles.vote}>
-          <button ref='btn' onClick={this.handleUpvote}>&#8593;</button>
+          <button disabled={ !canVote ? true : false } style={btn} onClick={this.handleUpvote}>&#8593;</button>
           <span style={styles.count}> {reply.count}</span>
         </div>
     </li>
