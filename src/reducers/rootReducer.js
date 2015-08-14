@@ -1,6 +1,16 @@
 import { combineReducers } from 'redux';
 import * as actionTypes from '../actions/actions';
 
+function uid(state='zip', action){
+  switch(action.type){
+    case actionTypes.LOGIN_USER:
+    case actionTypes.LOGIN:
+      return action.uid;
+    default:
+      return state;
+  }
+}
+
 function route(state='', action){
   switch(action.type){
     case actionTypes.REQUEST_ROUTE:
@@ -46,6 +56,7 @@ function topics(state={}, action){
 
 const rootReducer = combineReducers({
   route,
+  uid,
   selectedTopic,
   topics
 });

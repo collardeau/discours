@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import hasher from 'hasher';
-import {changeRoute} from '../actions/actions';
+import {login, changeRoute} from '../actions/actions';
 
 class App extends Component {
 
@@ -13,7 +13,8 @@ class App extends Component {
   }
 
   componentDidMount(){
-    console.log('App mounts');
+    //console.log('App mounts');
+    this.props.dispatch(login());
   }
 
   handleRoute = route => {
