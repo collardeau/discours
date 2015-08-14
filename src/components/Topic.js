@@ -20,17 +20,25 @@ export default class Topic extends Component {-}
       return <p style={styles.loading}>loading topic...</p>
 
     topic:= this.props.topic;
-    hasParentTopic:= topic.get('topic');
-    var parentTopic;
-    var count;
 
+    hasParentTopic:= topic.get('topic');
+
+    var parentTopic
+    var parentContent = hasParentTopic.content; 
+    var limit = 55;
+    var contentLength = parentContent.length;
+    if(contentLength > limit ){
+      parentContent = parentContent.substr(0,limit);
+      parentContent = parentContent.match(/^[^]*(?= )/) + ' ...';
+    }
+
+    // roundabout way to make sure we are not on root
     if(hasParentTopic && hasParentTopic.content !== 'none') {-}
-      count = topic.get('count');
       parentTopic = (
         <div style={styles.parentTopic}>
           <small> 
             In response to: <a href='#' onClick={this.handleClick}> 
-              {hasParentTopic.content}
+              {parentContent}
             </a>
           </small>
         </div>
