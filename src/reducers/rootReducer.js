@@ -10,18 +10,34 @@ function route(state='', action){
   }
 }
 
-function selectTopic(state='top', action){
+function selectedTopic(state={}, action){
   switch(action.type) {
     case actionTypes.SELECT_TOPIC:
-      return action.topicKey;
+      return Object.assign({}, state, {
+        hasReplies: false,
+        hasRepliesToday: false,
+        inResponseTo: 'some key',
+        lastUpdated: 'some day'
+      });
+    default:
+      return state;
+  }
+}
+
+function topic(state={}, action){
+  switch(action.type) {
+    case actionTypes.SELECT_TOPIC:
+      return Object.assign({}, state, {
+        [action.topicKey]: selectedTopic(state[action.topickey], action)
+     });
     default:
       return state;
   }
 }
 
 const rootReducer = combineReducers({
-  selectTopic,
-  route
+  route,
+  topic
 });
 
 export default rootReducer;

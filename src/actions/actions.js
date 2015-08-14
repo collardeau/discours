@@ -6,7 +6,7 @@ export const SELECT_TOPIC = 'SELECT_TOPIC';
 
 export const ROUTE_REQUEST = 'ROUTE_REQUEST';
 
-export function requestRoute(route) {
+function requestRoute(route) {
   return {
       type: ROUTE_REQUEST,
       route
@@ -14,6 +14,7 @@ export function requestRoute(route) {
 }
 
 export function changeRoute(route){
+
   return dispatch => {
 
     dispatch(requestRoute(route));
@@ -27,7 +28,7 @@ export function changeRoute(route){
   };
 }
 
-export function selectTopic(topicKey){
+function selectTopic(topicKey){
   return {
     type: SELECT_TOPIC,
     topicKey
@@ -37,7 +38,6 @@ export function selectTopic(topicKey){
 export function fetchTopicAndReplies(key){
   return dispatch => {
     dispatch(selectTopic(key));
-    console.log('fetch topic and replies');
   };
 }
 
