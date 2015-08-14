@@ -1,17 +1,23 @@
-
 export const REQUEST_TOPIC = 'REQUEST_TOPIC';
 export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
-export const SELECT_TOPIC = 'SELECT_TOPIC';
 
 
-export const ROUTE_REQUEST = 'ROUTE_REQUEST';
-
+export const REQUEST_ROUTE = 'REQUEST_ROUTE';
 function requestRoute(route) {
   return {
-      type: ROUTE_REQUEST,
+      type: REQUEST_ROUTE,
       route
   };
 }
+
+export const SELECT_TOPIC = 'SELECT_TOPIC';
+function selectTopic(topicId){
+  return {
+    type: SELECT_TOPIC,
+    topicId
+  };
+}
+
 
 export function changeRoute(route){
 
@@ -21,23 +27,25 @@ export function changeRoute(route){
 
     if(route.entry === 'about'){console.log('about'); }
     else {
-      dispatch(fetchTopicAndReplies(route.params[0]));
-      // dispatch the whole shabang!
+      let topicId = route.params[0];
+      dispatch(selectTopic(topicId));
+      dispatch(fetchTopicAndReplies(topicId));
     }
 
   };
 }
 
-function selectTopic(topicKey){
+export const FETCH_TOPIC = 'FETCH_TOPIC';
+function fetchTopic(topicKey){
   return {
-    type: SELECT_TOPIC,
+    type: FETCH_TOPIC,
     topicKey
   };
 }
 
 export function fetchTopicAndReplies(key){
   return dispatch => {
-    dispatch(selectTopic(key));
+    dispatch(fetchTopic(key));
   };
 }
 
