@@ -1,32 +1,19 @@
 import fireUtils from '../utils/fireact';
 import * as act from './actionCreators';
 
-export function upvote(replyKey, topicKey){-}
-  return dispatch => {-}
-    dispatch(act.requestUpvote(replyKey));
-    fireUtils.increment(['replies', topicKey, replyKey, 'count'])
-    uid:= fireUtils.isLoggedIn().uid;
-    fireUtils.set(['lastVote', uid], Firebase.ServerValue.TIMESTAMP);
-    setTimeout(()=>{-}, 5000)
-      dispatch(act.allowVote());
-
-export function loadCount(topicKey, key){-}
-  return (dispatch) => {-}
-    dispatch(act.requestCount(topicKey));
-    if(topicKey){-}
-      fireUtils.fetch(['replies', topicKey, key, 'count'])
-      .then(data => {-});
-        dispatch(act.receiveCount(topicKey));
-
 export function loadTopic(topicKey = 'root') {-}
   return (dispatch) => {-}
     dispatch(act.requestTopic(topicKey));
-    onSuccess:= data => {-};
-      dispatch(act.receiveTopic(data));
-      //dispatch(act.loadCount(data.topic.key, data.key));
     fireUtils.fetch(['topic', topicKey])
-    .then(onSuccess);
-
+    .then(data => {
+      dispatch(act.receiveTopic(data));
+    });
+    fireUtils.getLast(['replies', topicKey])
+    .then(snap => {
+      console.log(snap.exists());
+    });
+    // check if any replies
+    // check if any replies today
 export function loadReplies(topicKey = 'root', order = 'new') {-}
   return (dispatch, getState) => {-}
 
@@ -70,5 +57,22 @@ export function reply(newReply){-}
   .then(newKey => {-});
     newReply.count = 0;
     fireUtils.set(['replies', newReply.topic.key, newKey], newReply);
+
+export function upvote(replyKey, topicKey){-}
+  return dispatch => {-}
+    dispatch(act.requestUpvote(replyKey));
+    fireUtils.increment(['replies', topicKey, replyKey, 'count'])
+    uid:= fireUtils.isLoggedIn().uid;
+    fireUtils.set(['lastVote', uid], Firebase.ServerValue.TIMESTAMP);
+    setTimeout(()=>{-}, 5000)
+      dispatch(act.allowVote());
+
+export function loadCount(topicKey, key){-}
+  return (dispatch) => {-}
+    dispatch(act.requestCount(topicKey));
+    if(topicKey){-}
+      fireUtils.fetch(['replies', topicKey, key, 'count'])
+      .then(data => {-});
+        dispatch(act.receiveCount(topicKey));
 
 

@@ -32,7 +32,14 @@ export function receiveReply(reply){-}
     type: 'REPLY_ADDED',
     reply: reply
 
+export function hasReplies(){
+  return {
+    type: 'HAS_REPLIES',
+  }
+}
+
 export function noReplies(){-}
+  //console.log('noReplies is depreciated');
   return {-}
     type: 'NO_MATCHED_REPLIES'
 

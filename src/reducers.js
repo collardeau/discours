@@ -37,6 +37,7 @@ export function topic(state=I.Map({}), action){-}
       return state;
 
 export function filterHasReplies(state=true, action){-}
+  //console.log('filterHasReplies is depreciated');
   switch (action.type){-}
     case 'NO_MATCHED_REPLIES':
       return false;
@@ -44,6 +45,14 @@ export function filterHasReplies(state=true, action){-}
       return true;
     default:
       return state;
+
+export function hasReplies(state=false, action){-}
+  switch (action.type){-}
+    case 'HAS_REPLIES':
+      return true;
+    default:
+      return state;
+
 
 export function replies(state=I.OrderedMap({}), action){-}
   switch (action.type){-}

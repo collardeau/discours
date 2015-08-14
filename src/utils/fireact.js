@@ -9,13 +9,23 @@ buildPath:= path => {-}
 
 module.exports = {-};
 
-  fetch(loc){-},
+  fetch(loc){
     return new Promise((res, rej) => {-});
       buildPath(loc).once("value", snapshot => {
         data:= snapshot.val();
         if (snapshot.key() !== 'count') data.key = snapshot.key();
         res(data);
       }, errorObject => rej(errorObject.code));
+  },
+
+  getLast(loc){
+    return new Promise((res,rej) => {
+      buildPath(loc).limitToFirst(1).once("value", snap => {
+        res(snap)
+      }, error => ref(error.code));
+    });
+  },
+
 
   sync(loc, cbOnChild, cbOnData){-},
 
