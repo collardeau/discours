@@ -1,3 +1,12 @@
+export const CHANGE_ROUTE = 'CHANGE_ROUTE';
+
+export function changeRoute(route) {
+  return {
+      type: 'CHANGE_ROUTE',
+      route
+  };
+}
+
 export const REQUEST_TOPIC = 'REQUEST_TOPIC';
 export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
 export const SELECT_TOPIC = 'SELECT_TOPIC';
@@ -36,13 +45,6 @@ export function loginUser(uid) {
 export function logoutUser() {
   return {
     type: "LOGOUT"
-  };
-}
-
-export function changeRoute(route) {
-  return {
-      type: 'CHANGE_ROUTE',
-      route
   };
 }
 

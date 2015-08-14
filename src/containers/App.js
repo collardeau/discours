@@ -1,9 +1,24 @@
 import React, { Component, PropTypes } from 'react';
+import {connect } from 'react-redux';
+import hasher from 'hasher';
+import {changeRoute} from '../actions/actions';
 
 class App extends Component {
+
   constructor(props){
     super(props);
-    console.log('we are in the app component');
+    hasher.init();
+    hasher.initialized.add(this.handleRoute);
+    hasher.changed.add(this.handleRoute);
+  }
+
+  handleRoute = route => {
+    let params = route.split('/');
+    let nextRoute = {
+      entry: params.shift(),
+      params: params
+    };
+    this.props.dispatch(changeRoute(nextRoute));
   }
 
   render(){
@@ -14,5 +29,11 @@ class App extends Component {
 
 }
 
-export default App;
+let select = state => {
+  return {
+    route: state.route
+  };
+};
+
+export default connect(select)(App);
 
