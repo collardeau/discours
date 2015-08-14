@@ -1,7 +1,16 @@
 import { combineReducers } from 'redux';
 import * as actionTypes from '../actions/actions';
 
-function selectTopic(state='root', action){
+function route(state='', action){
+  switch(action.type){
+    case actionTypes.ROUTE_REQUEST:
+      return action.route;
+    default:
+      return state;
+  }
+}
+
+function selectTopic(state='top', action){
   switch(action.type) {
     case actionTypes.SELECT_TOPIC:
       return action.topicKey;
@@ -11,7 +20,8 @@ function selectTopic(state='root', action){
 }
 
 const rootReducer = combineReducers({
-  selectTopic
+  selectTopic,
+  route
 });
 
 export default rootReducer;

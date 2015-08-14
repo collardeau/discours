@@ -1,20 +1,43 @@
-export const CHANGE_ROUTE = 'CHANGE_ROUTE';
-
-export function changeRoute(route) {
-  return {
-      type: 'CHANGE_ROUTE',
-      route
-  };
-}
 
 export const REQUEST_TOPIC = 'REQUEST_TOPIC';
 export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
 export const SELECT_TOPIC = 'SELECT_TOPIC';
 
+
+export const ROUTE_REQUEST = 'ROUTE_REQUEST';
+
+export function requestRoute(route) {
+  return {
+      type: ROUTE_REQUEST,
+      route
+  };
+}
+
+export function changeRoute(route){
+  return dispatch => {
+
+    dispatch(requestRoute(route));
+
+    if(route.entry === 'about'){console.log('about'); }
+    else {
+      dispatch(fetchTopicAndReplies(route.params[0]));
+      // dispatch the whole shabang!
+    }
+
+  };
+}
+
 export function selectTopic(topicKey){
   return {
     type: SELECT_TOPIC,
     topicKey
+  };
+}
+
+export function fetchTopicAndReplies(key){
+  return dispatch => {
+    dispatch(selectTopic(key));
+    console.log('fetch topic and replies');
   };
 }
 

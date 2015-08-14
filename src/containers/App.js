@@ -12,6 +12,10 @@ class App extends Component {
     hasher.changed.add(this.handleRoute);
   }
 
+  componentDidMount(){
+    console.log('App mounts');
+  }
+
   handleRoute = route => {
     let params = route.split('/');
     let nextRoute = {
