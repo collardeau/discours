@@ -42,7 +42,9 @@ export default class Topic extends Component {-}
         <div style={styles.flex}>
           <p style={styles.content}>{topic.get('content')}</p>
           <span style={styles.child}>
-            <button onClick={this.handleToggle}> Reply</button>
+            <button onClick={this.handleToggle}> 
+              { this.props.formIsOpen ? 'Close' : 'Reply' } 
+            </button>
           </span>
         </div>
       </div> 
