@@ -85,11 +85,21 @@ function topics(state={}, action){
   }
 }
 
+function reply(state=[], action) {
+  switch(action.type){
+    case actionTypes.RECEIVE_REPLY:
+      return [...state, action.reply.topicId ];
+    default:
+      return state;
+  }
+}
+
 function replies(state={}, action){
   switch(action.type) {
-    case actionTypes.REQUEST_REPLIES:
+    case actionTypes.SYNC_REPLIES:
+    case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
-        [action.topicId]: 'some bullshit'
+        [action.topicId]: reply(state[action.topicId], action)
      });
     default:
       return state;

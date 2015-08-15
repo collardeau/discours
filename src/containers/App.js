@@ -8,7 +8,7 @@ class App extends Component {
 
   constructor(props){
     super(props);
-    props.dispatch(login());
+    //props.dispatch(login());
     hasher.init();
     hasher.initialized.add(this.handleRoute);
     hasher.changed.add(this.handleRoute);

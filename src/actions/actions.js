@@ -1,4 +1,4 @@
-import {fetch, exists} from '../utils/fireUtils.js';
+import * as db from '../utils/fireUtils.js';
 
 export const SELECT_TOPIC = 'SELECT_TOPIC';
 function selectTopic(topicId){
@@ -50,16 +50,16 @@ export function receiveTopic(topicId, topic){
   };
 }
 
-export const REQUEST_REPLIES = 'REQUEST_REPLIES';
-function requestReplies(topicId){
+export const SYNC_REPLIES = 'SYNC_REPLIES';
+function syncReplies(topicId){
   return {
-    type: REQUEST_REPLIES,
+    type: SYNC_REPLIES,
     topicId
   };
 }
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
-function hasReplies(topicId, reply){
+function receiveReply(topicId, reply){
   return {
     type: RECEIVE_REPLY,
     topicId: topicId,
@@ -75,24 +75,27 @@ export function fetchTopicAndReplies(route){
 
     dispatch(selectOrder(order));
     dispatch(selectTopic(topicId));
-    dispatch(fetchTopic(topicId)); // request topic?
+    //dispatch(fetchTopic(topicId)); // request topic?
 
-    fetch(['topic', topicId])
-    .then(data => {
-      dispatch(receiveTopic(topicId, data));
+    //db.fetch(['topic', topicId])
+    //.then(data => {
+    //  dispatch(receiveTopic(topicId, data));
+    //});
+
+    //if(topicId === 'root'){
+    //  //console.log('root so not checking if replies exist');
+    //  dispatch(hasReplies(topicId));
+    //} else {
+    //  db.exists(['replies', topicId])
+    //  .then(()=>{
+    //    dispatch(hasReplies(topicId));
+    //  });
+    //}
+
+    dispatch(syncReplies(topicId));
+    db.sync(['replies', topicId], reply => {
+      dispatch(receiveReply(topicId, reply));
     });
-
-    if(topicId === 'root'){
-      console.log('root so not checking if replies exist');
-      dispatch(hasReplies(topicId));
-    } else {
-      exists(['replies', topicId])
-      .then(()=>{
-        dispatch(hasReplies(topicId));
-      });
-    }
-
-    dispatch(requestReplies(topicId));
 
   };
 }

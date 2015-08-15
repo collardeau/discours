@@ -27,6 +27,8 @@ export function fetch(loc){
 
 export function sync(loc, cb){
   buildPath(loc).on('child_added', snap => {
-    cb(snap.val());
+    let d = snap.val();
+    d.topicId = snap.key();
+    cb(d);
   });
 }
