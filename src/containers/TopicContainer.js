@@ -1,13 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import Topic from '../components/Topic';
+import Replies from '../components/Replies';
 
 class TopicContainer extends Component {
 
   render(){
-    console.log('topic contianer props: ', this.props);
+    console.log('topic container props: ', this.props);
 
-    const { dispatch, topic } = this.props;
+    const { dispatch, topic, replies } = this.props;
 
     return (
       <div>
@@ -15,6 +16,10 @@ class TopicContainer extends Component {
         <Topic
           dispatch={dispatch}
           topic = {topic}
+        />
+        <Replies
+          dispatch={dispatch}
+          replies = {replies}
         />
       </div>
     );
