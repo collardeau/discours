@@ -39,7 +39,6 @@ function selectedOrder(state='new', action){
   }
 }
 
-
 function hasReplies(state=false, action){
   switch(action.type){
     case actionTypes.HAS_REPLIES:
@@ -59,8 +58,7 @@ function topic(state={}, action){
       });
     case actionTypes.RECEIVE_TOPIC:
       return Object.assign({}, state, {
-        content: action.topic.content,
-        topicId: action.topicId
+        content: action.topic.content
       });
     case actionTypes.FETCH_TOPIC:
       return Object.assign({}, state, {

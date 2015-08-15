@@ -34,9 +34,11 @@ TopicContainer.propTypes = {
 };
 
 function mapStateToProps(state){
-  const { selectedTopic, topics, replies } = state;
+  const { replies, route, selectedTopic, topics, } = state;
   return {
+    ordering: route.entry,
     topic: topics[selectedTopic] || {content: 'no content'},
+    topicId: selectedTopic,
     replies: replies[selectedTopic] ?
       replies[selectedTopic].map(tId => topics[tId]) : []
   };
