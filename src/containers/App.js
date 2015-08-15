@@ -7,14 +7,14 @@ class App extends Component {
 
   constructor(props){
     super(props);
+    props.dispatch(login());
     hasher.init();
     hasher.initialized.add(this.handleRoute);
     hasher.changed.add(this.handleRoute);
   }
 
   componentDidMount(){
-    //console.log('App mounts');
-    this.props.dispatch(login());
+    //this.props.dispatch(login());
   }
 
   handleRoute = route => {

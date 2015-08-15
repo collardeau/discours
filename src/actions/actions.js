@@ -11,8 +11,17 @@ function loginUser(uid){
   };
 }
 
+export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+function requestLogin(){
+  return {
+    type: REQUEST_LOGIN
+  };
+}
+
+
 export function login(){
   return dispatch => {
+    dispatch(requestLogin());
     dispatch(loginUser('obelix'));
   };
 }
@@ -32,9 +41,7 @@ export function changeRoute(route){
     dispatch(requestRoute(route));
     if(route.entry === 'about'){console.log('about'); }
     else {
-      let topicId = route.params[0];
-      dispatch(selectTopic(topicId));
-      dispatch(fetchTopicAndReplies(topicId));
+      dispatch(fetchTopicAndReplies(route)); // if needed?
     }
   };
 }
@@ -50,35 +57,55 @@ function selectTopic(topicId){
 export const REQUEST_TOPIC = 'REQUEST_TOPIC';
 export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
 export const FETCH_TOPIC = 'FETCH_TOPIC';
-function fetchTopic(topicKey){
+export const HAS_REPLIES = 'HAS_REPLIES';
+
+function fetchTopic(topicId){
   return {
     type: FETCH_TOPIC,
-    topicKey
+    topicId
   };
 }
 
-export function fetchTopicAndReplies(key){
+function hasReplies(topicId){
+  return {
+    type: HAS_REPLIES,
+    topicId
+  };
+
+}
+
+export const SELECT_ORDER = 'SELECT_ORDER';
+function selectOrder(order){
+  return {
+    type: SELECT_ORDER,
+    order
+  };
+}
+export function fetchTopicAndReplies(route){
   return dispatch => {
-    dispatch(fetchTopic(key));
+    let order = route.entry;
+    dispatch(selectOrder(route.entry));
+    let topicId = route.params[0];
+    dispatch(selectTopic(topicId));
+    dispatch(fetchTopic(topicId));
+    //check if it has replies
+    dispatch(hasReplies(topicId, true));
   };
 }
 
-export function requestTopic(topicKey) {
+export function requestTopic(topicId) {
   return {
     type: REQUEST_TOPIC,
-    topicKey
+    topicId
   };
 }
 
-export function receiveTopic(topicKey, dataObj){
+export function receiveTopic(topicId, dataObj){
   return {
     type: RECEIVE_TOPIC,
     topic: dataObj,
-    topicKey: topicKey,
+    topicId: topicId,
     receivedAt: Date.now()
   };
 }
-
-
-
 
