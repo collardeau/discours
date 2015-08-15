@@ -24,3 +24,9 @@ export function fetch(loc){
     }, err => reject(err.code));
   });
 }
+
+export function sync(loc, cb){
+  buildPath(loc).on('child_added', snap => {
+    cb(snap.val());
+  });
+}

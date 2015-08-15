@@ -87,9 +87,9 @@ function topics(state={}, action){
 
 function replies(state={}, action){
   switch(action.type) {
-    case 'who knows':
+    case actionTypes.REQUEST_REPLIES:
       return Object.assign({}, state, {
-        [action.topicId]: topic(state[action.topicId], action)
+        [action.topicId]: 'some bullshit'
      });
     default:
       return state;

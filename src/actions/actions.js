@@ -1,12 +1,6 @@
 import {fetch, exists} from '../utils/fireUtils.js';
 
 export const SELECT_TOPIC = 'SELECT_TOPIC';
-export const SELECT_ORDER = 'SELECT_ORDER';
-export const FETCH_TOPIC = 'FETCH_TOPIC';
-export const REQUEST_TOPIC = 'REQUEST_TOPIC';
-export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
-export const HAS_REPLIES = 'HAS_REPLIES';
-
 function selectTopic(topicId){
   return {
     type: SELECT_TOPIC,
@@ -14,6 +8,7 @@ function selectTopic(topicId){
   };
 }
 
+export const SELECT_ORDER = 'SELECT_ORDER';
 function selectOrder(order){
   return {
     type: SELECT_ORDER,
@@ -21,6 +16,7 @@ function selectOrder(order){
   };
 }
 
+export const FETCH_TOPIC = 'FETCH_TOPIC';
 function fetchTopic(topicId){
   return {
     type: FETCH_TOPIC,
@@ -28,13 +24,7 @@ function fetchTopic(topicId){
   };
 }
 
-function hasReplies(topicId){
-  return {
-    type: HAS_REPLIES,
-    topicId
-  };
-}
-
+export const REQUEST_TOPIC = 'REQUEST_TOPIC';
 export function requestTopic(topicId) {
   return {
     type: REQUEST_TOPIC,
@@ -42,12 +32,38 @@ export function requestTopic(topicId) {
   };
 }
 
+export const HAS_REPLIES = 'HAS_REPLIES';
+function hasReplies(topicId){
+  return {
+    type: HAS_REPLIES,
+    topicId
+  };
+}
+
+export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
 export function receiveTopic(topicId, topic){
   return {
     type: RECEIVE_TOPIC,
     topicId: topicId,
     topic: topic,
     receivedAt: Date.now()
+  };
+}
+
+export const REQUEST_REPLIES = 'REQUEST_REPLIES';
+function requestReplies(topicId){
+  return {
+    type: REQUEST_REPLIES,
+    topicId
+  };
+}
+
+export const RECEIVE_REPLY = 'RECEIVE_REPLY';
+function hasReplies(topicId, reply){
+  return {
+    type: RECEIVE_REPLY,
+    topicId: topicId,
+    reply: reply
   };
 }
 
@@ -75,6 +91,8 @@ export function fetchTopicAndReplies(route){
         dispatch(hasReplies(topicId));
       });
     }
+
+    dispatch(requestReplies(topicId));
 
   };
 }
