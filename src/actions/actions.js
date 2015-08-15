@@ -75,22 +75,22 @@ export function fetchTopicAndReplies(route){
 
     dispatch(selectOrder(order));
     dispatch(selectTopic(topicId));
-    //dispatch(fetchTopic(topicId)); // request topic?
+    dispatch(fetchTopic(topicId)); // request topic?
 
-    //db.fetch(['topic', topicId])
-    //.then(data => {
-    //  dispatch(receiveTopic(topicId, data));
-    //});
+    db.fetch(['topic', topicId])
+    .then(data => {
+      dispatch(receiveTopic(topicId, data));
+    });
 
-    //if(topicId === 'root'){
-    //  //console.log('root so not checking if replies exist');
-    //  dispatch(hasReplies(topicId));
-    //} else {
-    //  db.exists(['replies', topicId])
-    //  .then(()=>{
-    //    dispatch(hasReplies(topicId));
-    //  });
-    //}
+    if(topicId === 'root'){
+      //console.log('root so not checking if replies exist');
+      dispatch(hasReplies(topicId));
+    } else {
+      db.exists(['replies', topicId])
+      .then(()=>{
+        dispatch(hasReplies(topicId));
+      });
+    }
 
     dispatch(syncReplies(topicId));
     db.sync(['replies', topicId], reply => {

@@ -60,12 +60,16 @@ function topic(state={}, action){
     case actionTypes.RECEIVE_TOPIC:
       return Object.assign({}, state, {
         content: action.topic.content,
-        id: action.topicId
+        topicId: action.topicId
       });
     case actionTypes.FETCH_TOPIC:
       return Object.assign({}, state, {
         hasReplies: hasReplies(state[action.hasReplies], action),
         content: ''
+      });
+    case actionTypes.RECEIVE_REPLY:
+      return Object.assign({}, state, {
+        content: action.reply.content
       });
     default:
       return state;
@@ -80,6 +84,10 @@ function topics(state={}, action){
       return Object.assign({}, state, {
         [action.topicId]: topic(state[action.topicId], action)
      });
+    case actionTypes.RECEIVE_REPLY:
+      return Object.assign({}, state, {
+        [action.reply.topicId]: topic({}, action)
+      });
     default:
       return state;
   }
@@ -87,6 +95,8 @@ function topics(state={}, action){
 
 function reply(state=[], action) {
   switch(action.type){
+    case actionTypes.SELECT_TOPIC:
+      return [];
     case actionTypes.RECEIVE_REPLY:
       return [...state, action.reply.topicId ];
     default:
@@ -96,7 +106,7 @@ function reply(state=[], action) {
 
 function replies(state={}, action){
   switch(action.type) {
-    case actionTypes.SYNC_REPLIES:
+    case actionTypes.SELECT_TOPIC:
     case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
         [action.topicId]: reply(state[action.topicId], action)

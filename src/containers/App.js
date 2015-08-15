@@ -28,9 +28,9 @@ class App extends Component {
   }
 
   render(){
+    console.log('app props: ', this.props);
     return (
       <div>
-        { this.props.content }
         <br />Look here, a brand new app
       </div>
 
@@ -38,16 +38,19 @@ class App extends Component {
   }
 }
 
-let select = state => {
-  return {
-    route: state.route
-  };
+App.propTypes = {
+  topic: PropTypes.shape({
+    content: PropTypes.string.isRequired
+  })
+
 };
 
 function mapStateToProps(state){
-  const { selectedTopic, topics } = state;
+  const { selectedTopic, topics, replies } = state;
   return {
-    topic: topics[selectedTopic]
+    topic: topics[selectedTopic] || {content: 'no content'},
+    replies: replies[selectedTopic] ?
+      replies[selectedTopic].map(tId => topics[tId]) : []
   };
 }
 
