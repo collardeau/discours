@@ -1,4 +1,4 @@
-import {fetch} from '../utils/fireUtils.js';
+import {fetch, exists} from '../utils/fireUtils.js';
 
 export const SELECT_TOPIC = 'SELECT_TOPIC';
 export const SELECT_ORDER = 'SELECT_ORDER';
@@ -59,14 +59,23 @@ export function fetchTopicAndReplies(route){
 
     dispatch(selectOrder(order));
     dispatch(selectTopic(topicId));
-    dispatch(fetchTopic(topicId));
+    dispatch(fetchTopic(topicId)); // request topic?
 
     fetch(['topic', topicId])
     .then(data => {
       dispatch(receiveTopic(topicId, data));
     });
 
-    dispatch(hasReplies(topicId, true));
+    if(topicId === 'root'){
+      console.log('root so not checking if replies exist');
+      dispatch(hasReplies(topicId));
+    } else {
+      exists(['replies', topicId])
+      .then(()=>{
+        dispatch(hasReplies(topicId));
+      });
+    }
+
   };
 }
 
