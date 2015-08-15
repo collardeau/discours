@@ -1,8 +1,7 @@
-import React, {findDOMNode, Component} from 'react';
-//import { reply } from '../actions/appActions';
+import React, {findDOMNode, Component, PropTypes} from 'react';
 import { addReply } from '../actions/actions';
 
-export default class Content extends Component {
+export default class ReplyForm extends Component {
 
   handleClick = () => {
     const {dispatch, topicId } = this.props;
@@ -27,3 +26,10 @@ export default class Content extends Component {
   }
 
 }
+
+ReplyForm.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  topicId: PropTypes.string.isRequired
+};
+
+

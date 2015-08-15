@@ -13,7 +13,6 @@ class TopicContainer extends Component {
 
     return (
       <div>
-        Topic Container
         <Topic
           dispatch={dispatch}
           topic = {topic}
@@ -32,14 +31,16 @@ class TopicContainer extends Component {
 }
 
 TopicContainer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
   topic: PropTypes.shape({
     content: PropTypes.string.isRequired
-  })
-
+  }),
+  topicId: PropTypes.string.isRequired,
+  replies: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state){
-  const { replies, route, selectedTopic, topics, } = state;
+  const { replies, route, selectedTopic, topics } = state;
   return {
     ordering: route.entry,
     topic: topics[selectedTopic] || {content: 'no content'},

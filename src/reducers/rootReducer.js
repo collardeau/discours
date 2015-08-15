@@ -12,7 +12,7 @@ function uid(state=null, action){
   }
 }
 
-function route(state='home', action){
+function route(state={}, action){
   switch(action.type){
     case routeActions.REQUEST_ROUTE:
       return action.route;

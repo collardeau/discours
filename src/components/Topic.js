@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 export default class Topic extends Component {
 
@@ -12,3 +12,11 @@ export default class Topic extends Component {
   }
 
 }
+
+Topic.propTypes = {
+  topic: PropTypes.shape({
+    content: PropTypes.string.isRequired
+  })
+};
+
+

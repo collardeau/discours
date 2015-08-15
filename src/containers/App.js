@@ -19,7 +19,7 @@ class App extends Component {
 
   handleRoute = route => {
     let params = route.split('/');
-    let nextRoute = { // in router?
+    let nextRoute = {
       entry: params.shift(),
       params: params
     };
@@ -50,13 +50,13 @@ App.propTypes = {
   route: PropTypes.shape({
     entry: PropTypes.string.isRequired,
     params: PropTypes.array.isRequired
-  })
-
+  }),
+  dispatch: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state){
   return {
-    route: state.route || { entry: 'new', params: []}
+    route: state.route.entry ? state.route : { entry: 'new', params: []}
   };
 }
 
