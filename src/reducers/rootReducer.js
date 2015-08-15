@@ -96,6 +96,7 @@ function reply(state=[], action) {
     case actionTypes.SELECT_TOPIC:
       return [];
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_REPLY_BY_COUNT:
       return [...state, action.reply.topicId ];
     default:
       return state;
@@ -114,6 +115,16 @@ function replies(state={}, action){
   }
 }
 
+function repliesByCount(state={}, action){
+  switch(action.type) {
+    case actionTypes.RECEIVE_REPLY_BY_COUNT:
+      return Object.assign({}, state, {
+      [action.topicId]: reply(state[action.topicId], action)
+    });
+    default:
+      return state;
+  }
+}
 
 export function votes(state={}, action){
   switch(action.type){
@@ -128,9 +139,9 @@ const rootReducer = combineReducers({
   uid,
   selectedTopic,
   selectedOrder,
-  votes,
   topics,
-  replies
+  replies,
+  repliesByCount
 });
 
 export default rootReducer;

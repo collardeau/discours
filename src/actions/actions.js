@@ -58,10 +58,28 @@ function syncReplies(topicId){
   };
 }
 
+export const SYNC_REPLIES_BY_COUNT = 'SYNC_REPLIES_BY_COUNT';
+function syncRepliesByCount(topicId){
+  return {
+    type: SYNC_REPLIES,
+    topicId
+  };
+}
+
+
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
 function receiveReply(topicId, reply){
   return {
     type: RECEIVE_REPLY,
+    topicId: topicId,
+    reply: reply
+  };
+}
+
+export const RECEIVE_REPLY_BY_COUNT = 'RECEIVE_REPLY_BY_COUNT';
+function receiveReplyByCount(topicId, reply){
+  return {
+    type: RECEIVE_REPLY_BY_COUNT,
     topicId: topicId,
     reply: reply
   };
@@ -92,9 +110,13 @@ export function fetchTopicAndReplies(route){
       });
     }
 
-    dispatch(syncReplies(topicId));
+    dispatch(syncReplies(topicId)); // by what order?
     db.sync(['replies', topicId], reply => {
       dispatch(receiveReply(topicId, reply));
+    });
+    dispatch(syncRepliesByCount);
+    db.syncByOrder(['replies', topicId], 'count', reply => {
+      dispatch(receiveReplyByCount(topicId, reply));
     });
 
   };

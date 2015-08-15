@@ -9,7 +9,7 @@ class TopicContainer extends Component {
   render(){
     console.log('topic container props: ', this.props);
 
-    const { dispatch, topic, topicId, replies } = this.props;
+    const { dispatch, order, topic, topicId, replies } = this.props;
 
     return (
       <div>
@@ -32,8 +32,10 @@ class TopicContainer extends Component {
 
 TopicContainer.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['new', 'popular']),
   topic: PropTypes.shape({
-    content: PropTypes.string.isRequired
+    content: PropTypes.string.isRequired,
+    count: PropTypes.number.isRequired
   }),
   topicId: PropTypes.string.isRequired,
   replies: PropTypes.array.isRequired
@@ -42,7 +44,7 @@ TopicContainer.propTypes = {
 function mapStateToProps(state){
   const { replies, route, selectedTopic, topics } = state;
   return {
-    ordering: route.entry,
+    order: route.entry,
     topic: topics[selectedTopic] || {content: 'no content'},
     topicId: selectedTopic,
     replies: replies[selectedTopic] ?
