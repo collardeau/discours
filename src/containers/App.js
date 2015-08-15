@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
-import hasher from 'hasher';
+import router from '../utils/router';
 import {changeRoute} from '../actions/routeActions';
 import {login} from '../actions/authActions';
 
@@ -9,13 +9,7 @@ class App extends Component {
   constructor(props){
     super(props);
     //props.dispatch(login());
-    hasher.init();
-    hasher.initialized.add(this.handleRoute);
-    hasher.changed.add(this.handleRoute);
-  }
-
-  componentDidMount(){
-    //this.props.dispatch(login());
+    router.start(this.handleRoute);
   }
 
   handleRoute = route => {
@@ -39,18 +33,16 @@ class App extends Component {
 }
 
 App.propTypes = {
-  topic: PropTypes.shape({
-    content: PropTypes.string.isRequired
+  route: PropTypes.shape({
+    entry: PropTypes.string.isRequired,
+    params: PropTypes.array.isRequired
   })
 
 };
 
 function mapStateToProps(state){
-  const { selectedTopic, topics, replies } = state;
   return {
-    topic: topics[selectedTopic] || {content: 'no content'},
-    replies: replies[selectedTopic] ?
-      replies[selectedTopic].map(tId => topics[tId]) : []
+    route: state.route || { entry: 'new', params: []}
   };
 }
 
