@@ -1,8 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import router from '../utils/router';
+import normalize from 'normalize.css/normalize.css';
+import Radium, { Style } from 'radium';
+import rules from '../styles/styles';
 import {changeRoute} from '../actions/routeActions';
 import {login} from '../actions/authActions';
+import Header from '../components/Header';
+import TopicContainer from './TopicContainer';
 
 class App extends Component {
 
@@ -14,7 +19,7 @@ class App extends Component {
 
   handleRoute = route => {
     let params = route.split('/');
-    let nextRoute = {
+    let nextRoute = { // in router?
       entry: params.shift(),
       params: params
     };
@@ -22,10 +27,19 @@ class App extends Component {
   }
 
   render(){
-    console.log('app props: ', this.props);
+
+    const { route } = this.props;
+    let ui = <TopicContainer />;
+
+    if (route.entry === 'about') {
+      ui = <div>Welcome to the new app with new powers!</div>;
+    }
+
     return (
       <div>
-        <br />Look here, a brand new app
+        <Style rules={rules}/>
+        <Header />
+        {ui}
       </div>
 
     );

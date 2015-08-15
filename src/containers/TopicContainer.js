@@ -1,13 +1,21 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
+import Topic from '../components/Topic';
 
 class TopicContainer extends Component {
 
   render(){
-    console.log('topic props: ', this.props);
+    console.log('topic contianer props: ', this.props);
+
+    const { dispatch, topic } = this.props;
+
     return (
       <div>
-        <br />Look here, a brand new app
+        Topic Container
+        <Topic
+          dispatch={dispatch}
+          topic = {topic}
+        />
       </div>
     );
   }
