@@ -100,4 +100,23 @@ export function fetchTopicAndReplies(route){
   };
 }
 
+export const REQUEST_ADD_REPLY = 'REQUEST_ADD_REPLY';
+function requestAddReply(topicId, reply){
+  return {
+    type: REQUEST_ADD_REPLY,
+    topicId: topicId,
+    reply: reply
+  };
+}
+
+export function addReply(topicId, reply){
+  return (dispatch, getState) => {
+    dispatch(requestAddReply(topicId, reply));
+    db.push(['topic'], reply)
+    .then(newId => {
+      db.set(['replies', topicId, newId], reply);
+    });
+  };
+}
+
 

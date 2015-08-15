@@ -32,3 +32,14 @@ export function sync(loc, cb){
     cb(d);
   });
 }
+
+export function set(loc, data){
+  buildPath(loc).set(data);
+}
+
+export function push (loc, data){
+  let newRef = buildPath(loc).push(data);
+  if (newRef){
+    return Promise.resolve(newRef.key());
+  }
+}

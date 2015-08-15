@@ -1,31 +1,29 @@
 import React, {findDOMNode, Component} from 'react';
-import { reply } from '../actions/appActions';
+//import { reply } from '../actions/appActions';
+import { addReply } from '../actions/actions';
 
-export default class Content extends Component {-}
+export default class Content extends Component {
 
-  handleClick = () => {-}
-    node:= findDOMNode(this.refs.reply);
-    text:= node.value.trim();
-    reply({-});
-      content: text,
-      topic: {-}
-        key: this.props.topic.get('key'),
-        content: this.props.topic.get('content')
+  handleClick = () => {
+    const {dispatch, topicId } = this.props;
+    let node = findDOMNode(this.refs.reply);
+    let text = node.value.trim();
+    dispatch(addReply(topicId, {
+      content: text
+    }));
     node.value = "";
+  }
 
-  render(){-}
+  render(){
 
     return (
       <div>
         <textarea ref='reply' placeholder=' Go ahead, express yourself!'/>
-        <div style={styles.div}>
+        <div>
           <button onClick={this.handleClick}>Submit</button>
         </div>
       </div>
     );
+  }
 
-styles:= {-};
-  div: {-},
-    margin: '0.5em'
-
-
+}
