@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
+import * as authActions from '../actions/authActions';
+import * as routeActions from '../actions/routeActions';
 import * as actionTypes from '../actions/actions';
 
 function uid(state=null, action){
   switch(action.type){
-    case actionTypes.LOGIN_USER:
-    case actionTypes.LOGIN:
+    case authActions.LOGIN_USER:
       return action.uid;
     default:
       return state;
@@ -13,7 +14,7 @@ function uid(state=null, action){
 
 function route(state='home', action){
   switch(action.type){
-    case actionTypes.REQUEST_ROUTE:
+    case routeActions.REQUEST_ROUTE:
       return action.route;
     default:
       return state;
@@ -56,12 +57,15 @@ function topic(state={}, action){
       return Object.assign({}, state, {
         hasReplies: hasReplies(state[action.hasReplies], action)
       });
+    case actionTypes.RECEIVE_TOPIC:
+      return Object.assign({}, state, {
+        content: action.topic.content,
+        id: action.topicId
+      });
     case actionTypes.FETCH_TOPIC:
       return Object.assign({}, state, {
         hasReplies: hasReplies(state[action.hasReplies], action),
-        hasRepliesToday: false,
-        inResponseTo: 'some key',
-        lastUpdated: 'some day'
+        content: ''
       });
     default:
       return state;
@@ -71,6 +75,7 @@ function topic(state={}, action){
 function topics(state={}, action){
   switch(action.type) {
     case actionTypes.FETCH_TOPIC:
+    case actionTypes.RECEIVE_TOPIC:
     case actionTypes.HAS_REPLIES:
       return Object.assign({}, state, {
         [action.topicId]: topic(state[action.topicId], action)
@@ -79,6 +84,18 @@ function topics(state={}, action){
       return state;
   }
 }
+
+function replies(state={}, action){
+  switch(action.type) {
+    case 'who knows':
+      return Object.assign({}, state, {
+        [action.topicId]: topic(state[action.topicId], action)
+     });
+    default:
+      return state;
+  }
+}
+
 
 export function votes(state={}, action){
   switch(action.type){
@@ -94,7 +111,8 @@ const rootReducer = combineReducers({
   selectedTopic,
   selectedOrder,
   votes,
-  topics
+  topics,
+  replies
 });
 
 export default rootReducer;

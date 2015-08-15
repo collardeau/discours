@@ -1,63 +1,25 @@
-import fireUtils from '../utils/fireact.js';
+import {fetch} from '../utils/fireUtils.js';
 
-// auth actions
-
-export const LOGIN_USER = 'LOGIN_USER';
-
-function loginUser(uid){
-  return {
-    type: LOGIN_USER,
-    uid
-  };
-}
-
-export const REQUEST_LOGIN = 'REQUEST_LOGIN';
-function requestLogin(){
-  return {
-    type: REQUEST_LOGIN
-  };
-}
-
-
-export function login(){
-  return dispatch => {
-    dispatch(requestLogin());
-    dispatch(loginUser('obelix'));
-  };
-}
-
-// route actions
-
-export const REQUEST_ROUTE = 'REQUEST_ROUTE';
-function requestRoute(route) {
-  return {
-      type: REQUEST_ROUTE,
-      route
-  };
-}
-
-export function changeRoute(route){
-  return dispatch => {
-    dispatch(requestRoute(route));
-    if(route.entry === 'about'){console.log('about'); }
-    else {
-      dispatch(fetchTopicAndReplies(route)); // if needed?
-    }
-  };
-}
-
-// firebase actions
 export const SELECT_TOPIC = 'SELECT_TOPIC';
+export const SELECT_ORDER = 'SELECT_ORDER';
+export const FETCH_TOPIC = 'FETCH_TOPIC';
+export const REQUEST_TOPIC = 'REQUEST_TOPIC';
+export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
+export const HAS_REPLIES = 'HAS_REPLIES';
+
 function selectTopic(topicId){
   return {
     type: SELECT_TOPIC,
     topicId
   };
 }
-export const REQUEST_TOPIC = 'REQUEST_TOPIC';
-export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
-export const FETCH_TOPIC = 'FETCH_TOPIC';
-export const HAS_REPLIES = 'HAS_REPLIES';
+
+function selectOrder(order){
+  return {
+    type: SELECT_ORDER,
+    order
+  };
+}
 
 function fetchTopic(topicId){
   return {
@@ -71,26 +33,6 @@ function hasReplies(topicId){
     type: HAS_REPLIES,
     topicId
   };
-
-}
-
-export const SELECT_ORDER = 'SELECT_ORDER';
-function selectOrder(order){
-  return {
-    type: SELECT_ORDER,
-    order
-  };
-}
-export function fetchTopicAndReplies(route){
-  return dispatch => {
-    let order = route.entry;
-    dispatch(selectOrder(route.entry));
-    let topicId = route.params[0];
-    dispatch(selectTopic(topicId));
-    dispatch(fetchTopic(topicId));
-    //check if it has replies
-    dispatch(hasReplies(topicId, true));
-  };
 }
 
 export function requestTopic(topicId) {
@@ -100,12 +42,32 @@ export function requestTopic(topicId) {
   };
 }
 
-export function receiveTopic(topicId, dataObj){
+export function receiveTopic(topicId, topic){
   return {
     type: RECEIVE_TOPIC,
-    topic: dataObj,
     topicId: topicId,
+    topic: topic,
     receivedAt: Date.now()
   };
 }
+
+export function fetchTopicAndReplies(route){
+  return dispatch => {
+
+    let topicId = route.params[0],
+        order = route.entry;
+
+    dispatch(selectOrder(order));
+    dispatch(selectTopic(topicId));
+    dispatch(fetchTopic(topicId));
+
+    fetch(['topic', topicId])
+    .then(data => {
+      dispatch(receiveTopic(topicId, data));
+    });
+
+    dispatch(hasReplies(topicId, true));
+  };
+}
+
 

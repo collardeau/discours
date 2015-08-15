@@ -1,30 +1,26 @@
-import fireUtils from '../utils/fireact';
-import {loginUser, logoutUser} from './actionCreators';
+import {fetch} from '../utils/fireUtils.js';
+
+export const LOGIN_USER = 'LOGIN_USER';
+
+function loginUser(uid){
+  return {
+    type: LOGIN_USER,
+    uid
+  };
+}
+
+export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+function requestLogin(){
+  return {
+    type: REQUEST_LOGIN
+  };
+}
+
 
 export function login(){
-
   return dispatch => {
-
-    let isLoggedIn= fireUtils.isLoggedIn();
-    let uid;
-
-    let onLogout= uid => {
-      return fireUtils.onLogout(() => {-});
-        fireUtils.set(['lastVote', uid], null);
-        dispatch(logoutUser(uid));
-    };
-     
-    if(!isLoggedIn){
-      fireUtils.login().then(auth => {
-        uid= auth.uid;
-        dispatch(loginUser(uid));
-        onLogout(uid);
-      });
-    }else{
-      uid= isLoggedIn.uid;
-      dispatch(loginUser(isLoggedIn.uid));
-      onLogout(uid);
-    }
-  }
+    dispatch(requestLogin());
+    dispatch(loginUser('obelix'));
+  };
 }
 

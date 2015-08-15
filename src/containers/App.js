@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import hasher from 'hasher';
-import {login, changeRoute} from '../actions/actions';
+import {changeRoute} from '../actions/routeActions';
+import {login} from '../actions/authActions';
 
 class App extends Component {
 
@@ -28,10 +29,13 @@ class App extends Component {
 
   render(){
     return (
-      <div>Look here, a brand new app</div>
+      <div>
+        { this.props.content }
+        <br />Look here, a brand new app
+      </div>
+
     );
   }
-
 }
 
 let select = state => {
@@ -40,5 +44,12 @@ let select = state => {
   };
 };
 
-export default connect(select)(App);
+function mapStateToProps(state){
+  const { selectedTopic, topics } = state;
+  return {
+    topic: topics[selectedTopic]
+  };
+}
+
+export default connect(mapStateToProps)(App);
 
