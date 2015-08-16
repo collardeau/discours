@@ -61,6 +61,7 @@ function syncRepliesByCount(topicId){
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
 function receiveReply(topicId, reply){
+  console.log('received:', reply);
   return {
     type: RECEIVE_REPLY,
     topicId: topicId,

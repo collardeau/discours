@@ -68,7 +68,8 @@ function topic(state={}, action){
    case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
         content: action.reply.content,
-        count: action.reply.count
+        count: action.reply.count,
+        topicId: action.reply.topicId
       });
     default:
       return state;
