@@ -12,9 +12,9 @@ function uid(state=null, action){
   }
 }
 
-function route(state={}, action){
+function route(state='about', action){
   switch(action.type){
-    case routeActions.REQUEST_ROUTE:
+    case routeActions.SELECT_ROUTE:
       return action.route;
     default:
       return state;
@@ -56,17 +56,16 @@ function topic(state={}, action){
       return Object.assign({}, state, {
         hasReplies: hasReplies(state[action.hasReplies], action)
       });
-    case actionTypes.RECEIVE_TOPIC:
-      return Object.assign({}, state, {
-        content: action.topic.content
-      });
-    case actionTypes.FETCH_TOPIC:
-      return Object.assign({}, state, {
+    case actionTypes.REQUEST_TOPIC: return Object.assign({}, state, {
         hasReplies: hasReplies(state[action.hasReplies], action),
         content: '',
         count: 0
       });
-    case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_TOPIC:
+      return Object.assign({}, state, {
+        content: action.topic.content
+      });
+   case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
         content: action.reply.content,
         count: action.reply.count
@@ -78,7 +77,7 @@ function topic(state={}, action){
 
 function topics(state={}, action){
   switch(action.type) {
-    case actionTypes.FETCH_TOPIC:
+    case actionTypes.REQUEST_TOPIC:
     case actionTypes.RECEIVE_TOPIC:
     case actionTypes.HAS_REPLIES:
       return Object.assign({}, state, {

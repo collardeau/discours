@@ -15,16 +15,16 @@ class TopicContainer extends Component {
     return (
       <div>
         <Topic
-          dispatch={dispatch}
           topic = {topic}
         />
-        <Filter />
+        <Filter
+          order={order}
+          topicId= {topicId}
+        />
         <ReplyForm
-          dispatch={dispatch}
           topicId={topicId}
         />
         <Replies
-          dispatch={dispatch}
           replies = {replies}
         />
       </div>
@@ -45,8 +45,8 @@ TopicContainer.propTypes = {
 function mapStateToProps(state){
   const { repliesByDate, repliesByCount, route, selectedTopic, topics } = state;
 
-  const order = route.entry || 'new';
-  const topicId = selectedTopic || 'root';
+  const order = route;
+  const topicId = selectedTopic;
   const replies = order === 'popular' ? repliesByCount : repliesByDate;
 
   return {

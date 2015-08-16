@@ -16,14 +16,6 @@ function selectOrder(order){
   };
 }
 
-export const FETCH_TOPIC = 'FETCH_TOPIC';
-function fetchTopic(topicId){
-  return {
-    type: FETCH_TOPIC,
-    topicId
-  };
-}
-
 export const REQUEST_TOPIC = 'REQUEST_TOPIC';
 export function requestTopic(topicId) {
   return {
@@ -85,15 +77,12 @@ function receiveReplyByCount(topicId, reply){
   };
 }
 
-export function fetchTopicAndReplies(route){
+export function fetchTopicAndReplies(order, topicId){
   return dispatch => {
 
-    let topicId = route.params[0],
-        order = route.entry;
-
-    dispatch(selectOrder(order));
     dispatch(selectTopic(topicId));
-    dispatch(fetchTopic(topicId)); // request topic?
+    dispatch(selectOrder(order));
+    dispatch(requestTopic(topicId));
 
     db.fetch(['topic', topicId])
     .then(data => {
@@ -101,7 +90,6 @@ export function fetchTopicAndReplies(route){
     });
 
     if(topicId === 'root'){
-      //console.log('root so not checking if replies exist');
       dispatch(hasReplies(topicId));
     } else {
       db.exists(['replies', topicId])

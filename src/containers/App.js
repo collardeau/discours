@@ -19,12 +19,7 @@ class App extends Component {
   }
 
   handleRoute = route => {
-    let params = route.split('/');
-    let nextRoute = {
-      entry: params.shift(),
-      params: params
-    };
-    this.props.changeRoute(nextRoute);
+    this.props.changeRoute(route);
   }
 
   render(){
@@ -32,7 +27,7 @@ class App extends Component {
     const { route } = this.props;
     let ui = <TopicContainer />;
 
-    if (route.entry === 'about') {
+    if (route === 'about') {
       ui = <div>Welcome to the new app with new powers!</div>;
     }
 

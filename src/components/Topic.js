@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 export default class Topic extends Component {
 
   shouldComponentUpdate(nextProps){
+    return true;
     return !nextProps.topic === this.props.topic;
   }
 

@@ -1,4 +1,4 @@
-import React, {findDOMNode, Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Radium from 'radium';
 import {light, primary} from '../styles/theme';
 
@@ -18,29 +18,41 @@ let styles = {
 };
 
 @Radium
-export default class Content extends Component {
+export default class Filter extends Component {
 
-  renderTab = (filter, filterName, last = false) => {
+  handleTabClick = tab => {
+    window.location.hash = tab + '/' + this.props.topicId;
+  }
+
+  renderTab = (tab, tabName, last = false) => {
     let li = {
-      backgroundColor: filter === this.props.filter ? primary : light,
+      backgroundColor: tab === this.props.order ? primary : light,
       borderRight: last ? '' : '1px solid'
     };
 
     return (
-      <li style={[styles.li, li]}>
-        {filterName}
+      <li style={[styles.li, li]}
+        onClick= { () => this.handleTabClick(tab)}>
+        {tabName}
       </li>
     );
   }
   render(){
 
+    console.log( 'filter has props: ', this.props);
+
     return (
       <ul>
         {this.renderTab('new', 'New')}
-        {this.renderTab('all-time', 'Most Popular', true)}
+        {this.renderTab('popular', 'Most Popular', true)}
       </ul>
     );
   }
 }
+
+Filter.propTypes = {
+  order: PropTypes.oneOf(['new', 'popular']),
+  topicId: PropTypes.string.isRequired
+};
 
 

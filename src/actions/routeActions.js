@@ -9,11 +9,15 @@ function selectRoute(route) {
 }
 
 export function changeRoute(route){
+
+    let params = route.split('/'),
+        entry = params.shift();
+
   return dispatch => {
-    dispatch(selectRoute(route));
-    if(route.entry === 'about'){console.log('about'); }
+    dispatch(selectRoute(entry));
+    if(entry === 'about'){console.log('about'); }
     else {
-      dispatch(fetchTopicAndReplies(route)); // if needed?
+      dispatch(fetchTopicAndReplies(entry, params[0])); // if needed?
     }
   };
 }
