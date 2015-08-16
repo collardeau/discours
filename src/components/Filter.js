@@ -42,7 +42,7 @@ export default class Filter extends Component {
     console.log( 'filter has props: ', this.props);
 
     return (
-      <ul>
+      <ul style={styles.ul}>
         {this.renderTab('new', 'New')}
         {this.renderTab('popular', 'Most Popular', true)}
       </ul>

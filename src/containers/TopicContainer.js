@@ -10,19 +10,20 @@ class TopicContainer extends Component {
   render(){
     console.log('topic container props: ', this.props);
 
-    const { dispatch, order, topic, topicId, replies } = this.props;
+    const { dispatch, order, parentTopic, topic, topicId, replies } = this.props;
 
     return (
       <div>
         <Topic
+          parentTopic = {parentTopic}
           topic = {topic}
+        />
+       <ReplyForm
+          topicId={topicId}
         />
         <Filter
           order={order}
           topicId= {topicId}
-        />
-        <ReplyForm
-          topicId={topicId}
         />
         <Replies
           replies = {replies}
@@ -34,6 +35,10 @@ class TopicContainer extends Component {
 
 TopicContainer.propTypes = {
   order: PropTypes.oneOf(['new', 'popular']),
+  parentTopic: PropTypes.shape({
+    topicId: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired
+  }),
   topic: PropTypes.shape({
     content: PropTypes.string.isRequired,
     count: PropTypes.number.isRequired
@@ -44,7 +49,6 @@ TopicContainer.propTypes = {
 
 function mapStateToProps(state){
   const { repliesByDate, repliesByCount, route, selectedTopic, topics } = state;
-
   const order = route;
   const topicId = selectedTopic;
   const replies = order === 'popular' ? repliesByCount : repliesByDate;
@@ -62,6 +66,10 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   const { order, replies, topics, topicId } = stateProps;
   return Object.assign({}, parentProps, {
     order,
+    parentTopic: {
+      content: 'none',
+      topicId: 'none'
+    },
     replies: replies[topicId].map(tId => topics[tId]),
     topic: topics[topicId],
     topicId
