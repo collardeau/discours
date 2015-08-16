@@ -3,6 +3,7 @@ import {connect } from 'react-redux';
 import Topic from '../components/Topic';
 import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
+import Filter from '../components/Filter';
 
 class TopicContainer extends Component {
 
@@ -17,6 +18,7 @@ class TopicContainer extends Component {
           dispatch={dispatch}
           topic = {topic}
         />
+        <Filter />
         <ReplyForm
           dispatch={dispatch}
           topicId={topicId}
