@@ -63,11 +63,13 @@ function topic(state={}, action){
     case actionTypes.FETCH_TOPIC:
       return Object.assign({}, state, {
         hasReplies: hasReplies(state[action.hasReplies], action),
-        content: ''
+        content: '',
+        count: 0
       });
     case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
-        content: action.reply.content
+        content: action.reply.content,
+        count: action.reply.count
       });
     default:
       return state;

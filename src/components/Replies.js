@@ -7,7 +7,7 @@ export default class Replies extends React.Component {
     return (
       <ul>
         { this.props.replies.map((reply, i) =>
-          <li key={i}>{ reply.content }</li>
+          <li key={i}>{ reply.content } : { reply.count}</li>
         )}
       </ul>
     );
