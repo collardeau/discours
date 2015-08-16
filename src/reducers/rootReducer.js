@@ -105,7 +105,7 @@ function reply(state=[], action) {
   }
 }
 
-function replies(state={}, action){
+function repliesByDate(state={}, action){
   switch(action.type) {
     case actionTypes.SELECT_TOPIC:
     case actionTypes.RECEIVE_REPLY:
@@ -119,6 +119,7 @@ function replies(state={}, action){
 
 function repliesByCount(state={}, action){
   switch(action.type) {
+    case actionTypes.SELECT_TOPIC:
     case actionTypes.RECEIVE_REPLY_BY_COUNT:
       return Object.assign({}, state, {
       [action.topicId]: reply(state[action.topicId], action)
@@ -142,7 +143,7 @@ const rootReducer = combineReducers({
   selectedTopic,
   selectedOrder,
   topics,
-  replies,
+  repliesByDate,
   repliesByCount
 });
 

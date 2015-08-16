@@ -110,7 +110,7 @@ export function fetchTopicAndReplies(route){
       });
     }
 
-    dispatch(syncReplies(topicId)); 
+    dispatch(syncReplies(topicId));
     db.sync(['replies', topicId], reply => {
       dispatch(receiveReply(topicId, reply));
     });

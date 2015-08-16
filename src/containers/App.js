@@ -24,7 +24,7 @@ class App extends Component {
       entry: params.shift(),
       params: params
     };
-    changeRoute(nextRoute);
+    this.props.changeRoute(nextRoute);
   }
 
   render(){

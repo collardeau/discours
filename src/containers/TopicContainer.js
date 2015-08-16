@@ -33,7 +33,6 @@ class TopicContainer extends Component {
 }
 
 TopicContainer.propTypes = {
-  dispatch: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['new', 'popular']),
   topic: PropTypes.shape({
     content: PropTypes.string.isRequired,
@@ -44,16 +43,34 @@ TopicContainer.propTypes = {
 };
 
 function mapStateToProps(state){
-  const { replies, route, selectedTopic, topics } = state;
+  const { repliesByDate, repliesByCount, route, selectedTopic, topics } = state;
+
+  const order = route.entry || 'new';
+  const topicId = selectedTopic || 'root';
+  const replies = order === 'popular' ? repliesByCount : repliesByDate;
 
   return {
-    order: route.entry || 'new',
-    topic: topics[selectedTopic] || {content: 'no content', count: 0},
-    topicId: selectedTopic,
-    replies: replies[selectedTopic] ?
-      replies[selectedTopic].map(tId => topics[tId]) : []
+    order,
+    topicId,
+    topics,
+    replies
   };
+
 }
 
-export default connect(mapStateToProps)(TopicContainer);
+function mergeProps(stateProps, dispatchProps, parentProps) {
+  const { order, replies, topics, topicId } = stateProps;
+  return Object.assign({}, parentProps, {
+    order,
+    replies: replies[topicId].map(tId => topics[tId]),
+    topic: topics[topicId],
+    topicId
+  });
+}
+
+export default connect(
+  mapStateToProps,
+  {},
+  mergeProps
+)(TopicContainer);
 
