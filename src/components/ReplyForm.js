@@ -28,7 +28,7 @@ export default class ReplyForm extends Component {
 }
 
 ReplyForm.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  //dispatch: PropTypes.func.isRequired,
   topicId: PropTypes.string.isRequired
 };
 

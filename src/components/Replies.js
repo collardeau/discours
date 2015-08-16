@@ -16,7 +16,7 @@ export default class Replies extends React.Component {
 }
 
 Replies.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  //dispatch: PropTypes.func.isRequired,
   replies: PropTypes.arrayOf(PropTypes.shape({
     content: PropTypes.string.isRequired
   })).isRequired

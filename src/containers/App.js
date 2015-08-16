@@ -14,8 +14,8 @@ class App extends Component {
 
   constructor(props){
     super(props);
-    router.start(this.handleRoute);
     props.login();
+    router.start(this.handleRoute);
   }
 
   handleRoute = route => {
@@ -28,8 +28,6 @@ class App extends Component {
   }
 
   render(){
-
-    console.log('app props', this.props);
 
     const { route } = this.props;
     let ui = <TopicContainer />;

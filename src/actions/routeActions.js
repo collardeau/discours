@@ -1,16 +1,16 @@
 import { fetchTopicAndReplies} from './actions';
 
-export const REQUEST_ROUTE = 'REQUEST_ROUTE';
-function requestRoute(route) {
+export const SELECT_ROUTE = 'SELECT_ROUTE';
+function selectRoute(route) {
   return {
-      type: REQUEST_ROUTE,
+      type: SELECT_ROUTE,
       route
   };
 }
 
 export function changeRoute(route){
   return dispatch => {
-    dispatch(requestRoute(route));
+    dispatch(selectRoute(route));
     if(route.entry === 'about'){console.log('about'); }
     else {
       dispatch(fetchTopicAndReplies(route)); // if needed?

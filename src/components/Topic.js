@@ -2,6 +2,10 @@ import React, { Component, PropTypes } from 'react';
 
 export default class Topic extends Component {
 
+  shouldComponentUpdate(nextProps){
+    return !nextProps.topic === this.props.topic;
+  }
+
   render(){
     const { content } = this.props.topic;
     return (
