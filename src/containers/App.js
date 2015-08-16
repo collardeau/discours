@@ -6,6 +6,7 @@ import Radium, { Style } from 'radium';
 import rules from '../styles/styles';
 import {changeRoute} from '../actions/routeActions';
 import {login} from '../actions/authActions';
+import { bindActionCreators } from 'redux';
 import Header from '../components/Header';
 import TopicContainer from './TopicContainer';
 
@@ -13,8 +14,8 @@ class App extends Component {
 
   constructor(props){
     super(props);
-    //props.dispatch(login());
     router.start(this.handleRoute);
+    props.login();
   }
 
   handleRoute = route => {
@@ -23,10 +24,12 @@ class App extends Component {
       entry: params.shift(),
       params: params
     };
-    this.props.dispatch(changeRoute(nextRoute));
+    changeRoute(nextRoute);
   }
 
   render(){
+
+    console.log('app props', this.props);
 
     const { route } = this.props;
     let ui = <TopicContainer />;
@@ -50,8 +53,7 @@ App.propTypes = {
   route: PropTypes.shape({
     entry: PropTypes.string.isRequired,
     params: PropTypes.array.isRequired
-  }),
-  dispatch: PropTypes.func.isRequired
+  })
 };
 
 function mapStateToProps(state){
@@ -60,5 +62,17 @@ function mapStateToProps(state){
   };
 }
 
-export default connect(mapStateToProps)(App);
+function mergeProps(stateProps, dispatchProps, parentProps){
+  return Object.assign({}, parentProps, {
+    route: stateProps.route,
+    changeRoute: (route) => dispatchProps.changeRoute(route),
+    login: () => dispatchProps.login()
+  });
+}
+
+export default connect(
+  mapStateToProps,
+  { login, changeRoute},
+  mergeProps
+)(App);
 
