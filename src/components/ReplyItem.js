@@ -7,7 +7,8 @@ let styles = {
     padding: '0 0.5em',
     display: 'flex',
     justifyContent: 'space-between',
-    borderBottom: '1px dotted'
+    borderBottom: '1px dotted',
+    cursor: 'pointer'
   },
   content: {
     width: '80%'
@@ -25,12 +26,17 @@ let styles = {
 
 export default class ReplyItem extends Component {
 
+  handleLink = () => {
+    let { order, reply } = this.props;
+    window.location.hash = order + '/' + reply.topicId;
+  }
+
   render(){
 
     const { reply } = this.props;
 
     return (
-      <li style={styles.li}>
+      <li onClick={this.handleLink } style={styles.li}>
         <div style={styles.content}>{ reply.content }</div>
         <div style={styles.vote}>
           <button>
@@ -45,9 +51,11 @@ export default class ReplyItem extends Component {
 }
 
 ReplyItem.propTypes = {
+  order: PropTypes.oneOf(['new', 'popular']).isRequired,
   reply: PropTypes.shape({
     content: PropTypes.string.isRequired,
-    count: PropTypes.number.isRequired
+    count: PropTypes.number.isRequired,
+    topicId: PropTypes.string.isRequired
   }).isRequired
 };
 

@@ -26,6 +26,7 @@ class TopicContainer extends Component {
           topicId= {topicId}
         />
         <Replies
+          order = {order}
           replies = {replies}
         />
       </div>
@@ -34,7 +35,7 @@ class TopicContainer extends Component {
 }
 
 TopicContainer.propTypes = {
-  order: PropTypes.oneOf(['new', 'popular']),
+  order: PropTypes.oneOf(['new', 'popular']).isRequired,
   parentTopic: PropTypes.shape({
     topicId: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired
@@ -66,10 +67,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   const { order, replies, topics, topicId } = stateProps;
   return Object.assign({}, parentProps, {
     order,
-    parentTopic: {
-      content: 'none',
-      topicId: 'none'
-    },
+    parentTopic: {content: 'none', topicId: 'none' }, // temp
     replies: replies[topicId].map(tId => topics[tId]),
     topic: topics[topicId],
     topicId
