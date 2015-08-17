@@ -85,17 +85,19 @@ function receiveReplyByCount(topicId, reply){
 }
 
 export function fetchTopicAndReplies(order, topicId){
-  return dispatch => {
+  return (dispatch, getState) => {
 
     dispatch(selectTopic(topicId));
     dispatch(selectOrder(order));
-    dispatch(requestTopic(topicId));
 
-    db.fetch(['topic', topicId])
-    .then(data => {
-      dispatch(receiveTopic(topicId, data));
-    });
-
+    if(!getState().topics[topicId]){
+      dispatch(requestTopic(topicId));
+      db.fetch(['topic', topicId])
+      .then(data => {
+        dispatch(receiveTopic(topicId, data));
+      });
+    }
+    
     //if(topicId === 'root'){
       //dispatch(hasReplies(topicId));
       //} else {
