@@ -49,6 +49,10 @@ export function syncByOrder(loc, order, cb){
   });
 }
 
+export function unsync(loc){
+  buildPath(loc).off();
+}
+
 export function set(loc, data){
   const newData = {...data, date: Firebase.ServerValue.TIMESTAMP};
   buildPath(loc).set(newData);

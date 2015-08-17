@@ -48,6 +48,20 @@ function syncChange(topicId){
   };
 }
 
+export const UNSYNC_ALL = 'UNSYNC_ALL';
+function unsyncAll(topicId){
+  return {
+    type: UNSYNC_ALL,
+    topicId
+  };
+}
+
+export function unsync(topicId) {
+  return dispatch => {
+    dispatch(unsyncAll(topicId));    
+    db.unsync(['replies', topicId]);
+  };
+}
 export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
 export function receiveTopic(topicId, topic){
   return {
