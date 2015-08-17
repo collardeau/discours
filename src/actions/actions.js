@@ -32,18 +32,18 @@ function hasReplies(topicId){
   };
 }
 
-export const SYNC_REPLIES = 'SYNC_REPLIES';
-function syncReplies(topicId){
+export const SYNC_ADD = 'SYNC_ADD';
+function syncAdd(topicId){
   return {
-    type: SYNC_REPLIES,
+    type: SYNC_ADD,
     topicId
   };
 }
 
-export const SYNC_REPLIES_BY_COUNT = 'SYNC_REPLIES_BY_COUNT';
-function syncRepliesByCount(topicId){
+export const SYNC_CHANGE = 'SYNC_CHANGE';
+function syncChange(topicId){
   return {
-    type: SYNC_REPLIES,
+    type: SYNC_CHANGE,
     topicId
   };
 }
@@ -63,7 +63,6 @@ export function receiveTopic(topicId, topic){
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
 function receiveReply(topicId, reply){
-  console.log(reply);
   return {
     type: RECEIVE_REPLY,
     topic: {
@@ -118,11 +117,12 @@ export function fetchTopicAndReplies(order, topicId){
       //});
     //}
 
-    dispatch(syncReplies(topicId));
+    dispatch(syncAdd(topicId));
     db.sync(['replies', topicId], reply => {
       dispatch(receiveReply(topicId, reply));
     });
 
+    dispatch(syncChange(topicId));
     db.syncOnChange(['replies', topicId], data => {
       dispatch(receiveChangedReply(data.topicId, data));
     });
