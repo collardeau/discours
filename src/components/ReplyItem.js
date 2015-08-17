@@ -31,6 +31,12 @@ export default class ReplyItem extends Component {
     window.location.hash = order + '/' + reply.topicId;
   }
 
+  handleUpvote = (e) => {
+    e.stopPropagation();
+    const { parentId, reply } = this.props;
+    this.props.upvote(reply.topicId, parentId);  
+  }
+
   render(){
 
     const { reply } = this.props;
@@ -39,7 +45,7 @@ export default class ReplyItem extends Component {
       <li onClick={this.handleLink } style={styles.li}>
         <div style={styles.content}>{ reply.content }</div>
         <div style={styles.vote}>
-          <button>
+          <button onClick={this.handleUpvote}>
             &#8593;
           </button>
           <span style={styles.count}>{reply.count}</span>

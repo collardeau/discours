@@ -53,3 +53,11 @@ export function push (loc, data){
     return Promise.resolve(newRef.key());
   }
 }
+
+export function increment(loc){
+  buildPath(loc).transaction( current_value => {
+    return (current_value || 0) + 1;
+  }, (error, committed, snap) => {
+    if (error) { console.log(error.message); }
+  });
+}

@@ -4,14 +4,16 @@ import ReplyItem from './ReplyItem';
 export default class Replies extends React.Component {
 
   render(){
-    const {order, replies } = this.props;
+    const {order, parentId, replies, upvote } = this.props;
     return (
       <ul>
         { replies.map((reply) =>
           <ReplyItem
             key={reply.topicId}
             order={order}
+            parentId={parentId}
             reply={reply}
+            upvote={upvote}
           />
         )}
       </ul>

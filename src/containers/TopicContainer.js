@@ -4,7 +4,7 @@ import Topic from '../components/Topic';
 import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
-import {addReply} from '../actions/actions';
+import {addReply, upvote} from '../actions/actions';
 
 class TopicContainer extends Component {
 
@@ -12,9 +12,8 @@ class TopicContainer extends Component {
 
     console.log('topic container props: ', this.props);
 
-    const { addReply, order, parentTopic, topic, topicId, replies } = this.props;
+    const { addReply, order, parentTopic, topic, topicId, replies, upvote } = this.props;
 
-    //return <div>intercept</div>;
     return (
       <div>
         <Topic
@@ -32,7 +31,9 @@ class TopicContainer extends Component {
         />
         <Replies
           order = {order}
+          parentId={topicId}
           replies = {replies}
+          upvote = {upvote}
         />
       </div>
     );
@@ -71,6 +72,7 @@ function mapStateToProps(state){
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
   const { order, parentId, replies, topics, topicId } = stateProps;
+  console.log('all mighty god: ', dispatchProps.upvote);
   return Object.assign({}, parentProps, {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     order,
@@ -79,13 +81,14 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
       return {...topics[tId], topicId: tId };
     }),
     topic: topics[topicId],
-    topicId
+    topicId,
+    upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId)
   });
 }
 
 export default connect(
   mapStateToProps,
-  {addReply},
+  {addReply, upvote},
   mergeProps
 )(TopicContainer);
 

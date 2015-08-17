@@ -140,4 +140,17 @@ export function addReply(topicId, reply){
   };
 }
 
+export const REQUEST_UPVOTE = 'REQUEST_UPVOTE';
+function requestUpvote(topicId, reply){
+  return {
+    type: REQUEST_UPVOTE,
+    topicId: topicId
+  };
+}
 
+export function upvote(topicId, parentId){
+  return dispatch => {
+    dispatch(requestUpvote(topicId));
+    db.increment(['replies', parentId, topicId, 'count']);
+  };
+}
