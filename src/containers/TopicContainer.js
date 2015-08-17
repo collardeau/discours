@@ -9,6 +9,7 @@ import {addReply} from '../actions/actions';
 class TopicContainer extends Component {
 
   render(){
+
     console.log('topic container props: ', this.props);
 
     const { addReply, order, parentTopic, topic, topicId, replies } = this.props;
@@ -74,7 +75,9 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     order,
     parentTopic: {content: 'none', topicId: 'none' }, // temp
-    replies: replies[topicId].map(tId => topics[tId]),
+    replies: replies[topicId].map(tId => {
+      return {...topics[tId], topicId: tId };
+    }),
     topic: topics[topicId],
     topicId
   });

@@ -1,6 +1,11 @@
 import React, {findDOMNode, Component, PropTypes} from 'react';
 import { addReply } from '../actions/actions';
 
+let styles = {
+  div: {
+    //margin: '0.5em'
+  }
+};
 export default class ReplyForm extends Component {
 
   handleClick = () => {
@@ -21,7 +26,7 @@ export default class ReplyForm extends Component {
     return (
       <div>
         <textarea ref='reply' placeholder=' Go ahead, express yourself!'/>
-        <div>
+        <div styles={styles.div}>
           <button onClick={this.handleClick}>Submit</button>
         </div>
       </div>
