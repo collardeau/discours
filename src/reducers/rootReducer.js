@@ -56,13 +56,18 @@ function topicReducer(state={}, action){
       return Object.assign({}, state, {
         hasReplies: hasReplies(state[action.hasReplies], action)
       });
-    case actionTypes.REQUEST_TOPIC: return Object.assign({}, state, {
+    case actionTypes.REQUEST_TOPIC: 
+      return Object.assign({}, state, {
         //hasReplies: hasReplies(state[action.hasReplies], action),
         content: ''
       });
     case actionTypes.RECEIVE_TOPIC:
     case actionTypes.RECEIVE_REPLY:
-      return action.topic;
+      const { content, parentTopic } = action.topic;
+      return Object.assign({}, state, {
+        content,
+        parentTopic
+      });
    default:
       return state;
   }
@@ -84,6 +89,7 @@ function topics(state={}, action){
 function vote(state=0, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_CHANGED_REPLY:
       return action.topic.count;
     default:
       return state;
@@ -93,6 +99,7 @@ function vote(state=0, action){
 function votes(state={}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_CHANGED_REPLY:
       return Object.assign({}, state, {
       [action.topicId]: vote(state[action.topicId], action)
     });

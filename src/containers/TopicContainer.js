@@ -55,7 +55,7 @@ TopicContainer.propTypes = {
 };
 
 function mapStateToProps(state){
-  const { repliesByNew, route, selectedTopic, topics } = state;
+  const { repliesByNew, route, selectedTopic, topics, votes } = state;
   const order = route;
   const topicId = selectedTopic;
   //const replies = order === 'popular' ? repliesByCount : repliesByDate;
@@ -65,20 +65,20 @@ function mapStateToProps(state){
     order,
     topicId,
     topics,
-    replies
+    replies,
+    votes
   };
 
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
   const { order, parentId, replies, topics, topicId } = stateProps;
-  console.log('all mighty god: ', dispatchProps.upvote);
   return Object.assign({}, parentProps, {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     order,
     parentTopic: {content: 'none', topicId: 'none' }, // temp
     replies: replies[topicId].map(tId => {
-      return {...topics[tId], topicId: tId };
+      return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
     }),
     topic: topics[topicId],
     topicId,

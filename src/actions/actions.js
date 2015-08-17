@@ -84,6 +84,17 @@ function receiveReplyByCount(topicId, reply){
   };
 }
 
+export const RECEIVE_CHANGED_REPLY = 'RECEIVE_CHANGED_REPLY';
+function receiveChangedReply(topicId, reply){
+  return {
+    type: RECEIVE_CHANGED_REPLY,
+    topic: {
+      count: reply.count
+    },
+    topicId
+  };
+}
+
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
@@ -110,6 +121,10 @@ export function fetchTopicAndReplies(order, topicId){
     dispatch(syncReplies(topicId));
     db.sync(['replies', topicId], reply => {
       dispatch(receiveReply(topicId, reply));
+    });
+
+    db.syncOnChange(['replies', topicId], data => {
+      dispatch(receiveChangedReply(data.topicId, data));
     });
 
     //dispatch(syncRepliesByCount);

@@ -33,6 +33,14 @@ export function sync(loc, cb){
   });
 }
 
+export function syncOnChange(loc, cb){
+  buildPath(loc).on('child_changed', snap => {
+    let d = snap.val();
+    d.topicId = snap.key();
+    cb(d);
+  });
+}
+
 export function syncByOrder(loc, order, cb){
   buildPath(loc).orderByChild(order).on('child_added', snap => {
     let d = snap.val();
