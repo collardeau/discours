@@ -6,7 +6,6 @@ import Radium, { Style } from 'radium';
 import rules from '../styles/styles';
 import {changeRoute} from '../actions/routeActions';
 import {login} from '../actions/authActions';
-import { bindActionCreators } from 'redux';
 import Header from '../components/Header';
 import TopicContainer from './TopicContainer';
 

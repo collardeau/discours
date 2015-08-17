@@ -4,14 +4,16 @@ import Topic from '../components/Topic';
 import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
+import {addReply} from '../actions/actions';
 
 class TopicContainer extends Component {
 
   render(){
     console.log('topic container props: ', this.props);
 
-    const { dispatch, order, parentTopic, topic, topicId, replies } = this.props;
+    const { addReply, order, parentTopic, topic, topicId, replies } = this.props;
 
+    //return <div>intercept</div>;
     return (
       <div>
         <Topic
@@ -19,7 +21,8 @@ class TopicContainer extends Component {
           topic = {topic}
         />
        <ReplyForm
-          topicId={topicId}
+          addReply={addReply}
+          topic={topic}
         />
         <Filter
           order={order}
@@ -35,14 +38,14 @@ class TopicContainer extends Component {
 }
 
 TopicContainer.propTypes = {
+  addReply: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['new', 'popular']).isRequired,
   parentTopic: PropTypes.shape({
     topicId: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired
   }),
   topic: PropTypes.shape({
-    content: PropTypes.string.isRequired,
-    count: PropTypes.number.isRequired
+    content: PropTypes.string.isRequired
   }),
   topicId: PropTypes.string.isRequired,
   replies: PropTypes.array.isRequired
@@ -64,8 +67,9 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { order, replies, topics, topicId } = stateProps;
+  const { order, parentId, replies, topics, topicId } = stateProps;
   return Object.assign({}, parentProps, {
+    addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     order,
     parentTopic: {content: 'none', topicId: 'none' }, // temp
     replies: replies[topicId].map(tId => topics[tId]),
@@ -76,7 +80,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {},
+  {addReply},
   mergeProps
 )(TopicContainer);
 

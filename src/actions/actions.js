@@ -32,16 +32,6 @@ function hasReplies(topicId){
   };
 }
 
-export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
-export function receiveTopic(topicId, topic){
-  return {
-    type: RECEIVE_TOPIC,
-    topicId: topicId,
-    topic: topic,
-    receivedAt: Date.now()
-  };
-}
-
 export const SYNC_REPLIES = 'SYNC_REPLIES';
 function syncReplies(topicId){
   return {
@@ -58,14 +48,26 @@ function syncRepliesByCount(topicId){
   };
 }
 
+export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
+export function receiveTopic(topicId, topic){
+  console.log(topic);
+  return {
+    type: RECEIVE_TOPIC,
+    parentId: topic.ref.topicId,
+    topicId,
+    topic
+    //receivedAt: Date.now()
+  };
+}
+
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
 function receiveReply(topicId, reply){
-  console.log('received:', reply);
   return {
     type: RECEIVE_REPLY,
-    topicId: topicId,
+    parentId: topicId,
     reply: reply
+    //receivedAt: Date.now()
   };
 }
 
@@ -90,23 +92,23 @@ export function fetchTopicAndReplies(order, topicId){
       dispatch(receiveTopic(topicId, data));
     });
 
-    if(topicId === 'root'){
-      dispatch(hasReplies(topicId));
-    } else {
-      db.exists(['replies', topicId])
-      .then(()=>{
-        dispatch(hasReplies(topicId));
-      });
-    }
+    //if(topicId === 'root'){
+      //dispatch(hasReplies(topicId));
+      //} else {
+      //db.exists(['replies', topicId])
+      //.then(()=>{
+        //dispatch(hasReplies(topicId));
+      //});
+    //}
 
-    dispatch(syncReplies(topicId));
-    db.sync(['replies', topicId], reply => {
-      dispatch(receiveReply(topicId, reply));
-    });
-    dispatch(syncRepliesByCount);
-    db.syncByOrder(['replies', topicId], 'count', reply => {
-      dispatch(receiveReplyByCount(topicId, reply));
-    });
+    //dispatch(syncReplies(topicId));
+    //db.sync(['replies', topicId], reply => {
+      //dispatch(receiveReply(topicId, reply));
+    //});
+    //dispatch(syncRepliesByCount);
+    //db.syncByOrder(['replies', topicId], 'count', reply => {
+      //dispatch(receiveReplyByCount(topicId, reply));
+    //});
 
   };
 }
@@ -125,6 +127,8 @@ export function addReply(topicId, reply){
     dispatch(requestAddReply(topicId, reply));
     db.push(['topic'], reply)
     .then(newId => {
+      reply.count = 0;
+      delete reply.ref;
       db.set(['replies', topicId, newId], reply);
     });
   };

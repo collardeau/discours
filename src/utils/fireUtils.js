@@ -42,11 +42,13 @@ export function syncByOrder(loc, order, cb){
 }
 
 export function set(loc, data){
-  buildPath(loc).set(data);
+  const newData = {...data, date: Firebase.ServerValue.TIMESTAMP};
+  buildPath(loc).set(newData);
 }
 
 export function push (loc, data){
-  let newRef = buildPath(loc).push(data);
+  const newData = {...data, date: Firebase.ServerValue.TIMESTAMP};
+  let newRef = buildPath(loc).push(newData);
   if (newRef){
     return Promise.resolve(newRef.key());
   }

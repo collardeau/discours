@@ -4,12 +4,16 @@ import { addReply } from '../actions/actions';
 export default class ReplyForm extends Component {
 
   handleClick = () => {
-    const {dispatch, topicId } = this.props;
-    let node = findDOMNode(this.refs.reply);
-    let text = node.value.trim();
-    dispatch(addReply(topicId, {
-      content: text
-    }));
+    const {addReply, topic } = this.props;
+    const node = findDOMNode(this.refs.reply);
+    const topicId = topic.topicId;
+    addReply(topicId, {
+      content: node.value.trim(),
+      ref: {
+        content: topic.content,
+        topicId
+      } 
+    });
     node.value = "";
   }
 
@@ -26,10 +30,5 @@ export default class ReplyForm extends Component {
   }
 
 }
-
-ReplyForm.propTypes = {
-  //dispatch: PropTypes.func.isRequired,
-  topicId: PropTypes.string.isRequired
-};
 
 

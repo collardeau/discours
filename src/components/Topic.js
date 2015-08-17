@@ -51,8 +51,7 @@ Topic.propTypes = {
     content: PropTypes.string.isRequired
   }),
   topic: PropTypes.shape({
-    content: PropTypes.string.isRequired,
-    count: PropTypes.number.isRequired
+    content: PropTypes.string.isRequired
   })
 };
 
