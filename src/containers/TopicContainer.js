@@ -23,6 +23,7 @@ class TopicContainer extends Component {
        <ReplyForm
           addReply={addReply}
           topic={topic}
+          topicId={topicId}
         />
         <Filter
           order={order}
@@ -47,15 +48,16 @@ TopicContainer.propTypes = {
   topic: PropTypes.shape({
     content: PropTypes.string.isRequired
   }),
-  topicId: PropTypes.string.isRequired,
-  replies: PropTypes.array.isRequired
+  topicId: PropTypes.string.isRequired
+  //replies: PropTypes.array.isRequired
 };
 
 function mapStateToProps(state){
-  const { repliesByDate, repliesByCount, route, selectedTopic, topics } = state;
+  const { repliesByNew, route, selectedTopic, topics } = state;
   const order = route;
   const topicId = selectedTopic;
-  const replies = order === 'popular' ? repliesByCount : repliesByDate;
+  //const replies = order === 'popular' ? repliesByCount : repliesByDate;
+  const replies = repliesByNew;
 
   return {
     order,

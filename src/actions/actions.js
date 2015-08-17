@@ -68,6 +68,7 @@ function receiveReply(topicId, reply){
     type: RECEIVE_REPLY,
     topic: {
       content: reply.content,
+      count: reply.count,
       parentTopic: reply.ref
     },
     topicId: reply.topicId
@@ -132,7 +133,6 @@ export function addReply(topicId, reply){
     db.push(['topic'], reply)
     .then(newId => {
       reply.count = 0;
-      delete reply.ref.content;
       db.set(['replies', topicId, newId], reply);
     });
   };

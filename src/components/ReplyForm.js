@@ -4,9 +4,8 @@ import { addReply } from '../actions/actions';
 export default class ReplyForm extends Component {
 
   handleClick = () => {
-    const {addReply, topic } = this.props;
+    const {addReply, topic, topicId } = this.props;
     const node = findDOMNode(this.refs.reply);
-    const topicId = topic.topicId;
     addReply(topicId, {
       content: node.value.trim(),
       ref: {

@@ -81,46 +81,10 @@ function topics(state={}, action){
   }
 }
 
-function reply(state=[], action) {
-  switch(action.type){
-    case actionTypes.SELECT_TOPIC:
-      return [];
-    case actionTypes.RECEIVE_REPLY:
-    case actionTypes.RECEIVE_REPLY_BY_COUNT:
-      return [...state, action.topic.topicId ];
-    default:
-      return state;
-  }
-}
-
-function repliesByDate(state={}, action){
-  switch(action.type) {
-    case actionTypes.SELECT_TOPIC:
-    case actionTypes.RECEIVE_REPLY:
-      return Object.assign({}, state, {
-        [action.topicId]: reply(state[action.topicId], action)
-     });
-    default:
-      return state;
-  }
-}
-
-function repliesByCount(state={}, action){
-  switch(action.type) {
-    case actionTypes.SELECT_TOPIC:
-    case actionTypes.RECEIVE_REPLY_BY_COUNT:
-      return Object.assign({}, state, {
-      [action.topicId]: reply(state[action.topicId], action)
-    });
-    default:
-      return state;
-  }
-}
-
 function vote(state=0, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
-      return action.reply.count;
+      return action.topic.count;
     default:
       return state;
   }
@@ -137,6 +101,31 @@ function votes(state={}, action){
   }
 }
 
+function repliesReducer(state=[], action){
+  switch(action.type){
+    case actionTypes.RECEIVE_REPLY:
+      return [action.topicId, ...state ];
+    default:
+      return state;
+  } 
+}
+
+function repliesByNew(state={}, action){
+  switch(action.type){
+    case actionTypes.SELECT_TOPIC:
+      return Object.assign({}, state, {
+        [action.topicId]: []
+    });
+    case actionTypes.RECEIVE_REPLY:
+      const parentId = action.topic.parentTopic.topicId;
+      return Object.assign({}, state, {
+        [parentId]: repliesReducer(state[parentId], action)
+    });
+ 
+    default:
+      return state;
+  }
+}
 
 const rootReducer = combineReducers({
   route,
@@ -144,9 +133,8 @@ const rootReducer = combineReducers({
   selectedTopic,
   selectedOrder,
   topics,
-  repliesByDate,
-  repliesByCount
-  //votes
+  repliesByNew,
+  votes
 });
 
 export default rootReducer;
