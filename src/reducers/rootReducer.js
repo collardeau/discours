@@ -58,23 +58,12 @@ function topicReducer(state={}, action){
       });
     case actionTypes.REQUEST_TOPIC: return Object.assign({}, state, {
         //hasReplies: hasReplies(state[action.hasReplies], action),
-        content: '',
-        parentId: ''
+        content: ''
       });
     case actionTypes.RECEIVE_TOPIC:
-      return Object.assign({}, state, {
-        content: action.topic.content,
-        topicId: action.topicId
-      });
-   case actionTypes.RECEIVE_REPLY:
-      const { content, count, topic, topicId } = action.reply;
-      return Object.assign({}, state, {
-        content,
-        count,
-        //parentId: key,
-        topicId
-      });
-    default:
+    case actionTypes.RECEIVE_REPLY:
+      return action.topic;
+   default:
       return state;
   }
 }
@@ -83,13 +72,10 @@ function topics(state={}, action){
   switch(action.type) {
     case actionTypes.REQUEST_TOPIC:
     case actionTypes.RECEIVE_TOPIC:
+    case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
         [action.topicId]: topicReducer(state[action.topicId], action)
      });
-    case actionTypes.RECEIVE_REPLY:
-      return Object.assign({}, state, {
-        [action.reply.topicId]: topicReducer({}, action)
-      });
     default:
       return state;
   }
@@ -101,7 +87,7 @@ function reply(state=[], action) {
       return [];
     case actionTypes.RECEIVE_REPLY:
     case actionTypes.RECEIVE_REPLY_BY_COUNT:
-      return [...state, action.reply.topicId ];
+      return [...state, action.topic.topicId ];
     default:
       return state;
   }
@@ -159,8 +145,8 @@ const rootReducer = combineReducers({
   selectedOrder,
   topics,
   repliesByDate,
-  repliesByCount,
-  votes
+  repliesByCount
+  //votes
 });
 
 export default rootReducer;

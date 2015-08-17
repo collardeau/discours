@@ -50,24 +50,27 @@ function syncRepliesByCount(topicId){
 
 export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
 export function receiveTopic(topicId, topic){
-  console.log(topic);
   return {
     type: RECEIVE_TOPIC,
-    parentId: topic.ref.topicId,
-    topicId,
-    topic
-    //receivedAt: Date.now()
-  };
+    topic: {
+      content: topic.content,
+      parentTopic: topic.ref
+    },
+    topicId
+ };
 }
 
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
 function receiveReply(topicId, reply){
+  console.log(reply);
   return {
     type: RECEIVE_REPLY,
-    parentId: topicId,
-    reply: reply
-    //receivedAt: Date.now()
+    topic: {
+      content: reply.content,
+      parentTopic: reply.ref
+    },
+    topicId: reply.topicId
   };
 }
 
@@ -101,10 +104,11 @@ export function fetchTopicAndReplies(order, topicId){
       //});
     //}
 
-    //dispatch(syncReplies(topicId));
-    //db.sync(['replies', topicId], reply => {
-      //dispatch(receiveReply(topicId, reply));
-    //});
+    dispatch(syncReplies(topicId));
+    db.sync(['replies', topicId], reply => {
+      dispatch(receiveReply(topicId, reply));
+    });
+
     //dispatch(syncRepliesByCount);
     //db.syncByOrder(['replies', topicId], 'count', reply => {
       //dispatch(receiveReplyByCount(topicId, reply));
@@ -128,7 +132,7 @@ export function addReply(topicId, reply){
     db.push(['topic'], reply)
     .then(newId => {
       reply.count = 0;
-      delete reply.ref;
+      delete reply.ref.content;
       db.set(['replies', topicId, newId], reply);
     });
   };

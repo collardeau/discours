@@ -39,7 +39,7 @@ export default class Filter extends Component {
   }
   render(){
 
-    console.log( 'filter has props: ', this.props);
+    //console.log( 'filter has props: ', this.props);
 
     return (
       <ul style={styles.ul}>
