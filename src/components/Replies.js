@@ -20,10 +20,10 @@ export default class Replies extends React.Component {
     }
 
     return (
-      <ul key={topicId}>
+      <ul key='list'>
         { replies.map((reply, i) =>
           <ReplyItem
-            key={i}
+            key={reply.topicId}
             order={order}
             parentId={parentId}
             reply={reply}

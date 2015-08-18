@@ -94,12 +94,13 @@ function repliesReducer(state={view: [], queued: []}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
-        lastUpdated: Date.now(),
+        lastUpdated: action.topic.date,
         queued: [],
         view: [action.topicId, ...state.view]
       });
     case actionTypes.QUEUE_REPLY:
       return Object.assign({}, state, {
+        lastUpdated: action.topic.date,
         queued: [ action.topicId, ...state.queued]
     });
     case actionTypes.UNQUEUE:

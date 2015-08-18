@@ -26,9 +26,10 @@ export function fetch(loc){
   });
 }
 
-export function fetchUpToNow(loc, cb){
+export function fetchUntil(loc, timestamp, cb){
+  console.log(timestamp);
   buildPath(loc).orderByChild('date')
-  .endAt(Date.now())
+  .endAt(timestamp)
   .on('child_added', snap => {
     let d = snap.val();
     d.topicId = snap.key();
@@ -36,16 +37,16 @@ export function fetchUpToNow(loc, cb){
   });
 }
 
-export function syncFromNow(loc, cb){
+export function syncSince(loc, timestamp, cb){
+  console.log(timestamp);
   buildPath(loc).orderByChild('date')
-  .startAt(Date.now())
+  .startAt(timestamp)
   .on('child_added', snap => {
     let d = snap.val();
     d.topicId = snap.key();
     cb(d);
   });
 }
-
 
 export function syncOnChange(loc, cb){
   buildPath(loc).on('child_changed', snap => {

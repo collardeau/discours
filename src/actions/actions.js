@@ -158,15 +158,27 @@ export function fetchTopicAndReplies(order, topicId){
 
     dispatch(fetchTopic(topicId));
 
-    //dispatch(syncAdd(topicId)); // sync the replies on child added
-    db.fetchUpToNow(['replies', topicId], reply => {
-      dispatch(receiveReply(topicId, reply));
-    });
+    const replies = getState().repliesByNew;
+    const lastUpdated = replies[topicId].lastUpdated;
+    const now = Date.now();
 
-    //dispatch(syncAdd(topicId)); // sync the replies on child added
-    db.syncFromNow(['replies', topicId], reply => {
-      dispatch(queueReply(topicId, reply));
-    });
+    console.log('last updated replies: ', lastUpdated);
+
+    if(!lastUpdated){
+      //dispatch(syncAdd(topicId)); // sync the replies on child added
+      db.fetchUntil(['replies', topicId], now, reply => {
+        dispatch(receiveReply(topicId, reply));
+      });
+      //dispatch(syncAdd(topicId)); // sync the replies on child added
+      db.syncSince(['replies', topicId], now, reply => {
+        dispatch(queueReply(topicId, reply));
+      });
+    }else{
+      console.log(lastUpdated);
+      db.syncSince(['replies', topicId], lastUpdated + 1000, reply => {
+        dispatch(queueReply(topicId, reply));
+      });
+    }
 
     //dispatch(syncChange(topicId));
     db.syncOnChange(['replies', topicId], data => { // also on change (votes)
