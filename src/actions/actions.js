@@ -101,6 +101,14 @@ function queueReply(topicId, reply){
   };
 }
 
+export const UNQUEUE = 'UNQUEUE';
+export function unqueue(topicId){
+  return {
+    type: UNQUEUE,
+    topicId
+  };
+}
+
 
 export const RECEIVE_REPLY_BY_COUNT = 'RECEIVE_REPLY_BY_COUNT';
 function receiveReplyByCount(topicId, reply){

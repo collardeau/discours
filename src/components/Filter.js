@@ -21,10 +21,17 @@ let styles = {
 export default class Filter extends Component {
 
   handleTabClick = tab => {
-    window.location.hash = tab + '/' + this.props.topicId;
+    const { order, topicId, unqueue } = this.props;
+    if (tab === order) {
+      unqueue(topicId);
+    }
+    else {
+      window.location.hash = tab + '/' + topicId;
+    }
   }
 
   renderTab = (tab, tabName, last = false) => {
+
     let li = {
       backgroundColor: tab === this.props.order ? primary : light,
       borderRight: last ? '' : '1px solid'
@@ -33,23 +40,21 @@ export default class Filter extends Component {
     return (
       <li style={[styles.li, li]}
         onClick= { () => this.handleTabClick(tab)}>
-        {tabName}
+        {tabName} { this.props.queued }
       </li>
     );
   }
   render(){
 
-    //console.log( 'filter has props: ', this.props);
-
     return (
       <ul style={styles.ul}>
         {this.renderTab('new', 'New')}
-        {this.renderTab('popular', 'Most Popular', true)}
       </ul>
     );
   }
 }
 
+//{this.renderTab('popular', 'Most Popular', true)}
 Filter.propTypes = {
   order: PropTypes.oneOf(['new', 'popular']),
   topicId: PropTypes.string.isRequired
