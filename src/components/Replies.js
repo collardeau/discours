@@ -5,7 +5,7 @@ export default class Replies extends React.Component {
 
   render(){
 
-    const {hasReplies, order, parentId, replies, upvote } = this.props;
+    const {hasReplies, order, parentId, replies, topicId, upvote } = this.props;
 
     let styles = {
       info: {
@@ -20,10 +20,10 @@ export default class Replies extends React.Component {
     }
 
     return (
-      <ul>
-        { replies.map((reply) =>
+      <ul key={topicId}>
+        { replies.map((reply, i) =>
           <ReplyItem
-            key={reply.topicId}
+            key={i}
             order={order}
             parentId={parentId}
             reply={reply}

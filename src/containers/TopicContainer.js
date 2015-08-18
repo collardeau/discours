@@ -49,6 +49,7 @@ class TopicContainer extends Component {
           order = {order}
           parentId={topicId}
           replies = {replies}
+          topicId = {topicId}
           upvote = {upvote}
         />
       </div>
