@@ -24,10 +24,10 @@ export function requestTopic(topicId) {
   };
 }
 
-export const HAS_REPLIES = 'HAS_REPLIES';
-function hasReplies(topicId){
+export const HAS_NO_REPLIES = 'HAS_NO_REPLIES';
+function hasNoReplies(topicId){
   return {
-    type: HAS_REPLIES,
+    type: HAS_NO_REPLIES,
     topicId
   };
 }
@@ -135,6 +135,14 @@ export function fetchTopicAndReplies(order, topicId){
 
     dispatch(selectTopic(topicId));
     dispatch(selectOrder(order));
+
+    //dispatch request replies exist
+      db.exists(['replies', topicId])
+      .then(exists => {
+        if(!exists){
+          dispatch(hasNoReplies(topicId));
+        }
+      });
 
     // fetch the topic if not already cached
     if(!getState().topics[topicId]){

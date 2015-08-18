@@ -39,26 +39,10 @@ function selectedOrder(state='new', action){
   }
 }
 
-function hasReplies(state=false, action){
-  switch(action.type){
-    case actionTypes.HAS_REPLIES:
-      return true;
-    case actionTypes.SELECT_TOPIC:
-      return false;
-    default:
-      return state;
-  }
-}
-
 function topicReducer(state={}, action){
   switch(action.type) {
-    case actionTypes.HAS_REPLIES:
-      return Object.assign({}, state, {
-        hasReplies: hasReplies(state[action.hasReplies], action)
-      });
     case actionTypes.REQUEST_TOPIC: 
       return Object.assign({}, state, {
-        hasReplies: hasReplies(state[action.hasReplies], action),
         content: '',
         parentTopic: { content: '', topicId: ''}
       });
@@ -151,13 +135,44 @@ function repliesByNew(state={}, action){
   }
 }
 
+function hasReplies(state=-1, action){
+  switch(action.type){
+    case actionTypes.HAS_NO_REPLIES:
+      return 0;
+    case actionTypes.RECEIVE_REPLY:
+    case actionTypes.QUEUE_REPLY:
+      return 1;
+    default:
+      return state;
+  } 
+}
+
+function haveReplies(state={}, action){
+  switch(action.type){
+    case actionTypes.RECEIVE_REPLY:
+    case actionTypes.QUEUE_REPLY:
+      const parentId = action.topic.parentTopic.topicId;
+      return Object.assign({}, state, {
+        [parentId]: hasReplies(state[parentId], action)
+      });
+    case actionTypes.SELECT_TOPIC:
+    case actionTypes.HAS_NO_REPLIES:
+      return Object.assign({}, state, {
+        [action.topicId]: hasReplies(state[action.topicId], action)
+      });
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
+  haveReplies,
   route,
-  uid,
   selectedTopic,
   selectedOrder,
-  topics,
   repliesByNew,
+  topics,
+  uid,
   votes
 });
 

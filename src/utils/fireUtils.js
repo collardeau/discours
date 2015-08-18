@@ -12,7 +12,8 @@ function buildPath(path){
 export function exists(loc){
   return new Promise((resolve, reject) => {
     buildPath(loc).once('value', snap => {
-      if (snap.exists()){ resolve(); }
+      if (snap.exists()){ resolve(true); }
+      else { resolve(false); }
     });
   });
 }

@@ -4,7 +4,21 @@ import ReplyItem from './ReplyItem';
 export default class Replies extends React.Component {
 
   render(){
-    const {order, parentId, replies, upvote } = this.props;
+
+    const {hasReplies, order, parentId, replies, upvote } = this.props;
+
+    let styles = {
+      info: {
+        margin: '0.5em'
+      }
+    };
+
+    if(hasReplies === -1){
+      return <div style={styles.info}>Loading...</div>;
+    }else if (hasReplies === 0) {
+      return <div style={styles.info}>No replies, be the first to respond!</div>;
+    }
+
     return (
       <ul>
         { replies.map((reply) =>
@@ -22,7 +36,6 @@ export default class Replies extends React.Component {
   }
 }
 
-//<li key={i}>{ reply.content } : { reply.count}</li>
 Replies.propTypes = {
   order: PropTypes.oneOf(['new', 'popular']).isRequired,
   replies: PropTypes.arrayOf(PropTypes.shape({
