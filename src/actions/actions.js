@@ -88,6 +88,20 @@ function receiveReply(topicId, reply){
   };
 }
 
+export const QUEUE_REPLY = 'QUEUE_REPLY';
+function queueReply(topicId, reply){
+  return {
+    type: QUEUE_REPLY,
+    topic: {
+      content: reply.content,
+      count: reply.count,
+      parentTopic: reply.ref
+    },
+    topicId: reply.topicId
+  };
+}
+
+
 export const RECEIVE_REPLY_BY_COUNT = 'RECEIVE_REPLY_BY_COUNT';
 function receiveReplyByCount(topicId, reply){
   return {
@@ -114,6 +128,7 @@ export function fetchTopicAndReplies(order, topicId){
     dispatch(selectTopic(topicId));
     dispatch(selectOrder(order));
 
+    // fetch the topic if not already cached
     if(!getState().topics[topicId]){
       dispatch(requestTopic(topicId));
       db.fetch(['topic', topicId])
@@ -121,23 +136,19 @@ export function fetchTopicAndReplies(order, topicId){
         dispatch(receiveTopic(topicId, data));
       });
     }
-    
-    //if(topicId === 'root'){
-      //dispatch(hasReplies(topicId));
-      //} else {
-      //db.exists(['replies', topicId])
-      //.then(()=>{
-        //dispatch(hasReplies(topicId));
-      //});
-    //}
 
-    dispatch(syncAdd(topicId));
-    db.sync(['replies', topicId], reply => {
+    //dispatch(syncAdd(topicId)); // sync the replies on child added
+    db.fetchUpToNow(['replies', topicId], reply => {
       dispatch(receiveReply(topicId, reply));
     });
 
+    //dispatch(syncAdd(topicId)); // sync the replies on child added
+    db.syncFromNow(['replies', topicId], reply => {
+      dispatch(queueReply(topicId, reply));
+    });
+
     dispatch(syncChange(topicId));
-    db.syncOnChange(['replies', topicId], data => {
+    db.syncOnChange(['replies', topicId], data => { // also on change (votes)
       dispatch(receiveChangedReply(data.topicId, data));
     });
 

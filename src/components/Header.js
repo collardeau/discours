@@ -1,5 +1,5 @@
 import React from 'react';
-import {toggleForm} from '../actions/appActions';
+import {toggleForm} from '../actions/actions';
 import {primary} from '../styles/theme';
 
 export default class Header extends React.Component {-}

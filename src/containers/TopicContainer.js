@@ -8,12 +8,21 @@ import {addReply, upvote} from '../actions/actions';
 
 class TopicContainer extends Component {
 
-  render(){
+  componentDidMount(){
+    //console.log('topic container mount');
+    //console.log(this.props);
+  }
 
+  componentWillReceiveProps(){
+    //console.log('topic container will receive props');
+    //console.log(this.props);
+  }
+
+  render(){
     console.log('topic container props: ', this.props);
 
     const { addReply, order, topic, topicId, replies, upvote } = this.props;
-
+    //return <div>intercept</div>;
     return (
       <div>
         <Topic
@@ -76,8 +85,9 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   const { order, parentId, replies, topics, topicId } = stateProps;
   return Object.assign({}, parentProps, {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
+    queuedReplies: 0,
     order,
-    replies: replies[topicId].map(tId => {
+    replies: replies[topicId].view.map(tId => {
       return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
     }),
     topic: topics[topicId],

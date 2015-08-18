@@ -25,13 +25,26 @@ export function fetch(loc){
   });
 }
 
-export function sync(loc, cb){
-  buildPath(loc).on('child_added', snap => {
+export function fetchUpToNow(loc, cb){
+  buildPath(loc).orderByChild('date')
+  .endAt(Date.now())
+  .on('child_added', snap => {
     let d = snap.val();
     d.topicId = snap.key();
     cb(d);
   });
 }
+
+export function syncFromNow(loc, cb){
+  buildPath(loc).orderByChild('date')
+  .startAt(Date.now())
+  .on('child_added', snap => {
+    let d = snap.val();
+    d.topicId = snap.key();
+    cb(d);
+  });
+}
+
 
 export function syncOnChange(loc, cb){
   buildPath(loc).on('child_changed', snap => {

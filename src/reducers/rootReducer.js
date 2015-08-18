@@ -58,7 +58,7 @@ function topicReducer(state={}, action){
       });
     case actionTypes.REQUEST_TOPIC: 
       return Object.assign({}, state, {
-        //hasReplies: hasReplies(state[action.hasReplies], action),
+        hasReplies: hasReplies(state[action.hasReplies], action),
         content: '',
         parentTopic: { content: '', topicId: ''}
       });
@@ -109,10 +109,14 @@ function votes(state={}, action){
   }
 }
 
-function repliesReducer(state=[], action){
+function repliesReducer(state={view: [], queued: []}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
-      return [action.topicId, ...state ];
+      return Object.assign({}, state, {
+        lastUpdated: Date.now(),
+        queued: [],
+        view: [action.topicId, ...state.view]
+      });
     default:
       return state;
   } 
@@ -122,14 +126,22 @@ function repliesByNew(state={}, action){
   switch(action.type){
     case actionTypes.SELECT_TOPIC:
       return Object.assign({}, state, {
-        [action.topicId]: []
+        [action.topicId]: repliesReducer(state[action.topicId], action)
     });
     case actionTypes.RECEIVE_REPLY:
       const parentId = action.topic.parentTopic.topicId;
       return Object.assign({}, state, {
         [parentId]: repliesReducer(state[parentId], action)
     });
- 
+    default:
+      return state;
+  }
+}
+
+function queuedNewReplies(state=[], action){
+  switch(action.type){
+    case actionTypes.QUEUE_REPLY:
+      return [];
     default:
       return state;
   }
@@ -143,6 +155,7 @@ const rootReducer = combineReducers({
   topics,
   repliesByNew,
   votes
+  //queuedNewReplies
 });
 
 export default rootReducer;
