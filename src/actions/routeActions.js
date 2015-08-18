@@ -24,7 +24,7 @@ export function changeRoute(route){
     dispatch(selectRoute(entry));
     if(entry === 'about'){console.log('about'); }
     else {
-      dispatch(fetchTopicAndReplies(entry, params[0])); // if needed?
+      dispatch(fetchTopicAndReplies(entry, params[0]));
     }
   };
 }

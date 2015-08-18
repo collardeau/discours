@@ -1,13 +1,15 @@
 import React, { Component, PropTypes } from 'react';
+import Radium from 'radium';
 import {light, white} from '../styles/theme';
 
 let styles = {
   topic: {
     backgroundColor: white,
-    padding: '0.5em'
+    margin: '0.5em'
   },
   parentTopic: {
-    marginBottom: '0.8em'
+    marginBottom: '0.8em',
+    display: 'none'
   },
   flex: {
     display: 'flex',
@@ -19,19 +21,38 @@ let styles = {
   }
 };
 
+@Radium
 export default class Topic extends Component {
 
   shouldComponentUpdate(nextProps){
     return true;
-    //return !nextProps.topic === this.props.topic;
+  }
+
+  handleClick = (e) => {
+    e.preventDefault();
+    window.location.hash = '' +
+      this.props.order + '/' +
+      this.props.topic.parentTopic.topicId;
   }
 
   render(){
-    const { parentTopic, topic } = this.props;
+
+    const { topic, topicId } = this.props;
+    const parentTopic = topic.parentTopic;
+
+    let dynamicStyles = {
+      parentTopic: {
+        display: topicId === 'root' ? 'none' : 'block'
+      }
+    };
+ 
     return (
-      <div styles={styles.topic}>
-        { parentTopic.topicId === 'none' ? '' :
-        <span>in response to: Parent Topic</span> }
+      <div style={styles.topic}>
+        <div style={[styles.parentTopic, dynamicStyles.parentTopic]}>
+          <small>
+            In response to: <a href='' onClick={this.handleClick}>{ parentTopic.content}</a>
+          </small>
+        </div> 
         <div style={styles.flex}>
           <p style={styles.content}>{topic.content}</p>
           <span style={styles.child}>
@@ -46,12 +67,12 @@ export default class Topic extends Component {
 }
 
 Topic.propTypes = {
-  parentTopic: PropTypes.shape({
-    topicId: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired
-  }),
-  topic: PropTypes.shape({
-    content: PropTypes.string.isRequired
+ topic: PropTypes.shape({
+    content: PropTypes.string.isRequired,
+    parentTopic: PropTypes.shape({
+      content: PropTypes.string.isRequired,
+      topicId: PropTypes.string.isRequired
+    })
   })
 };
 

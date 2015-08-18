@@ -3,7 +3,7 @@ import { addReply } from '../actions/actions';
 
 let styles = {
   div: {
-    //margin: '0.5em'
+    margin: '0.5em'
   }
 };
 export default class ReplyForm extends Component {
@@ -26,7 +26,7 @@ export default class ReplyForm extends Component {
     return (
       <div>
         <textarea ref='reply' placeholder=' Go ahead, express yourself!'/>
-        <div styles={styles.div}>
+        <div style={styles.div}>
           <button onClick={this.handleClick}>Submit</button>
         </div>
       </div>

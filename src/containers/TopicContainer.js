@@ -12,13 +12,14 @@ class TopicContainer extends Component {
 
     console.log('topic container props: ', this.props);
 
-    const { addReply, order, parentTopic, topic, topicId, replies, upvote } = this.props;
+    const { addReply, order, topic, topicId, replies, upvote } = this.props;
 
     return (
       <div>
         <Topic
-          parentTopic = {parentTopic}
+          order = {order}
           topic = {topic}
+          topicId={topicId}
         />
        <ReplyForm
           addReply={addReply}
@@ -76,7 +77,6 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   return Object.assign({}, parentProps, {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     order,
-    parentTopic: {content: 'none', topicId: 'none' }, // temp
     replies: replies[topicId].map(tId => {
       return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
     }),

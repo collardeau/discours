@@ -59,7 +59,8 @@ function topicReducer(state={}, action){
     case actionTypes.REQUEST_TOPIC: 
       return Object.assign({}, state, {
         //hasReplies: hasReplies(state[action.hasReplies], action),
-        content: ''
+        content: '',
+        parentTopic: { content: '', topicId: ''}
       });
     case actionTypes.RECEIVE_TOPIC:
     case actionTypes.RECEIVE_REPLY:
