@@ -9,15 +9,9 @@ let styles = {
 export default class ReplyForm extends Component {
 
   handleClick = () => {
-    const {addReply, topic, topicId } = this.props;
+    const {addReply, topicId } = this.props;
     const node = findDOMNode(this.refs.reply);
-    addReply(topicId, {
-      content: node.value.trim(),
-      ref: {
-        content: topic.content,
-        topicId
-      } 
-    });
+    addReply(topicId, { content: node.value.trim() });
     node.value = "";
   }
 

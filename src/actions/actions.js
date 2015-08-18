@@ -66,24 +66,16 @@ export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
 export function receiveTopic(topicId, topic){
   return {
     type: RECEIVE_TOPIC,
-    topic: {
-      content: topic.content,
-      parentTopic: topic.ref
-    },
+    topic,
     topicId
  };
 }
-
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
 function receiveReply(topicId, reply){
   return {
     type: RECEIVE_REPLY,
-    topic: {
-      content: reply.content,
-      count: reply.count,
-      parentTopic: reply.ref
-    },
+    topic: reply,
     topicId: reply.topicId
   };
 }
@@ -92,11 +84,7 @@ export const QUEUE_REPLY = 'QUEUE_REPLY';
 function queueReply(topicId, reply){
   return {
     type: QUEUE_REPLY,
-    topic: {
-      content: reply.content,
-      count: reply.count,
-      parentTopic: reply.ref
-    },
+    topic: reply,
     topicId: reply.topicId
   };
 }
@@ -130,28 +118,45 @@ function receiveChangedReply(topicId, reply){
   };
 }
 
+function checkIfNoReplies(topicId){
+  return (dispatch, getState) => {
+    db.exists(['replies', topicId])
+    .then(exists => {
+      if(!exists){
+      dispatch(hasNoReplies(topicId));
+      }
+    });
+  };
+}
+
+function fetchTopic(topicId){
+  return (dispatch, getState) => {
+    if(!getState().topics[topicId]){
+      dispatch(requestTopic(topicId));
+      db.fetch(['topic', topicId])
+      .then(data => {
+        dispatch(receiveTopic(topicId, data));
+        let parentId = data.parentId;
+        if(parentId !== 'none' && !getState().topics[parentId]){
+          db.fetch(['topic', parentId])
+          .then(parentData => {
+            dispatch(receiveTopic(parentId, parentData));
+          });
+        }
+      });
+    }
+  };
+}
+
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
     dispatch(selectTopic(topicId));
     dispatch(selectOrder(order));
 
-    //dispatch request replies exist
-      db.exists(['replies', topicId])
-      .then(exists => {
-        if(!exists){
-          dispatch(hasNoReplies(topicId));
-        }
-      });
+    dispatch(checkIfNoReplies(topicId));
 
-    // fetch the topic if not already cached
-    if(!getState().topics[topicId]){
-      dispatch(requestTopic(topicId));
-      db.fetch(['topic', topicId])
-      .then(data => {
-        dispatch(receiveTopic(topicId, data));
-      });
-    }
+    dispatch(fetchTopic(topicId));
 
     //dispatch(syncAdd(topicId)); // sync the replies on child added
     db.fetchUpToNow(['replies', topicId], reply => {
@@ -163,7 +168,7 @@ export function fetchTopicAndReplies(order, topicId){
       dispatch(queueReply(topicId, reply));
     });
 
-    dispatch(syncChange(topicId));
+    //dispatch(syncChange(topicId));
     db.syncOnChange(['replies', topicId], data => { // also on change (votes)
       dispatch(receiveChangedReply(data.topicId, data));
     });
@@ -188,6 +193,7 @@ function requestAddReply(topicId, reply){
 export function addReply(topicId, reply){
   return (dispatch, getState) => {
     dispatch(requestAddReply(topicId, reply));
+    reply.parentId = topicId;
     db.push(['topic'], reply)
     .then(newId => {
       reply.count = 0;

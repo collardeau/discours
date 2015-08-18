@@ -32,13 +32,12 @@ export default class Topic extends Component {
     e.preventDefault();
     window.location.hash = '' +
       this.props.order + '/' +
-      this.props.topic.parentTopic.topicId;
+      this.props.topic.parentId;
   }
 
   render(){
 
-    const { topic, topicId } = this.props;
-    const parentTopic = topic.parentTopic;
+    const { parentTopic, topic, topicId } = this.props;
 
     let dynamicStyles = {
       parentTopic: {
@@ -69,10 +68,7 @@ export default class Topic extends Component {
 Topic.propTypes = {
  topic: PropTypes.shape({
     content: PropTypes.string.isRequired,
-    parentTopic: PropTypes.shape({
-      content: PropTypes.string.isRequired,
-      topicId: PropTypes.string.isRequired
-    })
+    parentId: PropTypes.string.isRequired
   })
 };
 

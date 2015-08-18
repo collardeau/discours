@@ -19,10 +19,9 @@ class TopicContainer extends Component {
   }
 
   render(){
-
     console.log('topic container props: ', this.props);
 
-    const { addReply, hasReplies, order, queuedReplies, 
+    const { addReply, hasReplies, order, parentTopic, queuedReplies, 
       topic, topicId, replies, unqueue, upvote } = this.props;
 
     //return <div>intercept</div>;
@@ -30,6 +29,7 @@ class TopicContainer extends Component {
       <div>
         <Topic
           order = {order}
+          parentTopic = {parentTopic}
           topic = {topic}
           topicId={topicId}
         />
@@ -60,7 +60,6 @@ TopicContainer.propTypes = {
   addReply: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['new', 'popular']).isRequired,
   parentTopic: PropTypes.shape({
-    topicId: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired
   }),
   topic: PropTypes.shape({
@@ -89,12 +88,15 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { haveReplies, order, parentId, replies, topics, topicId } = stateProps;
+  const { haveReplies, order, replies, topics, topicId } = stateProps;
+  const parentId = topics[topicId].parentId;
+
   return Object.assign({}, parentProps, {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     hasReplies: haveReplies[topicId],
     queuedReplies: replies[topicId].queued.length, 
     order,
+    parentTopic: topics[parentId] || {content: ''},
     replies: replies[topicId].view.map(tId => {
       return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
     }),
