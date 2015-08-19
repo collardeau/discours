@@ -1,5 +1,13 @@
 import * as db from '../utils/fireUtils.js';
 
+
+export const ALLOW_VOTE = 'ALLOW_VOTE';
+function allowVote(topicId){
+  return {
+    type: ALLOW_VOTE
+  };
+}
+
 export const SELECT_TOPIC = 'SELECT_TOPIC';
 function selectTopic(topicId){
   return {
@@ -226,9 +234,9 @@ export function upvote(topicId, parentId){
     db.increment(['replies', parentId, topicId, 'count']);
     const uid = db.getAuth().uid;
     db.setTime(['lastVote', uid]);
-    //setTimeout(() => {
-    //  dispatch(allowVote());
-    //}, 5000)
+    setTimeout(() => {
+      dispatch(allowVote());
+    }, 5000);
   };
 }
 

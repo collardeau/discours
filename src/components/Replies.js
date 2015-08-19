@@ -5,7 +5,8 @@ export default class Replies extends React.Component {
 
   render(){
 
-    const {hasReplies, order, parentId, replies, topicId, upvote } = this.props;
+    const {hasReplies, order, permissions, 
+      parentId, replies, topicId, upvote } = this.props;
 
     let styles = {
       info: {
@@ -25,6 +26,7 @@ export default class Replies extends React.Component {
           <ReplyItem
             key={reply.topicId}
             order={order}
+            permissions={permissions}
             parentId={parentId}
             reply={reply}
             upvote={upvote}

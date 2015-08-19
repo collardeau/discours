@@ -12,7 +12,7 @@ class TopicContainer extends Component {
 
     console.log('topic container props: ', this.props);
 
-    const { addReply, formIsOpen, hasReplies, order, 
+    const { addReply, formIsOpen, hasReplies, order, permissions, 
       parentTopic, queuedReplies, toggleForm, 
       topic, topicId, replies, unqueue, upvote } = this.props;
 
@@ -41,6 +41,7 @@ class TopicContainer extends Component {
         <Replies
           hasReplies = {hasReplies}
           order = {order}
+          permissions = {permissions}
           parentId={topicId}
           replies = {replies}
           topicId = {topicId}
@@ -65,7 +66,7 @@ TopicContainer.propTypes = {
 };
 
 function mapStateToProps(state){
-  const { formIsOpen, haveReplies, repliesByNew, route, 
+  const { formIsOpen, haveReplies, permissions, repliesByNew, route, 
     selectedTopic, topics, votes } = state;
   const order = route;
   const topicId = selectedTopic;
@@ -76,6 +77,7 @@ function mapStateToProps(state){
     formIsOpen,
     haveReplies,
     order,
+    permissions,
     topicId,
     topics,
     replies,
@@ -85,7 +87,8 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { formIsOpen, haveReplies, order, replies, topics, topicId } = stateProps;
+  const { formIsOpen, haveReplies, order, permissions, 
+    replies, topics, topicId } = stateProps;
   const parentId = topics[topicId].parentId;
 
   return Object.assign({}, parentProps, {
@@ -94,6 +97,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     hasReplies: haveReplies[topicId],
     queuedReplies: replies[topicId].queued.length, 
     order,
+    permissions,
     parentTopic: topics[parentId] || {content: '', topicId: ''},
     replies: replies[topicId].view.map(tId => {
       return {...topics[tId], count: stateProps.votes[tId], topicId: tId };

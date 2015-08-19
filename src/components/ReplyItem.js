@@ -39,7 +39,8 @@ export default class ReplyItem extends Component {
 
   render(){
 
-    const { reply } = this.props;
+    const { permissions, reply } = this.props;
+    console.log('can vote: ', permissions.vote);
 
     return (
       <li onClick={this.handleLink } style={styles.li}>

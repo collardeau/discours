@@ -21,6 +21,33 @@ function route(state='about', action){
   }
 }
 
+function voteReducer(state=false, action){
+  switch(action.type) {
+    case actionTypes.REQUEST_UPVOTE:
+    case actionTypes.LOGOUT:
+      return false;
+    case actionTypes.ALLOW_VOTE:
+    case authActions.LOGIN_USER:
+      return true;
+    default:
+      return state;
+  }
+}
+
+function permissions(state={post: false, vote: false}, action) {
+  switch(action.type){
+    case actionTypes.ALLOW_VOTE:
+    case actionTypes.LOGOUT:
+    case authActions.LOGIN_USER:
+    case actionTypes.REQUEST_UPVOTE:
+      return Object.assign({}, state, {
+        vote: voteReducer(state[vote], action)
+     });
+    default:
+      return state;
+  }
+}
+
 function selectedTopic(state='root', action){
   switch(action.type) {
     case actionTypes.SELECT_TOPIC:
@@ -174,6 +201,7 @@ function formIsOpen(state=false, action){
 const rootReducer = combineReducers({
   formIsOpen,
   haveReplies,
+  permissions,
   route,
   selectedTopic,
   selectedOrder,
