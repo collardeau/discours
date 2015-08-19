@@ -224,6 +224,11 @@ export function upvote(topicId, parentId){
   return dispatch => {
     dispatch(requestUpvote(topicId));
     db.increment(['replies', parentId, topicId, 'count']);
+    const uid = db.getAuth().uid;
+    db.setTime(['lastVote', uid]);
+    //setTimeout(() => {
+    //  dispatch(allowVote());
+    //}, 5000)
   };
 }
 

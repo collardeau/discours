@@ -70,6 +70,10 @@ export function set(loc, data){
   buildPath(loc).set(newData);
 }
 
+export function setTime(loc){
+  buildPath(loc).set(Firebase.ServerValue.TIMESTAMP);
+}
+
 export function push (loc, data){
   const newData = {...data, date: Firebase.ServerValue.TIMESTAMP};
   let newRef = buildPath(loc).push(newData);
@@ -85,3 +89,23 @@ export function increment(loc){
     if (error) { console.log(error.message); }
   });
 }
+
+export function loginAnonymously(){
+  return new Promise((res, rej) => {
+    ref.authAnonymously((error, authData) => {
+      if(error){ rej(error); }
+      else{ res(authData); }
+    });
+  });
+}
+
+export function getAuth(){
+  return ref.getAuth();
+}
+
+export function onLogout(cb){
+  ref.onAuth(uid => {
+    if(!uid){ cb(); }
+  });
+}
+
