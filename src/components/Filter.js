@@ -32,18 +32,28 @@ export default class Filter extends Component {
 
   renderTab = (tab, tabName, last = false) => {
 
-    let li = {
-      backgroundColor: tab === this.props.order ? primary : light,
-      borderRight: last ? '' : '1px solid'
+    const { queued } = this.props;
+    console.log(queued);
+
+    let dyStyles = {
+      tab: {
+        backgroundColor: tab === this.props.order ? primary : light,
+        borderRight: last ? '' : '1px solid'
+      },
+      queue: {
+        display: queued > 0 ? 'inline' : 'none' 
+      }
     };
 
     return (
-      <li style={[styles.li, li]}
+      <li style={[styles.li, dyStyles.tab]}
         onClick= { () => this.handleTabClick(tab)}>
-        {tabName} { this.props.queued }
+        {tabName} 
+        <span style={dyStyles.queue}> { this.props.queued }</span>
       </li>
     );
   }
+
   render(){
 
     return (
