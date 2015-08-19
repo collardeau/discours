@@ -82,6 +82,7 @@ function votes(state={}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
     case actionTypes.RECEIVE_CHANGED_REPLY:
+    case actionTypes.QUEUE_REPLY:
       return Object.assign({}, state, {
       [action.topicId]: vote(state[action.topicId], action)
     });
