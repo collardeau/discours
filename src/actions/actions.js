@@ -136,7 +136,7 @@ function fetchTopic(topicId){
       db.fetch(['topic', topicId])
       .then(data => {
         dispatch(receiveTopic(topicId, data));
-        let parentId = data.parentId;
+        let parentId = data.ref;
         if(parentId !== 'none' && !getState().topics[parentId]){
           db.fetch(['topic', parentId])
           .then(parentData => {
@@ -162,8 +162,6 @@ export function fetchTopicAndReplies(order, topicId){
     const lastUpdated = replies[topicId].lastUpdated;
     const now = Date.now();
 
-    console.log('last updated replies: ', lastUpdated);
-
     if(!lastUpdated){
       //dispatch(syncAdd(topicId)); // sync the replies on child added
       db.fetchUntil(['replies', topicId], now, reply => {
@@ -175,7 +173,7 @@ export function fetchTopicAndReplies(order, topicId){
       });
     }else{
       console.log(lastUpdated);
-      db.syncSince(['replies', topicId], lastUpdated + 1000, reply => {
+      db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
         dispatch(queueReply(topicId, reply));
       });
     }
@@ -205,7 +203,7 @@ function requestAddReply(topicId, reply){
 export function addReply(topicId, reply){
   return (dispatch, getState) => {
     dispatch(requestAddReply(topicId, reply));
-    reply.parentId = topicId;
+    reply.ref = topicId;
     db.push(['topic'], reply)
     .then(newId => {
       reply.count = 0;

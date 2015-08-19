@@ -44,7 +44,7 @@ function topicReducer(state={content: '', parentId: ''}, action){
    case actionTypes.RECEIVE_TOPIC:
     case actionTypes.RECEIVE_REPLY:
     case actionTypes.QUEUE_REPLY:
-      const {content, parentId } = action.topic;
+      const {content, ref: parentId } = action.topic;
       return Object.assign({}, state, {
         content,
         parentId
@@ -123,7 +123,7 @@ function repliesByNew(state={}, action){
     });
     case actionTypes.RECEIVE_REPLY:
     case actionTypes.QUEUE_REPLY:
-      const parentId = action.topic.parentId;
+      const parentId = action.topic.ref;
       return Object.assign({}, state, {
         [parentId]: repliesReducer(state[parentId], action)
     });
@@ -148,7 +148,7 @@ function haveReplies(state={}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
     case actionTypes.QUEUE_REPLY:
-      const parentId = action.topic.parentId;
+      const parentId = action.topic.ref;
       return Object.assign({}, state, {
         [parentId]: hasReplies(state[parentId], action)
       });

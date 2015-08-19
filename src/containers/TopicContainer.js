@@ -97,7 +97,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     hasReplies: haveReplies[topicId],
     queuedReplies: replies[topicId].queued.length, 
     order,
-    parentTopic: topics[parentId] || {content: ''},
+    parentTopic: topics[parentId] || {content: '', topicId: ''},
     replies: replies[topicId].view.map(tId => {
       return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
     }),

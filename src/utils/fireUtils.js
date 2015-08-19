@@ -1,6 +1,5 @@
 const Firebase = require('firebase');
 const ref = new Firebase('https://discours.firebaseio.com/');
-//const moment = require('moment');
 
 function buildPath(path){
   let p = path.slice();
@@ -27,7 +26,6 @@ export function fetch(loc){
 }
 
 export function fetchUntil(loc, timestamp, cb){
-  console.log(timestamp);
   buildPath(loc).orderByChild('date')
   .endAt(timestamp)
   .on('child_added', snap => {
@@ -38,7 +36,6 @@ export function fetchUntil(loc, timestamp, cb){
 }
 
 export function syncSince(loc, timestamp, cb){
-  console.log(timestamp);
   buildPath(loc).orderByChild('date')
   .startAt(timestamp)
   .on('child_added', snap => {
