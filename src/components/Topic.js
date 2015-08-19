@@ -35,9 +35,13 @@ export default class Topic extends Component {
       this.props.topic.parentId;
   }
 
+  handleToggle = () => {
+    this.props.toggleForm();
+  }
+
   render(){
 
-    const { parentTopic, topic, topicId } = this.props;
+    const { formIsOpen, parentTopic, topic, topicId } = this.props;
 
     let dynamicStyles = {
       parentTopic: {
@@ -56,7 +60,7 @@ export default class Topic extends Component {
           <p style={styles.content}>{topic.content}</p>
           <span style={styles.child}>
             <button onClick={this.handleToggle}>
-              Reply
+              { formIsOpen ? 'Close' : 'Reply' }  
             </button>
           </span>
         </div>

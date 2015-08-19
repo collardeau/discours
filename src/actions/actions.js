@@ -226,3 +226,10 @@ export function upvote(topicId, parentId){
     db.increment(['replies', parentId, topicId, 'count']);
   };
 }
+
+export const TOGGLE_FORM = 'TOGGLE_FORM';
+export function toggleForm(){
+  return {
+    type: TOGGLE_FORM
+  };
+}

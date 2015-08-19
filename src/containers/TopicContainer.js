@@ -4,37 +4,31 @@ import Topic from '../components/Topic';
 import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
-import {addReply, unqueue, upvote} from '../actions/actions';
+import {addReply, toggleForm, unqueue, upvote} from '../actions/actions';
 
 class TopicContainer extends Component {
 
-  componentDidMount(){
-    //console.log('topic container mount');
-    //console.log(this.props);
-  }
-
-  componentWillReceiveProps(){
-    //console.log('topic container will receive props');
-    //console.log(this.props);
-  }
-
   render(){
+
     console.log('topic container props: ', this.props);
 
-    const { addReply, hasReplies, order, parentTopic, queuedReplies, 
+    const { addReply, formIsOpen, hasReplies, order, 
+      parentTopic, queuedReplies, toggleForm, 
       topic, topicId, replies, unqueue, upvote } = this.props;
 
-    //return <div>intercept</div>;
     return (
       <div>
         <Topic
+          formIsOpen = {formIsOpen}
           order = {order}
           parentTopic = {parentTopic}
+          toggleForm = {toggleForm}
           topic = {topic}
           topicId={topicId}
         />
        <ReplyForm
           addReply={addReply}
+          formIsOpen = {formIsOpen}
           topic={topic}
           topicId={topicId}
         />
@@ -71,13 +65,15 @@ TopicContainer.propTypes = {
 };
 
 function mapStateToProps(state){
-  const { haveReplies, repliesByNew, route, selectedTopic, topics, votes } = state;
+  const { formIsOpen, haveReplies, repliesByNew, route, 
+    selectedTopic, topics, votes } = state;
   const order = route;
   const topicId = selectedTopic;
   //const replies = order === 'popular' ? repliesByCount : repliesByDate;
   const replies = repliesByNew;
 
   return {
+    formIsOpen,
     haveReplies,
     order,
     topicId,
@@ -89,11 +85,12 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { haveReplies, order, replies, topics, topicId } = stateProps;
+  const { formIsOpen, haveReplies, order, replies, topics, topicId } = stateProps;
   const parentId = topics[topicId].parentId;
 
   return Object.assign({}, parentProps, {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
+    formIsOpen: stateProps.formIsOpen,
     hasReplies: haveReplies[topicId],
     queuedReplies: replies[topicId].queued.length, 
     order,
@@ -101,6 +98,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     replies: replies[topicId].view.map(tId => {
       return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
     }),
+    toggleForm: () => dispatchProps.toggleForm(),
     topic: topics[topicId],
     topicId,
     unqueue: (topicId) => dispatchProps.unqueue(topicId),
@@ -110,7 +108,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {addReply, unqueue, upvote},
+  {addReply, toggleForm, unqueue, upvote},
   mergeProps
 )(TopicContainer);
 

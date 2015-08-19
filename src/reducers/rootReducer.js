@@ -162,7 +162,17 @@ function haveReplies(state={}, action){
   }
 }
 
+function formIsOpen(state=false, action){
+  switch (action.type){
+    case actionTypes.TOGGLE_FORM:
+      return !state;
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
+  formIsOpen,
   haveReplies,
   route,
   selectedTopic,

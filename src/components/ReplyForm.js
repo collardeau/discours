@@ -17,6 +17,10 @@ export default class ReplyForm extends Component {
 
   render(){
 
+    if (!this.props.formIsOpen){
+      return <div></div>;
+    }
+
     return (
       <div>
         <textarea ref='reply' placeholder=' Go ahead, express yourself!'/>
