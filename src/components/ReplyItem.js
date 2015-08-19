@@ -40,13 +40,20 @@ export default class ReplyItem extends Component {
   render(){
 
     const { permissions, reply } = this.props;
-    console.log('can vote: ', permissions.vote);
+    const canVote = permissions.vote;
+
+    let dyStyles = {
+      btn: {
+        opacity: canVote ? '1' : '0.4'
+      }
+    };
 
     return (
       <li onClick={this.handleLink } style={styles.li}>
         <div style={styles.content}>{ reply.content }</div>
         <div style={styles.vote}>
-          <button onClick={this.handleUpvote}>
+          <button disabled={!canVote ? true : false }
+            onClick={this.handleUpvote} style={dyStyles.btn}>
             &#8593;
           </button>
           <span style={styles.count}>{reply.count}</span>
