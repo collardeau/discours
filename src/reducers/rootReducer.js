@@ -70,6 +70,7 @@ function topicReducer(state={content: '', parentId: ''}, action){
   switch(action.type) {
    case actionTypes.RECEIVE_TOPIC:
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
     case actionTypes.QUEUE_REPLY:
       const {content, ref: parentId } = action.topic;
       return Object.assign({}, state, {
@@ -86,6 +87,7 @@ function topics(state={}, action){
     case actionTypes.REQUEST_TOPIC:
     case actionTypes.RECEIVE_TOPIC:
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
     case actionTypes.QUEUE_REPLY:
       return Object.assign({}, state, {
         [action.topicId]: topicReducer(state[action.topicId], action)
@@ -98,6 +100,7 @@ function topics(state={}, action){
 function vote(state=0, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
     case actionTypes.RECEIVE_CHANGED_REPLY:
       return action.topic.count;
     default:
@@ -108,6 +111,7 @@ function vote(state=0, action){
 function votes(state={}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
     case actionTypes.RECEIVE_CHANGED_REPLY:
     case actionTypes.QUEUE_REPLY:
       return Object.assign({}, state, {
@@ -121,6 +125,7 @@ function votes(state={}, action){
 function repliesReducer(state={view: [], queued: []}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
       return Object.assign({}, state, {
         lastUpdated: action.topic.date,
         queued: [],
@@ -159,11 +164,30 @@ function repliesByNew(state={}, action){
   }
 }
 
+function repliesByPopular(state={}, action){
+  switch(action.type){
+    case actionTypes.SELECT_TOPIC:
+    case 'unqueue_popular':
+      return Object.assign({}, state, {
+        [action.topicId]: repliesReducer(state[action.topicId], action)
+    });
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+    case 'queue_popular_reply':
+      const parentId = action.topic.ref;
+      return Object.assign({}, state, {
+        [parentId]: repliesReducer(state[parentId], action)
+    });
+    default:
+      return state;
+  }
+}
+
 function hasReplies(state=-1, action){
   switch(action.type){
     case actionTypes.HAS_NO_REPLIES:
       return 0;
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
     case actionTypes.QUEUE_REPLY:
       return 1;
     default:
@@ -174,6 +198,7 @@ function hasReplies(state=-1, action){
 function haveReplies(state={}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
     case actionTypes.QUEUE_REPLY:
       const parentId = action.topic.ref;
       return Object.assign({}, state, {
@@ -206,6 +231,7 @@ const rootReducer = combineReducers({
   selectedTopic,
   selectedOrder,
   repliesByNew,
+  repliesByPopular,
   topics,
   uid,
   votes

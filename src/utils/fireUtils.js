@@ -35,6 +35,17 @@ export function fetchUntil(loc, timestamp, cb){
   });
 }
 
+export function fetchByUntil(loc, timestamp, order, cb){
+  buildPath(loc).orderByChild(order)
+  .endAt(timestamp)
+  .on('child_added', snap => {
+    let d = snap.val();
+    d.topicId = snap.key();
+    console.log(d);
+    cb(d);
+  });
+}
+
 export function syncSince(loc, timestamp, cb){
   buildPath(loc).orderByChild('date')
   .startAt(timestamp)

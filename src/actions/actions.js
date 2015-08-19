@@ -88,6 +88,16 @@ function receiveReply(topicId, reply){
   };
 }
 
+export const RECEIVE_REPLY_BY_ORDER = 'RECEIVE_REPLY_BY_ORDER';
+function receiveReplyByOrder(topicId, reply){
+  return {
+    type: RECEIVE_REPLY_BY_ORDER,
+    topic: reply,
+    topicId: reply.topicId
+  };
+}
+
+
 export const QUEUE_REPLY = 'QUEUE_REPLY';
 function queueReply(topicId, reply){
   return {
@@ -105,15 +115,6 @@ export function unqueue(topicId){
   };
 }
 
-
-export const RECEIVE_REPLY_BY_COUNT = 'RECEIVE_REPLY_BY_COUNT';
-function receiveReplyByCount(topicId, reply){
-  return {
-    type: RECEIVE_REPLY_BY_COUNT,
-    topicId: topicId,
-    reply: reply
-  };
-}
 
 export const RECEIVE_CHANGED_REPLY = 'RECEIVE_CHANGED_REPLY';
 function receiveChangedReply(topicId, reply){
@@ -156,37 +157,59 @@ function fetchTopic(topicId){
   };
 }
 
+function getReplies(state, order){
+  if(order === 'popular') {
+    return state.repliesByPopular; 
+  }
+  return state.repliesByNew;
+}
+
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
     dispatch(selectTopic(topicId));
     dispatch(selectOrder(order));
-
     dispatch(checkIfNoReplies(topicId));
-
     dispatch(fetchTopic(topicId));
 
-    const replies = getState().repliesByNew;
+    // determine what replies we are dealing with
+    const replies = getReplies(getState(), order);
+    
+    // sync replies    
     const lastUpdated = replies[topicId].lastUpdated;
     const now = Date.now();
 
-    if(!lastUpdated){
-      //dispatch(syncAdd(topicId)); // sync the replies on child added
-      db.fetchUntil(['replies', topicId], now, reply => {
-        dispatch(receiveReply(topicId, reply));
-      });
-      //dispatch(syncAdd(topicId)); // sync the replies on child added
-      db.syncSince(['replies', topicId], now, reply => {
-        dispatch(queueReply(topicId, reply));
-      });
+    if(order === 'popular'){
+      if(!lastUpdated){
+        console.log('we are on the popular page, homie!');
+        db.fetchByUntil(['replies', topicId], now, 'count', reply => {
+          dispatch(receiveReplyByOrder(topicId, reply));
+        });
+        // db.syncSince(['replies', topicId], now, reply => {
+        //   dispatch(queueReply(topicId, reply));
+        // });
+      }else{
+        db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
+          dispatch(queueReply(topicId, reply));
+        });
+      }
     }else{
-      console.log(lastUpdated);
-      db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
-        dispatch(queueReply(topicId, reply));
-      });
+      if(!lastUpdated){ // sorted by new
+        db.fetchUntil(['replies', topicId], now, reply => {
+          dispatch(receiveReply(topicId, reply));
+        });
+        db.syncSince(['replies', topicId], now, reply => {
+          dispatch(queueReply(topicId, reply));
+        });
+      }else{
+        db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
+          dispatch(queueReply(topicId, reply));
+        });
+      }
+
     }
 
-    //dispatch(syncChange(topicId));
+   //dispatch(syncChange(topicId));
     db.syncOnChange(['replies', topicId], data => { // also on change (votes)
       dispatch(receiveChangedReply(data.topicId, data));
     });

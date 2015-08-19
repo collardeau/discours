@@ -66,12 +66,12 @@ TopicContainer.propTypes = {
 };
 
 function mapStateToProps(state){
-  const { formIsOpen, haveReplies, permissions, repliesByNew, route, 
+  const { formIsOpen, haveReplies, permissions, 
+    repliesByNew, repliesByPopular, route, 
     selectedTopic, topics, votes } = state;
   const order = route;
   const topicId = selectedTopic;
-  //const replies = order === 'popular' ? repliesByCount : repliesByDate;
-  const replies = repliesByNew;
+  const replies = order === 'popular' ? repliesByPopular : repliesByNew;
 
   return {
     formIsOpen,

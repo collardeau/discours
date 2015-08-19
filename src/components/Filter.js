@@ -33,7 +33,6 @@ export default class Filter extends Component {
   renderTab = (tab, tabName, last = false) => {
 
     const { queued } = this.props;
-    console.log(queued);
 
     let dyStyles = {
       tab: {
@@ -59,6 +58,7 @@ export default class Filter extends Component {
     return (
       <ul style={styles.ul}>
         {this.renderTab('new', 'New')}
+        {this.renderTab('popular', 'Popular', true)}
       </ul>
     );
   }
