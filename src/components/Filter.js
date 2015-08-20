@@ -32,15 +32,15 @@ export default class Filter extends Component {
 
   renderTab = (tab, tabName, last = false) => {
 
-    const { queued } = this.props;
+    const { order, queued } = this.props;
 
     let dyStyles = {
       tab: {
-        backgroundColor: tab === this.props.order ? primary : light,
+        backgroundColor: tab === order ? primary : light,
         borderRight: last ? '' : '1px solid'
       },
       queue: {
-        display: queued > 0 ? 'inline' : 'none' 
+        display: queued > 0 && tab ==='new' ? 'inline' : 'none' 
       }
     };
 

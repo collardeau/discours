@@ -35,15 +35,20 @@ export function fetchUntil(loc, timestamp, cb){
   });
 }
 
-export function fetchByUntil(loc, timestamp, order, cb){
-  buildPath(loc).orderByChild(order)
-  .endAt(timestamp)
+export function fetchByOrder(loc, numToFetch, order, cb){
+  let limit = numToFetch, i = 1, data;
+  buildPath(loc).limitToLast(limit)
+  .orderByChild(order)
   .on('child_added', snap => {
-    let d = snap.val();
-    d.topicId = snap.key();
-    console.log(d);
-    cb(d);
-  });
+    if(i > limit){
+      buildPath(loc).limitToLast(limit).orderByChild(order).off();
+    }else {
+      data = snap.val();
+      data.topicId = snap.key();
+      cb(data);
+      i++;
+    }
+ });
 }
 
 export function syncSince(loc, timestamp, cb){
@@ -58,14 +63,6 @@ export function syncSince(loc, timestamp, cb){
 
 export function syncOnChange(loc, cb){
   buildPath(loc).on('child_changed', snap => {
-    let d = snap.val();
-    d.topicId = snap.key();
-    cb(d);
-  });
-}
-
-export function syncByOrder(loc, order, cb){
-  buildPath(loc).orderByChild(order).on('child_added', snap => {
     let d = snap.val();
     d.topicId = snap.key();
     cb(d);

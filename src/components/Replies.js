@@ -21,10 +21,10 @@ export default class Replies extends React.Component {
     }
 
     return (
-      <ul key='list'>
+      <ul>
         { replies.map((reply, i) =>
           <ReplyItem
-            key={reply.topicId}
+            key={i}
             order={order}
             permissions={permissions}
             parentId={parentId}

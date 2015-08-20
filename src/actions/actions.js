@@ -115,7 +115,6 @@ export function unqueue(topicId){
   };
 }
 
-
 export const RECEIVE_CHANGED_REPLY = 'RECEIVE_CHANGED_REPLY';
 function receiveChangedReply(topicId, reply){
   return {
@@ -168,9 +167,9 @@ export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
     dispatch(selectTopic(topicId));
+    dispatch(fetchTopic(topicId));
     dispatch(selectOrder(order));
     dispatch(checkIfNoReplies(topicId));
-    dispatch(fetchTopic(topicId));
 
     // determine what replies we are dealing with
     const replies = getReplies(getState(), order);
@@ -180,21 +179,14 @@ export function fetchTopicAndReplies(order, topicId){
     const now = Date.now();
 
     if(order === 'popular'){
-      if(!lastUpdated){
-        console.log('we are on the popular page, homie!');
-        db.fetchByUntil(['replies', topicId], now, 'count', reply => {
+      if(true){ // cache for a minute? empty array when recalculating?
+        db.fetchByOrder(['replies', topicId], 2, 'count', reply => {
           dispatch(receiveReplyByOrder(topicId, reply));
-        });
-        // db.syncSince(['replies', topicId], now, reply => {
-        //   dispatch(queueReply(topicId, reply));
-        // });
-      }else{
-        db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
-          dispatch(queueReply(topicId, reply));
         });
       }
     }else{
-      if(!lastUpdated){ // sorted by new
+      // sorted chronologically
+      if(!lastUpdated){ // cache only for so long
         db.fetchUntil(['replies', topicId], now, reply => {
           dispatch(receiveReply(topicId, reply));
         });
@@ -213,11 +205,6 @@ export function fetchTopicAndReplies(order, topicId){
     db.syncOnChange(['replies', topicId], data => { // also on change (votes)
       dispatch(receiveChangedReply(data.topicId, data));
     });
-
-    //dispatch(syncRepliesByCount);
-    //db.syncByOrder(['replies', topicId], 'count', reply => {
-      //dispatch(receiveReplyByCount(topicId, reply));
-    //});
 
   };
 }

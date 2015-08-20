@@ -167,12 +167,10 @@ function repliesByNew(state={}, action){
 function repliesByPopular(state={}, action){
   switch(action.type){
     case actionTypes.SELECT_TOPIC:
-    case 'unqueue_popular':
       return Object.assign({}, state, {
         [action.topicId]: repliesReducer(state[action.topicId], action)
     });
     case actionTypes.RECEIVE_REPLY_BY_ORDER:
-    case 'queue_popular_reply':
       const parentId = action.topic.ref;
       return Object.assign({}, state, {
         [parentId]: repliesReducer(state[parentId], action)
