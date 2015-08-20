@@ -1,13 +1,16 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import loggerMiddleware from 'redux-logger';
-import rootReducer from '../reducers/rootReducer';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
+import { devTools, persistState } from 'redux-devtools';
+import thunk from 'redux-thunk';
+import logger from 'redux-logger';
+import reducer from '../reducers/rootReducer';
 
-const createStoreWithMiddleware = applyMiddleware(
-  thunkMiddleware,
-  loggerMiddleware
-)(createStore);
+const finalCreateStore = compose(
+  applyMiddleware(thunk, logger),
+  devTools(),
+  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
+  createStore
+);
 
-export default function configureStore(initialState){
-  return createStoreWithMiddleware(rootReducer, initialState);
+export default function configureStore(){
+  return finalCreateStore(reducer);
 }
