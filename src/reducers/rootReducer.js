@@ -122,13 +122,18 @@ function votes(state={}, action){
   }
 }
 
-function repliesReducer(state={view: [], queued: []}, action){
+function repliesReducer(state={lastUpdated: 0,view: [], queued: []}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
       return Object.assign({}, state, {
         lastUpdated: action.topic.date,
         queued: [],
+        view: [action.topicId, ...state.view]
+      });
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+      return Object.assign({}, state, {
+        //lastUpdated: action.topic.date, //??
+        //queued: [],
         view: [action.topicId, ...state.view]
       });
     case actionTypes.QUEUE_REPLY:
@@ -144,6 +149,22 @@ function repliesReducer(state={view: [], queued: []}, action){
     });
     case actionTypes.REQUEST_REPLIES_BY_POPULAR:
       return { queued: [], view:[]}
+    case actionTypes.REORDER_POPULAR:
+      function comp (arr, votes) { 
+        let voteA, voteB;
+        return arr.sort((a, b) => {
+          voteA = votes[a], 
+          voteB = votes[b];
+          if(voteA > voteB) { return -1}
+          if(voteA < voteB) { return 1 }
+          return 0;
+        });
+      } 
+ 
+      return Object.assign({}, state, {
+        view: [...comp(state.view, action.votes)]
+      });
+
     default:
       return state;
   } 
@@ -171,6 +192,7 @@ function repliesByPopular(state={}, action){
   switch(action.type){
     case actionTypes.SELECT_TOPIC:
     case actionTypes.REQUEST_REPLIES_BY_POPULAR:
+    case actionTypes.REORDER_POPULAR:
       return Object.assign({}, state, {
         [action.topicId]: repliesReducer(state[action.topicId], action)
     });

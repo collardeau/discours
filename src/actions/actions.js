@@ -1,5 +1,5 @@
 import * as db from '../utils/fireUtils.js';
-
+import moment from 'moment';
 
 export const ALLOW_VOTE = 'ALLOW_VOTE';
 function allowVote(topicId){
@@ -171,6 +171,14 @@ function requestRepliesByPopular(topicId){
   };
 }
 
+export const REORDER_POPULAR = 'REORDER_POPULAR';
+function reorderPopular(topicId, votes){
+  return {
+    type: REORDER_POPULAR,
+    topicId,
+    votes
+  };
+}
 
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
@@ -180,7 +188,7 @@ export function fetchTopicAndReplies(order, topicId){
     dispatch(selectOrder(order));
     dispatch(checkIfNoReplies(topicId));
 
-    // determine what replies we are dealing with
+    // determine order of replies
     const replies = getReplies(getState(), order);
     
     // sync replies    
@@ -188,15 +196,20 @@ export function fetchTopicAndReplies(order, topicId){
     const now = Date.now();
 
     if(order === 'popular'){
-      dispatch(requestRepliesByPopular(topicId));
-      if(true){ // cache for a minute? empty array when recalculating?
+
+      const ago = now - (2*60*60*1000); // 2 hours
+
+      if(lastUpdated < ago){ 
+        dispatch(requestRepliesByPopular(topicId));
         db.fetchByOrder(['replies', topicId], 2, 'count', reply => {
           dispatch(receiveReplyByOrder(topicId, reply));
         });
+      }else {
+        dispatch(reorderPopular(topicId, getState().votes));
       }
     }else{
       // sorted chronologically
-      if(!lastUpdated){ // cache only for so long
+      if(!lastUpdated){ 
         db.fetchUntil(['replies', topicId], now, reply => {
           dispatch(receiveReply(topicId, reply));
         });
@@ -208,7 +221,6 @@ export function fetchTopicAndReplies(order, topicId){
           dispatch(queueReply(topicId, reply));
         });
       }
-
     }
 
    //dispatch(syncChange(topicId));

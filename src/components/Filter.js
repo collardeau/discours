@@ -23,7 +23,9 @@ export default class Filter extends Component {
   handleTabClick = tab => {
     const { order, topicId, unqueue } = this.props;
     window.location.hash = tab + '/' + topicId;
-    unqueue(topicId);
+    if(tab === 'new'){
+      unqueue(topicId);
+    }
   }
 
   renderTab = (tab, tabName, last = false) => {
