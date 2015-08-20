@@ -138,6 +138,7 @@ function repliesReducer(state={view: [], queued: []}, action){
     });
     case actionTypes.UNQUEUE:
       return Object.assign({}, state, {
+        lastUpdated: state.queued[0],
         queued: [],
         view: [...state.queued, ...state.view]
     });

@@ -24,7 +24,7 @@ export default class Replies extends React.Component {
       <ul >
         { replies.map((reply, i) =>
           <ReplyItem
-            key={reply.topicId}
+            key={i}
             order={order}
             permissions={permissions}
             parentId={parentId}
