@@ -141,6 +141,8 @@ function repliesReducer(state={view: [], queued: []}, action){
         queued: [],
         view: [...state.queued, ...state.view]
     });
+    case actionTypes.REQUEST_REPLIES_BY_POPULAR:
+      return { queued: [], view:[]}
     default:
       return state;
   } 
@@ -167,6 +169,7 @@ function repliesByNew(state={}, action){
 function repliesByPopular(state={}, action){
   switch(action.type){
     case actionTypes.SELECT_TOPIC:
+    case actionTypes.REQUEST_REPLIES_BY_POPULAR:
       return Object.assign({}, state, {
         [action.topicId]: repliesReducer(state[action.topicId], action)
     });

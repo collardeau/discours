@@ -163,6 +163,15 @@ function getReplies(state, order){
   return state.repliesByNew;
 }
 
+export const REQUEST_REPLIES_BY_POPULAR = 'REQUEST_REPLIES_BY_POPULAR';
+function requestRepliesByPopular(topicId){
+  return {
+    type: REQUEST_REPLIES_BY_POPULAR,
+    topicId
+  };
+}
+
+
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
@@ -179,6 +188,7 @@ export function fetchTopicAndReplies(order, topicId){
     const now = Date.now();
 
     if(order === 'popular'){
+      dispatch(requestRepliesByPopular(topicId));
       if(true){ // cache for a minute? empty array when recalculating?
         db.fetchByOrder(['replies', topicId], 2, 'count', reply => {
           dispatch(receiveReplyByOrder(topicId, reply));
