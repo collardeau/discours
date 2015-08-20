@@ -108,10 +108,19 @@ function queueReply(topicId, reply){
 }
 
 export const UNQUEUE = 'UNQUEUE';
-export function unqueue(topicId){
+function unqueue(topicId) {
   return {
     type: UNQUEUE,
     topicId
+  };
+}
+
+export function unqueueIfNeeded(topicId){
+  return (dispatch, getState) => {
+    const hasQueue = getState().repliesByNew[topicId].queued.length;
+    if(hasQueue) {
+      dispatch(unqueue(topicId));
+    }
   };
 }
 
@@ -197,7 +206,7 @@ export function fetchTopicAndReplies(order, topicId){
 
     if(order === 'popular'){
 
-      const ago = now - (2*60*60*1000); // 2 hours
+      const ago = now - (2 * 60 * 60 * 1000); // 2 hours
 
       if(lastUpdated < ago){ 
         dispatch(requestRepliesByPopular(topicId));
@@ -209,6 +218,7 @@ export function fetchTopicAndReplies(order, topicId){
       }
     }else{
       // sorted chronologically
+       console.log('new replies, last updated: ', lastUpdated);
       if(!lastUpdated){ 
         db.fetchUntil(['replies', topicId], now, reply => {
           dispatch(receiveReply(topicId, reply));

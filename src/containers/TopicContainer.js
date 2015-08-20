@@ -4,7 +4,7 @@ import Topic from '../components/Topic';
 import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
-import {addReply, toggleForm, unqueue, upvote} from '../actions/actions';
+import {addReply, toggleForm, unqueueIfNeeded, upvote} from '../actions/actions';
 
 class TopicContainer extends Component {
 
@@ -14,7 +14,7 @@ class TopicContainer extends Component {
 
     const { addReply, formIsOpen, hasReplies, order, permissions, 
       parentTopic, queuedReplies, toggleForm, 
-      topic, topicId, replies, unqueue, upvote } = this.props;
+      topic, topicId, replies, unqueueIfNeeded, upvote } = this.props;
 
     return (
       <div>
@@ -36,7 +36,7 @@ class TopicContainer extends Component {
           order={order}
           queued = {queuedReplies}
           topicId= {topicId}
-          unqueue = { unqueue }
+          unqueueIfNeeded = { unqueueIfNeeded }
         />
         <Replies
           hasReplies = {hasReplies}
@@ -105,14 +105,14 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     toggleForm: () => dispatchProps.toggleForm(),
     topic: topics[topicId],
     topicId,
-    unqueue: (topicId) => dispatchProps.unqueue(topicId),
+    unqueueIfNeeded: (topicId) => dispatchProps.unqueueIfNeeded(topicId),
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId)
   });
 }
 
 export default connect(
   mapStateToProps,
-  {addReply, toggleForm, unqueue, upvote},
+  {addReply, toggleForm, unqueueIfNeeded, upvote},
   mergeProps
 )(TopicContainer);
 

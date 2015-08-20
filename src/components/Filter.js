@@ -21,11 +21,11 @@ let styles = {
 export default class Filter extends Component {
 
   handleTabClick = tab => {
-    const { order, topicId, unqueue } = this.props;
-    window.location.hash = tab + '/' + topicId;
+    const { order, topicId, unqueueIfNeeded } = this.props;
     if(tab === 'new'){
-      unqueue(topicId);
+      unqueueIfNeeded(topicId);
     }
+    window.location.hash = tab + '/' + topicId;
   }
 
   renderTab = (tab, tabName, last = false) => {
@@ -38,7 +38,7 @@ export default class Filter extends Component {
         borderRight: last ? '' : '1px solid'
       },
       queue: {
-        display: queued > 0 && tab ==='new' ? 'inline' : 'none' 
+        display: queued > 0 && tab === 'new' ? 'inline' : 'none' 
       }
     };
 
