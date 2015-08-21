@@ -146,7 +146,7 @@ function checkIfNoReplies(topicId){
   };
 }
 
-function fetchTopic(topicId){
+function fetchTopicIfNeeded(topicId){
   return (dispatch, getState) => {
     if(!getState().topics[topicId]){
       dispatch(requestTopic(topicId));
@@ -180,6 +180,15 @@ function requestRepliesByPopular(topicId){
   };
 }
 
+export const REQUEST_REPLIES_BY_NEW = 'REQUEST_REPLIES_BY_NEW';
+function requestRepliesByNew(topicId){
+  return {
+    type: REQUEST_REPLIES_BY_NEW,
+    topicId
+  };
+}
+
+
 export const REORDER_POPULAR = 'REORDER_POPULAR';
 function reorderPopular(topicId, votes){
   return {
@@ -193,7 +202,7 @@ export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
     dispatch(selectTopic(topicId));
-    dispatch(fetchTopic(topicId));
+    dispatch(fetchTopicIfNeeded(topicId));
     dispatch(selectOrder(order));
     dispatch(checkIfNoReplies(topicId));
 
@@ -206,20 +215,28 @@ export function fetchTopicAndReplies(order, topicId){
 
     if(order === 'popular'){
 
-      const ago = now - (2 * 60 * 60 * 1000); // 2 hours
+      const popularCach = now - (2 * 60 * 60 * 1000); // 2 hours
+      console.log('we are fetching by popular');
 
-      if(lastUpdated < ago){ 
+      if(lastUpdated < popularCach){ 
+        console.log('the cach is not valid');
         dispatch(requestRepliesByPopular(topicId));
         db.fetchByOrder(['replies', topicId], 2, 'count', reply => {
           dispatch(receiveReplyByOrder(topicId, reply));
         });
       }else {
+        console.log('the cach is valid, just reorder what we have');
         dispatch(reorderPopular(topicId, getState().votes));
       }
+
     }else{
-      // sorted chronologically
-       console.log('new replies, last updated: ', lastUpdated);
-      if(!lastUpdated){ 
+
+      const newCach = now - (5 * 60 * 60 * 1000); // 5 min
+      console.log('we are fetching by new');
+      dispatch(requestRepliesByNew(topicId));
+
+      if(!lastUpdated || lastUpdated < newCach){ 
+        console.log('the cache is not valid, fetch from now: ' + now + ' and sync rest');
         db.fetchUntil(['replies', topicId], now, reply => {
           dispatch(receiveReply(topicId, reply));
         });
@@ -227,6 +244,7 @@ export function fetchTopicAndReplies(order, topicId){
           dispatch(queueReply(topicId, reply));
         });
       }else{
+        console.log('the cache is valid, just sync from the last update recorded:', lastUpdated + 1);
         db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
           dispatch(queueReply(topicId, reply));
         });
