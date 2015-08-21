@@ -13,10 +13,20 @@ export default class Root extends Component {
         <Provider store={store}>
           {() => <App />}
         </Provider>
-        <DebugPanel left top bottom>
-          <DevTools select={state => state.repliesByNew} store={store} monitor={LogMonitor} />
-        </DebugPanel>
-      </div>
+     </div>
     );
   }
 }
+
+
+// give it a name so it reuses the same window
+var win = window.open(null, "redux-devtools", "menubar=no,location=no,resizable=yes,scrollbars=no,status=no");
+// reload in case it's reusing the same window with the old content
+ win.location.reload();
+// wait a little bit for it to reload, then render
+setTimeout(function() {
+   React.render(
+     <DebugPanel top right bottom left>
+       <DevTools select={state => state.repliesByNew} store={store} monitor={LogMonitor} />
+     </DebugPanel>, win.document.body);
+}, 10);
