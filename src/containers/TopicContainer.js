@@ -10,7 +10,7 @@ class TopicContainer extends Component {
 
   render(){
 
-    console.log('topic container props: ', this.props);
+    //console.log('topic container props: ', this.props);
 
     const { addReply, formIsOpen, hasReplies, order, permissions, 
       parentTopic, queuedReplies, toggleForm, 
@@ -81,6 +81,7 @@ function mapStateToProps(state){
     topicId,
     topics,
     replies,
+    repliesByNew,
     votes
   };
 
@@ -88,14 +89,14 @@ function mapStateToProps(state){
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
   const { formIsOpen, haveReplies, order, permissions, 
-    replies, topics, topicId } = stateProps;
+    replies, repliesByNew, topics, topicId } = stateProps;
   const parentId = topics[topicId].parentId;
 
   return Object.assign({}, parentProps, {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     formIsOpen: stateProps.formIsOpen,
     hasReplies: haveReplies[topicId],
-    queuedReplies: replies[topicId].queued.length, 
+    queuedReplies: repliesByNew[topicId].queued.length, 
     order,
     permissions,
     parentTopic: topics[parentId] || {content: '', topicId: ''},
