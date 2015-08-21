@@ -15,9 +15,8 @@ export function changeRoute(route){
 
   return (dispatch, getState) => {
 
-    const prevRoute = getState().route;
-    if(prevRoute === 'new' || prevRoute === 'popular') {
-      const prevTopicId = getState().selectedTopic;
+    const prevTopicId = getState().selectedTopic;
+    if(prevTopicId && params[0] !== prevTopicId){ // a different topic
       dispatch(unsync(prevTopicId));
     }
 
