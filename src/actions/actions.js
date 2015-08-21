@@ -137,6 +137,7 @@ function receiveChangedReply(topicId, reply){
 
 function checkIfNoReplies(topicId){
   return (dispatch, getState) => {
+    // check the state first
     db.exists(['replies', topicId])
     .then(exists => {
       if(!exists){
@@ -208,50 +209,19 @@ export function fetchTopicAndReplies(order, topicId){
 
     // determine order of replies
     const replies = getReplies(getState(), order);
-    
-    // sync replies    
-    const lastUpdated = replies[topicId].lastUpdated;
+    // if order is popular, get those now
+
+    // get the replies... always (cache later)
     const now = Date.now();
-
-    if(order === 'popular'){
-
-      const popularCach = now - (2 * 60 * 60 * 1000); // 2 hours
-      console.log('we are fetching by popular');
-
-      if(lastUpdated < popularCach){ 
-        console.log('the cach is not valid');
-        dispatch(requestRepliesByPopular(topicId));
-        db.fetchByOrder(['replies', topicId], 2, 'count', reply => {
-          dispatch(receiveReplyByOrder(topicId, reply));
-        });
-      }else {
-        console.log('the cach is valid, just reorder what we have');
-        dispatch(reorderPopular(topicId, getState().votes));
-      }
-
-    }else{
-
-      const newCach = now - (5 * 60 * 60 * 1000); // 5 min
-      console.log('we are fetching by new');
-      dispatch(requestRepliesByNew(topicId));
-
-      if(!lastUpdated || lastUpdated < newCach){ 
-        console.log('the cache is not valid, fetch from now: ' + now + ' and sync rest');
-        db.fetchUntil(['replies', topicId], now, reply => {
-          dispatch(receiveReply(topicId, reply));
-        });
-        db.syncSince(['replies', topicId], now, reply => {
-          dispatch(queueReply(topicId, reply));
-        });
-      }else{
-        console.log('the cache is valid, just sync from the last update recorded:', lastUpdated + 1);
-        db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
-          dispatch(queueReply(topicId, reply));
-        });
-      }
-    }
-
-   //dispatch(syncChange(topicId));
+    db.fetchUntil(['replies', topicId], now, reply => {
+      dispatch(receiveReply(topicId, reply));
+    });
+    // queue the coming ones
+    db.syncSince(['replies', topicId], now, reply => {
+      console.log('receive a new reply');
+      dispatch(queueReply(topicId, reply));
+    });
+    // listen for changes (votes)
     db.syncOnChange(['replies', topicId], data => { // also on change (votes)
       dispatch(receiveChangedReply(data.topicId, data));
     });
