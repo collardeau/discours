@@ -229,7 +229,6 @@ export function fetchTopicAndReplies(order, topicId){
         });
    
       }else{
-        // queue since the last one we got ? // unqueue also?
         db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
           dispatch(queueReply(topicId, reply));
         });
@@ -238,18 +237,27 @@ export function fetchTopicAndReplies(order, topicId){
  
     }
 
-    dispatch(selectOrder(order));
-
-    const replies = getReplies(getState(), order);
-    const popCach = now - ( 60 * 1000); //one minute
  
     if(order === 'popular'){
+      //debugger;
+      const popCach = now - ( 30 * 1000); //one minute
+      const lastRequested = getState().repliesByPopular[topicId].lastRequested;
+      //console.log('last pop updated: ', lastPopularUpdated);
+      if(lastRequested < popCach ) {
+        console.log('invalid cach');
         dispatch(requestRepliesByPopular(topicId));
-        db.fetchByOrder(['replies', topicId], 2, 'count', reply => {
+        db.fetchByOrder(['replies', topicId], 5, 'count', reply => {
           dispatch(receiveReplyByOrder(topicId, reply));
         });
+      }else{
+        console.log('use cache, but reorder');
+        dispatch(reorderPopular(topicId, getState().votes));
+      }
     }
 
+   dispatch(selectOrder(order));
+
+    //const replies = getReplies(getState(), order);
  };
 }
 

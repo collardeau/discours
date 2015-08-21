@@ -132,39 +132,30 @@ function comp (arr, votes) {
     return 0;
   });
 } 
- 
-function repliesReducer(state={lastUpdated: 0, view: [], queued: []}, action){
+
+function repliesByNewReducer(state={
+  lastQueuedTime: 0, 
+  lastUpdated: 0, 
+  view: [], 
+  queued: []}, action) {
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
         lastUpdated: action.topic.date,
-        //queued: [],
         view: [action.topicId, ...state.view]
       });
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+   case actionTypes.QUEUE_REPLY:
       return Object.assign({}, state, {
-        //lastUpdated: action.topic.date, //??
-        //queued: [],
-        view: [action.topicId, ...state.view]
-      });
-    case actionTypes.QUEUE_REPLY:
-      return Object.assign({}, state, {
-        lastUpdated: action.topic.date,
+        //lastUpdated: action.topic.date,
+        lastQueuedTime: action.topic.date,
         queued: [ action.topicId, ...state.queued]
     });
     case actionTypes.UNQUEUE:
       return Object.assign({}, state, {
-        lastUpdated: state.queued[0].date,
+        lastUpdated: state.lastQueuedTime,
         queued: [],
         view: [...state.queued, ...state.view]
     });
-    case actionTypes.REQUEST_REPLIES_BY_POPULAR:
-      return { queued: [], view: [] };
-    case actionTypes.REORDER_POPULAR:
-      return Object.assign({}, state, {
-        view: [...comp(state.view, action.votes)]
-      });
-
     default:
       return state;
   } 
@@ -175,17 +166,45 @@ function repliesByNew(state={}, action){
     case actionTypes.SELECT_TOPIC:
     case actionTypes.UNQUEUE:
       return Object.assign({}, state, {
-        [action.topicId]: repliesReducer(state[action.topicId], action)
+        [action.topicId]: repliesByNewReducer(state[action.topicId], action) //state.Topic here?
     });
     case actionTypes.RECEIVE_REPLY:
     case actionTypes.QUEUE_REPLY:
       const parentId = action.topic.ref;
       return Object.assign({}, state, {
-        [parentId]: repliesReducer(state[parentId], action)
+        [parentId]: repliesByNewReducer(state[parentId], action)
     });
     default:
       return state;
   }
+}
+
+function repliesByPopularReducer(state={
+  lastRequested: 0,
+  high: 0,
+  view: []}, action){
+  switch(action.type){
+    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+      const newCount = action.topic.count;
+      const high = state.high;
+      const isNewHigh = newCount >= high;
+      return Object.assign({}, state, {
+        high: isNewHigh ? newCount : high,
+        lastRequested: Date.now(),
+        view: isNewHigh ? [action.topicId, ...state.view] : [...state.view, action.topicId]  
+      });
+    case actionTypes.REQUEST_REPLIES_BY_POPULAR:
+      return { lastRequested: 0, high: 0, view: [] };
+    case actionTypes.REORDER_POPULAR:
+        const view = [...comp(state.view, action.votes)];
+        const newHigh = action.votes[view[0]];
+      return Object.assign({}, state, {
+        view,
+        high: newHigh
+      });
+    default:
+      return state;
+  } 
 }
 
 function repliesByPopular(state={}, action){
@@ -194,12 +213,12 @@ function repliesByPopular(state={}, action){
     case actionTypes.REQUEST_REPLIES_BY_POPULAR:
     case actionTypes.REORDER_POPULAR:
       return Object.assign({}, state, {
-        [action.topicId]: repliesReducer(state[action.topicId], action)
+        [action.topicId]: repliesByPopularReducer(state[action.topicId], action)
     });
     case actionTypes.RECEIVE_REPLY_BY_ORDER:
       const parentId = action.topic.ref;
       return Object.assign({}, state, {
-        [parentId]: repliesReducer(state[parentId], action)
+        [parentId]: repliesByPopularReducer(state[parentId], action)
     });
     default:
       return state;
