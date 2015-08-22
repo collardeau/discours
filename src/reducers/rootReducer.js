@@ -163,7 +163,7 @@ function repliesByNewReducer(state={
 
 function repliesByNew(state={}, action){
   switch(action.type){
-    case actionTypes.REQUEST_TOPIC:
+    case actionTypes.SELECT_TOPIC:
     case actionTypes.UNQUEUE:
       return Object.assign({}, state, {
         [action.topicId]: repliesByNewReducer(state[action.topicId], action) //state.Topic here?
