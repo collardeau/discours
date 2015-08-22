@@ -48,7 +48,7 @@ function permissions(state={post: false, vote: false}, action) {
   }
 }
 
-function selectedTopic(state='root', action){
+function selectedTopic(state='', action){
   switch(action.type) {
     case actionTypes.SELECT_TOPIC:
       return action.topicId;
@@ -84,7 +84,7 @@ function topicReducer(state={content: '', parentId: ''}, action){
 
 function topics(state={}, action){
   switch(action.type) {
-    case actionTypes.REQUEST_TOPIC:
+    case actionTypes.SELECT_TOPIC:
     case actionTypes.RECEIVE_TOPIC:
     case actionTypes.RECEIVE_REPLY:
     case actionTypes.RECEIVE_REPLY_BY_ORDER:
@@ -163,7 +163,7 @@ function repliesByNewReducer(state={
 
 function repliesByNew(state={}, action){
   switch(action.type){
-    case actionTypes.SELECT_TOPIC:
+    case actionTypes.REQUEST_TOPIC:
     case actionTypes.UNQUEUE:
       return Object.assign({}, state, {
         [action.topicId]: repliesByNewReducer(state[action.topicId], action) //state.Topic here?

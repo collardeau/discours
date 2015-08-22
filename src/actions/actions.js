@@ -148,9 +148,10 @@ function checkIfNoReplies(topicId){
 }
 
 function fetchTopicIfNeeded(topicId){
+  // debugger;
   return (dispatch, getState) => {
-    if(!getState().topics[topicId]){
-      dispatch(requestTopic(topicId));
+    // if it doesn't exist or content doesn't exists or ref (parent) doesn't exist
+    if(!getState().topics[topicId] || !getState().topics[topicId].content || !getState().topics[topicId].ref){
       db.fetch(['topic', topicId])
       .then(data => {
         dispatch(receiveTopic(topicId, data));
@@ -204,14 +205,19 @@ export function fetchTopicAndReplies(order, topicId){
 
     const prevTopicId = getState().selectedTopic;
     const isSameTopic = topicId === prevTopicId;
+    console.log('is same topic: ', isSameTopic);
 
     const now = Date.now();
+
+    dispatch(selectOrder(order));
 
     if(!isSameTopic){
 
       dispatch(selectTopic(topicId));
-      dispatch(fetchTopicIfNeeded(topicId));
       dispatch(checkIfNoReplies(topicId)); // if needed
+      dispatch(requestTopic(topicId));
+      dispatch(fetchTopicIfNeeded(topicId));
+      // fetch topic parent if needed
 
       db.syncOnChange(['replies', topicId], data => { // also on change (votes)
         dispatch(receiveChangedReply(data.topicId, data));
@@ -255,7 +261,6 @@ export function fetchTopicAndReplies(order, topicId){
       }
     }
 
-   dispatch(selectOrder(order));
 
     //const replies = getReplies(getState(), order);
  };
