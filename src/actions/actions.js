@@ -1,7 +1,7 @@
 import * as db from '../utils/fireUtils.js';
 import moment from 'moment';
 
-const voteTimeout = 3000;
+const voteTimeout = 4000;
 
 export const ALLOW_VOTE = 'ALLOW_VOTE';
 function allowVote(topicId){
@@ -202,13 +202,18 @@ function reorderPopular(topicId, votes){
   };
 }
 
+export function allowVoteLater(time){
+  return (dispatch, getState) => {
+    setTimeout(() => {
+      dispatch(allowVote());
+    }, time); 
+  };
+}
 
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
-    setTimeout(() => {
-      dispatch(allowVote());
-    }, voteTimeout);
+    //dispatch(allowVoteLater());
 
     const prevTopicId = getState().selectedTopic;
     const isSameTopic = topicId === prevTopicId;
@@ -301,15 +306,18 @@ function requestUpvote(topicId, reply){
 
 export function upvote(topicId, parentId){
   return dispatch => {
-    dispatch(requestUpvote(topicId));
-    db.increment(['replies', parentId, topicId, 'count']);
-    const auth = db.getAuth();
+   const auth = db.getAuth();
     if(auth){
       const uid = auth.uid;
-      db.setTime(['lastVote', uid]);
-      setTimeout(() => {
-        dispatch(allowVote());
-      }, voteTimeout);
+      db.getTimestamp(['lastVote', uid]).then(ts => {
+        db.increment(['replies', parentId, topicId, 'count']);
+      }, err => {
+        console.log(err.message);
+      });
+      //dispatch(requestUpvote(topicId));
+      //db.increment(['replies', parentId, topicId, 'count']);
+      //db.setTime(['lastVote', uid]);
+      //dispatch(allowVoteLater(3200));
     }
   };
 }

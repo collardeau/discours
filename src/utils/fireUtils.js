@@ -111,6 +111,49 @@ export function loginAnonymously(){
   });
 }
 
+function testgetTimestamp(uid, next) {
+  let lastVoteRef = ref.child('lastVote/' + uid);
+  lastVoteRef.onDisconnect().remove();
+  lastVoteRef.set(Firebase.ServerValue.TIMESTAMP, err => {
+    if (err) { console.log(err); }
+    else {
+      ref.once('value', snap => {
+        next(snap.val());
+      });
+    }
+  });
+}
+
+export function getTimestamp(loc) {
+  return new Promise((res, rej) => {
+    let ref = buildPath(loc);
+    // on disconnect?
+    ref.set(Firebase.ServerValue.TIMESTAMP, err => {
+      if (err) { rej(err); }
+      else {
+        ref.once('value', snap => {
+          res(snap.val());
+        });
+      }
+    });
+  });
+}
+
+export function createRecord(data) {
+  getTimestamp(data, timestamp => {
+    //data.timestamp = timestamp;
+    console.log('creating record', data); 
+    console.log(timestamp); 
+    //let countRef = ref.child('replies...').push(data, err => {
+    //  if(err) { console.log(err); }
+    //  else {
+    //    next(countRef.name(), timestamp);
+    //  }
+    //});
+    //ref.onDisconnnect().remove();
+  });
+}
+
 export function getAuth(){
   return ref.getAuth();
 }

@@ -96,7 +96,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     formIsOpen: stateProps.formIsOpen,
     hasReplies: haveReplies[topicId],
-    queuedReplies: repliesByNew[topicId].queued.length, 
+    queuedReplies: repliesByNew[topicId].queued.length,
     order,
     permissions,
     parentTopic: topics[parentId] || {content: '', topicId: ''},

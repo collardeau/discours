@@ -7,6 +7,8 @@ function uid(state=null, action){
   switch(action.type){
     case authActions.LOGIN_USER:
       return action.uid;
+    case authActions.LOGOUT_USER:
+      return null;
     default:
       return state;
   }
@@ -27,7 +29,6 @@ function voteReducer(state=false, action){
     case actionTypes.LOGOUT:
       return false;
     case actionTypes.ALLOW_VOTE:
-    case authActions.LOGIN_USER:
       return true;
     default:
       return state;

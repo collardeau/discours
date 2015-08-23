@@ -1,4 +1,5 @@
 import * as db from '../utils/fireUtils.js';
+import { allowVoteLater } from './actions';
 
 export const LOGIN_USER = 'LOGIN_USER';
 function loginUser(uid){
@@ -29,6 +30,7 @@ function onLoginOrOut(){
     db.onLogin(auth => {
       if(auth){ 
         db.setTime(['lastVote', auth.uid]);
+        dispatch(allowVoteLater(7000));
       }else if (getState().uid ){ console.log('log out process');
         const lastUid = getState().uid;
         dispatch(logoutUser());
