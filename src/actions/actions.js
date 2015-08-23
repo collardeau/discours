@@ -1,6 +1,8 @@
 import * as db from '../utils/fireUtils.js';
 import moment from 'moment';
 
+const voteTimeout = 3000;
+
 export const ALLOW_VOTE = 'ALLOW_VOTE';
 function allowVote(topicId){
   return {
@@ -200,15 +202,17 @@ function reorderPopular(topicId, votes){
   };
 }
 
+
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
+    setTimeout(() => {
+      dispatch(allowVote());
+    }, voteTimeout);
+
     const prevTopicId = getState().selectedTopic;
     const isSameTopic = topicId === prevTopicId;
-    console.log('is same topic: ', isSameTopic);
-
     const now = Date.now();
-
     dispatch(selectOrder(order));
 
     if(!isSameTopic){
@@ -303,7 +307,7 @@ export function upvote(topicId, parentId){
     db.setTime(['lastVote', uid]);
     setTimeout(() => {
       dispatch(allowVote());
-    }, 5000);
+    }, voteTimeout);
   };
 }
 

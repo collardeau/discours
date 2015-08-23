@@ -78,6 +78,10 @@ export function set(loc, data){
   buildPath(loc).set(newData);
 }
 
+export function setEmpty(loc){
+  buildPath(loc).set(null);
+}
+
 export function setTime(loc){
   buildPath(loc).set(Firebase.ServerValue.TIMESTAMP);
 }
@@ -111,9 +115,9 @@ export function getAuth(){
   return ref.getAuth();
 }
 
-export function onLogout(cb){
-  ref.onAuth(uid => {
-    if(!uid){ cb(); }
+export function onLogin(cb){
+  ref.onAuth(auth => {
+    cb(auth);
   });
 }
 

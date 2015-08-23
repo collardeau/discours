@@ -9,10 +9,9 @@ function loginUser(uid){
 }
 
 export const LOGOUT_USER = 'LOGOUT_USER';
-function logoutUser(uid){
+function logoutUser(){
   return {
-    type: LOGOUT_USER,
-    uid
+    type: LOGOUT_USER
   };
 }
 
@@ -24,32 +23,41 @@ function requestLogin(){
   };
 }
 
+function onLoginOrOut(){
+
+  return (dispatch, getState) => {
+    db.onLogin(auth => {
+      if(auth){ 
+        db.setTime(['lastVote', auth.uid]);
+      }else if (getState().uid ){ console.log('log out process');
+        const lastUid = getState().uid;
+        dispatch(logoutUser());
+        db.setEmpty(['lastVote', lastUid]);
+      }
+ 
+    });
+  };
+
+}
+
 export function login(){
-  return dispatch => {
+  return (dispatch, getState) => {
 
     dispatch(requestLogin());
-
-    let onLogout = uid => {
-      return db.onLogout(() => {
-        db.set(['lastVote', uid], null);
-        dispatch(logoutUser(uid));
-      });
-    };
+    dispatch(onLoginOrOut());
 
     const isLoggedIn = db.getAuth();
     let uid;
 
-    if(!isLoggedIn){
+    if(isLoggedIn){
+      uid = isLoggedIn.uid;
+      dispatch(loginUser(uid));
+   }else{
       db.loginAnonymously().then(auth=> {
         uid = auth.uid;
         dispatch(loginUser(uid));
-        onLogout(uid);
       });
-    }else{
-      uid = isLoggedIn.uid;
-      dispatch(loginUser(uid));
-      onLogout(uid);
-    }
+   }
  
  };
 }
