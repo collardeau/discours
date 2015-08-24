@@ -131,25 +131,25 @@ function comp (arr, votes) {
 } 
 
 function repliesByNewReducer(state={
-  lastQueuedTime: 0, 
+  //lastQueuedTime: 0, 
   lastUpdated: 0, 
   view: [], 
   queued: []}, action) {
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
       return Object.assign({}, state, {
-        lastUpdated: action.topic.date,
+        lastUpdated: action.topic.stamp,
         view: [action.topicId, ...state.view]
       });
    case actionTypes.QUEUE_REPLY:
       return Object.assign({}, state, {
-        //lastUpdated: action.topic.date,
-        lastQueuedTime: action.topic.date,
+        lastUpdated: action.topic.stamp,
+        //lastQueuedTime: action.topic.date,
         queued: [ action.topicId, ...state.queued]
     });
     case actionTypes.UNQUEUE:
       return Object.assign({}, state, {
-        lastUpdated: state.lastQueuedTime,
+        //lastUpdated: action.topic.stamp,
         queued: [],
         view: [...state.queued, ...state.view]
     });

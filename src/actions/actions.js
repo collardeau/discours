@@ -69,6 +69,7 @@ function unsyncAll(topicId){
 export function unsync(topicId) {
   return dispatch => {
     dispatch(unsyncAll(topicId));    
+    db.unsync(['votes', topicId]);
     db.unsync(['replies', topicId]);
   };
 }
@@ -106,7 +107,7 @@ export const QUEUE_REPLY = 'QUEUE_REPLY';
 function queueReply(topicId, reply){
   return {
     type: QUEUE_REPLY,
-    //parentId: reply.ref,
+    parentId: reply.ref,
     topic: reply,
     topicId: reply.topicId
   };
@@ -145,7 +146,6 @@ function checkIfNoReplies(topicId){
     // check the state first
     db.exists(['replies', topicId])
     .then(exists => {
-      console.log('we checked if topic has reply ', exists);
       if(!exists){
         dispatch(hasNoReplies(topicId));
       }
@@ -250,11 +250,12 @@ export function fetchTopicAndReplies(order, topicId){
       dispatch(requestTopic(topicId));
       dispatch(fetchTopicIfNeeded(topicId)); // and parent
 
-      //const lastUpdated = getState().repliesByNew[topicId].lastUpdated;    
-      const lastUpdated = true;
+      const lastUpdated = getState().repliesByNew[topicId].lastUpdated;
+      console.log('last updated: ', lastUpdated);
 
-      if(lastUpdated){ 
+      if(!lastUpdated){ 
 
+        console.log('getting past replies from server');
 
         db.fetchUntil(['replies', topicId], now, reply => {
           dispatch(requestVoteCount(topicId, reply.topicId));
@@ -267,6 +268,10 @@ export function fetchTopicAndReplies(order, topicId){
         });
    
       }else{
+
+        console.log('queuing replies from last update');
+        console.log(lastUpdated);
+
         db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
           dispatch(queueReply(topicId, reply));
         });
@@ -278,12 +283,13 @@ export function fetchTopicAndReplies(order, topicId){
     if(order === 'popular'){
 
       const lastRequested = getState().repliesByPopular[topicId].lastRequested;
-      const popCach = now - ( 30 * 1000); // 30 seconds
+      const popCach = now - ( 5 * 60 * 1000); // 5
 
       console.log('last requested: ', lastRequested);
       console.log('pop cach: ', popCach);
 
       if(lastRequested < popCach ){
+        console.log('get fresh order list');
         dispatch(requestRepliesByPopular(topicId));
         db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
           dispatch(receiveOrderByCount(topicId, reply));
@@ -317,16 +323,20 @@ export function addReply(topicId, reply){
   return (dispatch, getState) => {
     dispatch(requestAddReply(topicId, reply));
     reply.ref = topicId;
-    db.pushWithStamp(['topic'], reply)
-    .then(newId => {
-      //reply.count = 0;
-      // delete reply.ref?
-      db.setWithStamp(['replies', topicId, newId], reply);
-      // add more info
-      db.set(['votes', topicId, newId], { count: 0, stamp: 10101});
-      // store more vote separately on success
+
+    const uid = db.getAuth().uid;
+    db.getTimestamp(['postStamp', uid]).then(ts => {
+      reply.stamp = ts;
+      db.push(['topic'], reply)
+      .then(newId => {  // does promise need to be nested
+        db.set(['replies', topicId, newId], reply);
+        db.set(['votes', topicId, newId], { count: 0, stamp: 10101});
+      });
+    }, err => {
+      console.log(err.message);
     });
-  };
+
+ };
 }
 
 export const REQUEST_UPVOTE = 'REQUEST_UPVOTE';
@@ -347,7 +357,6 @@ export function upvote(topicId, parentId){
       db.getTimestamp(['voteStamp', uid]).then(ts => {
         db.addVote(['votes', parentId, topicId], ts);        
         db.push(['voteHistory', topicId], { uid, ts});        
-        console.log('vote stamp generated :', ts);
       }, err => {
         console.log(err.message);
       });
