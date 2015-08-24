@@ -247,7 +247,6 @@ export function fetchTopicAndReplies(order, topicId){
       dispatch(requestTopic(topicId));
       dispatch(fetchTopicIfNeeded(topicId)); // and parent
 
-
       //const lastUpdated = getState().repliesByNew[topicId].lastUpdated;    
       const lastUpdated = true;
 
@@ -272,42 +271,24 @@ export function fetchTopicAndReplies(order, topicId){
  
     }
 
-    if(order === 'popular'){
+    const lastRequested = getState().repliesByPopular[topicId].lastRequested;
+    console.log(lastRequested);
+    const popCach = now - ( 30 * 1000); // 30 seconds
+    if(order === 'popular' && lastRequested < popCach){
       dispatch(requestRepliesByPopular(topicId));
       db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
-        console.log(reply);
-        console.log(topicId);
         dispatch(receiveOrderByCount(topicId, reply));
-        // really receiving the vote count here
-        // should the content be here too?
-        //dispatch(receivedOrderByCount());
         dispatch(fetchTopicIfNeeded(reply.topicId));
       });
+    }else{
+      console.log('use cache, but reorder');
+      dispatch(reorderPopular(topicId, getState().votes));
     }
 
     db.syncOnChange(['votes', topicId], data => { 
       dispatch(receiveVoteCount(data.topicId, data.count)); 
     }); // should sync on change when getting the vote count ?
  
-    //if(order === 'popular'){
-    //  //debugger;
-    //  const popCach = now - ( 30 * 1000); //one minute
-    //  const lastRequested = getState().repliesByPopular[topicId].lastRequested;
-    //  //console.log('last pop updated: ', lastPopularUpdated);
-    //  if(lastRequested < popCach ) {
-    //    console.log('invalid cach');
-    //    dispatch(requestRepliesByPopular(topicId));
-    //    db.fetchByOrder(['replies', topicId], 5, 'count', reply => {
-    //      dispatch(receiveOrderByCount(topicId, reply));
-    //    });
-    //  }else{
-    //    console.log('use cache, but reorder');
-    //    dispatch(reorderPopular(topicId, getState().votes));
-    //  }
-    //}
-
-
-    //const replies = getReplies(getState(), order);
  };
 }
 
