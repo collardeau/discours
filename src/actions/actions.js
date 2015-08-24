@@ -91,13 +91,13 @@ function receiveReply(topicId, reply){
   };
 }
 
-export const RECEIVE_REPLY_BY_ORDER = 'RECEIVE_REPLY_BY_ORDER';
-function receiveReplyByOrder(topicId, reply){
+export const RECEIVE_ORDER_BY_COUNT = 'RECEIVE_ORDER_BY_COUNT';
+function receiveOrderByCount(topicId, data){
   return {
-    type: RECEIVE_REPLY_BY_ORDER,
+    type: RECEIVE_ORDER_BY_COUNT,
     parentId: topicId,
-    topic: reply,
-    topicId: reply.topicId
+    topic: data,
+    topicId: data.topicId
   };
 }
 
@@ -277,7 +277,7 @@ export function fetchTopicAndReplies(order, topicId){
       db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
         console.log(reply);
         console.log(topicId);
-        dispatch(receiveReplyByOrder(topicId, reply));
+        dispatch(receiveOrderByCount(topicId, reply));
         // really receiving the vote count here
         // should the content be here too?
         //dispatch(receivedOrderByCount());
@@ -298,7 +298,7 @@ export function fetchTopicAndReplies(order, topicId){
     //    console.log('invalid cach');
     //    dispatch(requestRepliesByPopular(topicId));
     //    db.fetchByOrder(['replies', topicId], 5, 'count', reply => {
-    //      dispatch(receiveReplyByOrder(topicId, reply));
+    //      dispatch(receiveOrderByCount(topicId, reply));
     //    });
     //  }else{
     //    console.log('use cache, but reorder');

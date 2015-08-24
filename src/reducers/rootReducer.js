@@ -71,7 +71,7 @@ function topicReducer(state={content: '', parentId: ''}, action){
   switch(action.type) {
    case actionTypes.RECEIVE_TOPIC:
     case actionTypes.RECEIVE_REPLY:
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+    case actionTypes.RECEIVE_ORDER_BY_COUNT:
     case actionTypes.QUEUE_REPLY:
       const {content, ref: parentId } = action.topic;
       return Object.assign({}, state, {
@@ -88,7 +88,7 @@ function topics(state={}, action){
     case actionTypes.SELECT_TOPIC:
     case actionTypes.RECEIVE_TOPIC:
     case actionTypes.RECEIVE_REPLY:
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+    case actionTypes.RECEIVE_ORDER_BY_COUNT:
     case actionTypes.QUEUE_REPLY:
       return Object.assign({}, state, {
         [action.topicId]: topicReducer(state[action.topicId], action)
@@ -181,7 +181,7 @@ function repliesByPopularReducer(state={
   high: 0,
   view: []}, action){
   switch(action.type){
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+    case actionTypes.RECEIVE_ORDER_BY_COUNT:
       const newCount = action.topic.count;
       const high = state.high;
       const isNewHigh = newCount >= high;
@@ -212,7 +212,7 @@ function repliesByPopular(state={}, action){
       return Object.assign({}, state, {
         [action.topicId]: repliesByPopularReducer(state[action.topicId], action)
     });
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+    case actionTypes.RECEIVE_ORDER_BY_COUNT:
       const parentId = action.parentId;
       return Object.assign({}, state, {
         [parentId]: repliesByPopularReducer(state[parentId], action)
@@ -238,7 +238,7 @@ function hasReplies(state=-1, action){
 function haveReplies(state={}, action){
   switch(action.type){
     case actionTypes.RECEIVE_REPLY:
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
+    case actionTypes.RECEIVE_ORDER_BY_COUNT:
     case actionTypes.QUEUE_REPLY:
       const parentId = action.parentId;
       return Object.assign({}, state, {
