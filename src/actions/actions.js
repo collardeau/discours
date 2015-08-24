@@ -106,6 +106,7 @@ export const QUEUE_REPLY = 'QUEUE_REPLY';
 function queueReply(topicId, reply){
   return {
     type: QUEUE_REPLY,
+    //parentId: reply.ref,
     topic: reply,
     topicId: reply.topicId
   };
@@ -225,7 +226,8 @@ function receiveVoteCount(topicId, votes){
 export function requestVoteCount(parentId, topicId){
   return (dispatch, getState) => {
     db.fetch(['votes', parentId, topicId]).then(data => {
-      dispatch(receiveVoteCount(topicId, data.count));
+      const count = data ? data.count : 0; 
+      dispatch(receiveVoteCount(topicId, count));
     });
   };
 }
@@ -237,8 +239,9 @@ export function fetchTopicAndReplies(order, topicId){
 
     const prevTopicId = getState().selectedTopic;
     const isSameTopic = topicId === prevTopicId;
-    const now = Date.now();
     dispatch(selectOrder(order));
+
+    const now = Date.now();
 
     if(!isSameTopic){
 
@@ -252,14 +255,15 @@ export function fetchTopicAndReplies(order, topicId){
 
       if(lastUpdated){ 
 
+
         db.fetchUntil(['replies', topicId], now, reply => {
           dispatch(requestVoteCount(topicId, reply.topicId));
           dispatch(receiveReply(topicId, reply));
         });
  
         db.syncSince(['replies', topicId], now, reply => {
-          dispatch(requestVoteCount(reply.topicId));
           dispatch(queueReply(topicId, reply));
+          dispatch(requestVoteCount(topicId, reply.topicId));
         });
    
       }else{
@@ -278,6 +282,7 @@ export function fetchTopicAndReplies(order, topicId){
 
       console.log('last requested: ', lastRequested);
       console.log('pop cach: ', popCach);
+
       if(lastRequested < popCach ){
         dispatch(requestRepliesByPopular(topicId));
         db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
