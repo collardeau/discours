@@ -29,12 +29,12 @@ function onLoginOrOut(){
   return (dispatch, getState) => {
     db.onLogin(auth => {
       if(auth){ 
-        db.setTime(['lastVote', auth.uid]);
-        dispatch(allowVoteLater(7000));
+        db.setTime(['voteStamp', auth.uid]);
+        //dispatch(allowVoteLater(7000));
       }else if (getState().uid ){ console.log('log out process');
         const lastUid = getState().uid;
         dispatch(logoutUser());
-        db.setEmpty(['lastVote', lastUid]);
+        db.setEmpty(['voteStamp', lastUid]);
       }
  
     });

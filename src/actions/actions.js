@@ -343,7 +343,8 @@ export function upvote(topicId, parentId){
     if(auth){
       const uid = auth.uid;
       dispatch(requestUpvote(topicId));
-      db.getTimestamp(['lastVote', uid]).then(ts => {
+      db.getTimestamp(['voteStamp', uid]).then(ts => {
+        console.log('vote stamp generated :', ts);
         db.addVote(['votes', parentId, topicId], ts);        
       }, err => {
         console.log(err.message);
