@@ -153,7 +153,7 @@ function fetchTopicIfNeeded(topicId){
   // debugger;
   return (dispatch, getState) => {
     // if it doesn't exist or content doesn't exists or ref (parent) doesn't exist
-    if(!getState().topics[topicId] || !getState().topics[topicId].content || !getState().topics[topicId].ref){
+    if(!getState().topics[topicId] || !getState().topics[topicId].content){
       db.fetch(['topic', topicId])
       .then(data => {
         dispatch(receiveTopic(topicId, data));
@@ -219,10 +219,10 @@ function receiveVoteCount(topicId, votes){
   };
 }
 
-export function requestVoteCount(topicId){
+export function requestVoteCount(parentId, topicId){
   return (dispatch, getState) => {
-    db.fetch(['votes', topicId, 'count']).then(count => {
-      dispatch(receiveVoteCount(topicId, count));
+    db.fetch(['votes', parentId, topicId]).then(data => {
+      dispatch(receiveVoteCount(topicId, data.count));
     });
   };
 }
@@ -249,13 +249,14 @@ export function fetchTopicAndReplies(order, topicId){
       const lastUpdated = true;
 
       if(lastUpdated){ 
+
         db.fetchUntil(['replies', topicId], now, reply => {
-          //get the vote count!
-          dispatch(requestVoteCount(reply.topicId));
+          dispatch(requestVoteCount(topicId, reply.topicId));
           dispatch(receiveReply(topicId, reply));
         });
-  
+ 
         db.syncSince(['replies', topicId], now, reply => {
+          dispatch(requestVoteCount(reply.topicId));
           dispatch(queueReply(topicId, reply));
         });
    
@@ -268,28 +269,36 @@ export function fetchTopicAndReplies(order, topicId){
  
     }
 
-    //db.syncOnChange(['replies', topicId], data => { // also on change (votes)
-    //dispatch(receiveChangedReply(data.topicId, data));
-    //});
 
-
- 
     if(order === 'popular'){
-      //debugger;
-      const popCach = now - ( 30 * 1000); //one minute
-      const lastRequested = getState().repliesByPopular[topicId].lastRequested;
-      //console.log('last pop updated: ', lastPopularUpdated);
-      if(lastRequested < popCach ) {
-        console.log('invalid cach');
-        dispatch(requestRepliesByPopular(topicId));
-        db.fetchByOrder(['replies', topicId], 5, 'count', reply => {
-          dispatch(receiveReplyByOrder(topicId, reply));
-        });
-      }else{
-        console.log('use cache, but reorder');
-        dispatch(reorderPopular(topicId, getState().votes));
-      }
+      dispatch(requestRepliesByPopular(topicId));
+      db.fetchByOrder(['votes', topicId], 5, 'count', orderedData => {
+        //dispatch(receiveReplyByOrder(topicId, reply));
+        console.log(orderedData);
+        dispatch(fetchTopicIfNeeded(orderedData.topicId));
+      });
     }
+
+    db.syncOnChange(['votes', topicId], data => { 
+      dispatch(receiveVoteCount(data.topicId, data.count)); 
+    }); // should sync on change when getting the vote count ?
+ 
+    //if(order === 'popular'){
+    //  //debugger;
+    //  const popCach = now - ( 30 * 1000); //one minute
+    //  const lastRequested = getState().repliesByPopular[topicId].lastRequested;
+    //  //console.log('last pop updated: ', lastPopularUpdated);
+    //  if(lastRequested < popCach ) {
+    //    console.log('invalid cach');
+    //    dispatch(requestRepliesByPopular(topicId));
+    //    db.fetchByOrder(['replies', topicId], 5, 'count', reply => {
+    //      dispatch(receiveReplyByOrder(topicId, reply));
+    //    });
+    //  }else{
+    //    console.log('use cache, but reorder');
+    //    dispatch(reorderPopular(topicId, getState().votes));
+    //  }
+    //}
 
 
     //const replies = getReplies(getState(), order);
@@ -315,7 +324,7 @@ export function addReply(topicId, reply){
       // delete reply.ref?
       db.setWithStamp(['replies', topicId, newId], reply);
       // add more info
-      db.set(['votes', newId], { count: 0, stamp: 10101});
+      db.set(['votes', topicId, newId], { count: 0, stamp: 10101});
       // store more vote separately on success
     });
   };
@@ -334,14 +343,12 @@ export function upvote(topicId, parentId){
    const auth = db.getAuth();
     if(auth){
       const uid = auth.uid;
+      dispatch(requestUpvote(topicId));
       db.getTimestamp(['lastVote', uid]).then(ts => {
         db.addVote(['votes', parentId, topicId], ts);        
       }, err => {
         console.log(err.message);
       });
-      //dispatch(requestUpvote(topicId));
-      //db.increment(['replies', parentId, topicId, 'count']);
-      //db.setTime(['lastVote', uid]);
       //dispatch(allowVoteLater(3200));
     }
   };
