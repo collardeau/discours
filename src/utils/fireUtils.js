@@ -74,20 +74,24 @@ export function unsync(loc){
 }
 
 export function set(loc, data){
-  const newData = {...data, date: Firebase.ServerValue.TIMESTAMP};
-  buildPath(loc).set(newData);
+  buildPath(loc).set(data);
 }
 
-export function setEmpty(loc){
-  buildPath(loc).set(null);
+export function setWithStamp(loc, data){
+  const newData = {...data, stamp: Firebase.ServerValue.TIMESTAMP};
+  buildPath(loc).set(newData);
 }
 
 export function setTime(loc){
   buildPath(loc).set(Firebase.ServerValue.TIMESTAMP);
 }
 
-export function push (loc, data){
-  const newData = {...data, date: Firebase.ServerValue.TIMESTAMP};
+export function setEmpty(loc){
+  buildPath(loc).set(null);
+}
+
+export function pushWithStamp (loc, data){
+  const newData = {...data, stamp: Firebase.ServerValue.TIMESTAMP};
   let newRef = buildPath(loc).push(newData);
   if (newRef){
     return Promise.resolve(newRef.key());
@@ -101,6 +105,16 @@ export function increment(loc){
     if (error) { console.log(error.message); }
   });
 }
+
+export function addVote(loc, timestamp){
+  buildPath(loc).transaction( current_value => {
+    return Object.assign({}, current_value, {
+      stamp: timestamp,
+      num: current_value ? current_value.num + 1 : 0
+    });
+  });
+}
+
 
 export function loginAnonymously(){
   return new Promise((res, rej) => {

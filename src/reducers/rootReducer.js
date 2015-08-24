@@ -100,10 +100,8 @@ function topics(state={}, action){
 
 function vote(state=0, action){
   switch(action.type){
-    case actionTypes.RECEIVE_REPLY:
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
-    case actionTypes.RECEIVE_CHANGED_REPLY:
-      return action.topic.count;
+    case actionTypes.RECEIVE_VOTE_COUNT:
+      return action.votes;
     default:
       return state;
   }
@@ -111,10 +109,8 @@ function vote(state=0, action){
 
 function votes(state={}, action){
   switch(action.type){
-    case actionTypes.RECEIVE_REPLY:
-    case actionTypes.RECEIVE_REPLY_BY_ORDER:
     case actionTypes.RECEIVE_CHANGED_REPLY:
-    case actionTypes.QUEUE_REPLY:
+    case actionTypes.RECEIVE_VOTE_COUNT:
       return Object.assign({}, state, {
       [action.topicId]: vote(state[action.topicId], action)
     });

@@ -210,6 +210,23 @@ export function allowVoteLater(time){
   };
 }
 
+export const RECEIVE_VOTE_COUNT = 'RECEIVE_VOTE_COUNT';
+function receiveVoteCount(topicId, votes){
+  return {
+    type: RECEIVE_VOTE_COUNT,
+    topicId,
+    votes
+  };
+}
+
+export function requestVoteCount(topicId){
+  return (dispatch, getState) => {
+    db.fetch(['votes', topicId, 'count']).then(count => {
+      dispatch(receiveVoteCount(topicId, count));
+    });
+  };
+}
+
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
@@ -225,17 +242,16 @@ export function fetchTopicAndReplies(order, topicId){
       dispatch(selectTopic(topicId));
       dispatch(checkIfNoReplies(topicId)); // if needed
       dispatch(requestTopic(topicId));
-      dispatch(fetchTopicIfNeeded(topicId));
-      // fetch topic parent if needed
+      dispatch(fetchTopicIfNeeded(topicId)); // and parent
 
-      db.syncOnChange(['replies', topicId], data => { // also on change (votes)
-        dispatch(receiveChangedReply(data.topicId, data));
-      });
 
-      const lastUpdated = getState().repliesByNew[topicId].lastUpdated;    
+      //const lastUpdated = getState().repliesByNew[topicId].lastUpdated;    
+      const lastUpdated = true;
 
-      if(!lastUpdated){ // cache?
+      if(lastUpdated){ 
         db.fetchUntil(['replies', topicId], now, reply => {
+          //get the vote count!
+          dispatch(requestVoteCount(reply.topicId));
           dispatch(receiveReply(topicId, reply));
         });
   
@@ -251,6 +267,11 @@ export function fetchTopicAndReplies(order, topicId){
       }
  
     }
+
+    //db.syncOnChange(['replies', topicId], data => { // also on change (votes)
+    //dispatch(receiveChangedReply(data.topicId, data));
+    //});
+
 
  
     if(order === 'popular'){
@@ -288,10 +309,14 @@ export function addReply(topicId, reply){
   return (dispatch, getState) => {
     dispatch(requestAddReply(topicId, reply));
     reply.ref = topicId;
-    db.push(['topic'], reply)
+    db.pushWithStamp(['topic'], reply)
     .then(newId => {
-      reply.count = 0;
-      db.set(['replies', topicId, newId], reply);
+      //reply.count = 0;
+      // delete reply.ref?
+      db.setWithStamp(['replies', topicId, newId], reply);
+      // add more info
+      db.set(['votes', newId], { count: 0, stamp: 10101});
+      // store more vote separately on success
     });
   };
 }
@@ -310,7 +335,7 @@ export function upvote(topicId, parentId){
     if(auth){
       const uid = auth.uid;
       db.getTimestamp(['lastVote', uid]).then(ts => {
-        db.increment(['replies', parentId, topicId, 'count']);
+        db.addVote(['votes', parentId, topicId], ts);        
       }, err => {
         console.log(err.message);
       });
