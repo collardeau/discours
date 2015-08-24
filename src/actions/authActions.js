@@ -30,7 +30,7 @@ function onLoginOrOut(){
     db.onLogin(auth => {
       if(auth){ 
         db.setTime(['voteStamp', auth.uid]);
-        dispatch(allowVoteLater(3000));
+        dispatch(allowVoteLater(5000));
       }else if (getState().uid ){ console.log('log out process');
         const lastUid = getState().uid;
         dispatch(logoutUser());

@@ -26,7 +26,7 @@ export function fetch(loc){
 }
 
 export function fetchUntil(loc, timestamp, cb){
-  buildPath(loc).orderByChild('date')
+  buildPath(loc).orderByChild('stamp')
   .endAt(timestamp)
   .on('child_added', snap => {
     let d = snap.val();
@@ -52,7 +52,7 @@ export function fetchByOrder(loc, numToFetch, order, cb){
 }
 
 export function syncSince(loc, timestamp, cb){
-  buildPath(loc).orderByChild('date')
+  buildPath(loc).orderByChild('stamp')
   .startAt(timestamp)
   .on('child_added', snap => {
     let d = snap.val();
@@ -98,6 +98,14 @@ export function pushWithStamp (loc, data){
   }
 }
 
+export function push (loc, data){
+  let newRef = buildPath(loc).push(data);
+  if (newRef){
+    return Promise.resolve(newRef.key());
+  }
+}
+
+
 export function increment(loc){
   buildPath(loc).transaction( current_value => {
     return (current_value || 0) + 1;
@@ -110,7 +118,7 @@ export function addVote(loc, timestamp){
   buildPath(loc).transaction( current_value => {
     return Object.assign({}, current_value, {
       stamp: timestamp,
-      num: current_value ? current_value.num + 1 : 0
+      count: current_value ? current_value.count + 1 : 0
     });
   });
 }
@@ -122,19 +130,6 @@ export function loginAnonymously(){
       if(error){ rej(error); }
       else{ res(authData); }
     });
-  });
-}
-
-function testgetTimestamp(uid, next) {
-  let lastVoteRef = ref.child('lastVote/' + uid);
-  lastVoteRef.onDisconnect().remove();
-  lastVoteRef.set(Firebase.ServerValue.TIMESTAMP, err => {
-    if (err) { console.log(err); }
-    else {
-      ref.once('value', snap => {
-        next(snap.val());
-      });
-    }
   });
 }
 

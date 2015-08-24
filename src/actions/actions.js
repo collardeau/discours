@@ -341,12 +341,13 @@ export function upvote(topicId, parentId){
   return dispatch => {
    const auth = db.getAuth();
     if(auth){
+      dispatch(allowVoteLater(3200));
       const uid = auth.uid;
       dispatch(requestUpvote(topicId));
       db.getTimestamp(['voteStamp', uid]).then(ts => {
         db.addVote(['votes', parentId, topicId], ts);        
+        db.push(['voteHistory', topicId], { uid, ts});        
         console.log('vote stamp generated :', ts);
-        dispatch(allowVoteLater(3000));
       }, err => {
         console.log(err.message);
       });
