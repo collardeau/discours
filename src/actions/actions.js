@@ -271,25 +271,32 @@ export function fetchTopicAndReplies(order, topicId){
  
     }
 
-    const lastRequested = getState().repliesByPopular[topicId].lastRequested;
-    console.log(lastRequested);
-    const popCach = now - ( 30 * 1000); // 30 seconds
-    if(order === 'popular' && lastRequested < popCach){
-      dispatch(requestRepliesByPopular(topicId));
-      db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
-        dispatch(receiveOrderByCount(topicId, reply));
-        dispatch(fetchTopicIfNeeded(reply.topicId));
-      });
-    }else{
-      console.log('use cache, but reorder');
-      dispatch(reorderPopular(topicId, getState().votes));
+    if(order === 'popular'){
+
+      const lastRequested = getState().repliesByPopular[topicId].lastRequested;
+      const popCach = now - ( 30 * 1000); // 30 seconds
+
+      console.log('last requested: ', lastRequested);
+      console.log('pop cach: ', popCach);
+      if(lastRequested < popCach ){
+        dispatch(requestRepliesByPopular(topicId));
+        db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
+          dispatch(receiveOrderByCount(topicId, reply));
+          dispatch(fetchTopicIfNeeded(reply.topicId));
+        });
+      }else{ // seems to always go to this branch
+        console.log('use cache, but reorder');
+        dispatch(reorderPopular(topicId, getState().votes));
+      }
     }
 
     db.syncOnChange(['votes', topicId], data => { 
       dispatch(receiveVoteCount(data.topicId, data.count)); 
     }); // should sync on change when getting the vote count ?
  
- };
+  };
+
+
 }
 
 export const REQUEST_ADD_REPLY = 'REQUEST_ADD_REPLY';
