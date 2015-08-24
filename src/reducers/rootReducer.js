@@ -213,7 +213,7 @@ function repliesByPopular(state={}, action){
         [action.topicId]: repliesByPopularReducer(state[action.topicId], action)
     });
     case actionTypes.RECEIVE_REPLY_BY_ORDER:
-      const parentId = action.topic.ref;
+      const parentId = action.parentId;
       return Object.assign({}, state, {
         [parentId]: repliesByPopularReducer(state[parentId], action)
     });
@@ -240,7 +240,7 @@ function haveReplies(state={}, action){
     case actionTypes.RECEIVE_REPLY:
     case actionTypes.RECEIVE_REPLY_BY_ORDER:
     case actionTypes.QUEUE_REPLY:
-      const parentId = action.topic.ref;
+      const parentId = action.parentId;
       return Object.assign({}, state, {
         [parentId]: hasReplies(state[parentId], action)
       });

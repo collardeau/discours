@@ -83,8 +83,9 @@ export function receiveTopic(topicId, topic){
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
 function receiveReply(topicId, reply){
-  return {
+ return {
     type: RECEIVE_REPLY,
+    parentId: topicId,
     topic: reply,
     topicId: reply.topicId
   };
@@ -94,6 +95,7 @@ export const RECEIVE_REPLY_BY_ORDER = 'RECEIVE_REPLY_BY_ORDER';
 function receiveReplyByOrder(topicId, reply){
   return {
     type: RECEIVE_REPLY_BY_ORDER,
+    parentId: topicId,
     topic: reply,
     topicId: reply.topicId
   };
@@ -142,8 +144,9 @@ function checkIfNoReplies(topicId){
     // check the state first
     db.exists(['replies', topicId])
     .then(exists => {
+      console.log('we checked if topic has reply ', exists);
       if(!exists){
-      dispatch(hasNoReplies(topicId));
+        dispatch(hasNoReplies(topicId));
       }
     });
   };
@@ -269,13 +272,16 @@ export function fetchTopicAndReplies(order, topicId){
  
     }
 
-
     if(order === 'popular'){
       dispatch(requestRepliesByPopular(topicId));
-      db.fetchByOrder(['votes', topicId], 5, 'count', orderedData => {
-        //dispatch(receiveReplyByOrder(topicId, reply));
-        console.log(orderedData);
-        dispatch(fetchTopicIfNeeded(orderedData.topicId));
+      db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
+        console.log(reply);
+        console.log(topicId);
+        dispatch(receiveReplyByOrder(topicId, reply));
+        // really receiving the vote count here
+        // should the content be here too?
+        //dispatch(receivedOrderByCount());
+        dispatch(fetchTopicIfNeeded(reply.topicId));
       });
     }
 
