@@ -437,6 +437,7 @@ export function upvote(topicId, parentId){
         db.addVote(['votes', parentId, topicId], ts);        
         db.push(['voteHistory', topicId], { uid, ts});        
       }, err => {
+        dispatch(setWarning('Not enough time elapsed between votes'), 3000);
         console.log(err.message);
       });
     }
