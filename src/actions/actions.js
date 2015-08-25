@@ -264,8 +264,6 @@ export function requestVoteCount(parentId, topicId){
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
 
-    dispatch(setWarning("We are fetching info, bwahahsa"));
-
     //dispatch(allowVoteLater());
 
     const prevTopicId = getState().selectedTopic;
@@ -350,28 +348,72 @@ function requestAddReply(topicId, reply){
   };
 }
 
+function isGibberish(s) {
+  //http://www.webdeveloper.com/forum/showthread.php?157846-anti-spam-comment-javasript-by-regex-need-help/page2
+  var v = 1, c = 1, ratio, len, gibberish = false;
+  
+  if(typeof s !== 'undefined' && s.length) {
+    len = s.length;
+    for(var i = 0; i < len; i++) {
+      if(/[aeiou]/i.test(s.charAt(i))) { v++; }
+      else{
+        if(/[bcdfghjklmnpqrstvwxyz]/i.test(s.charAt(i))){ c++; }
+      }
+    }
+   
+    ratio = v / (c + v);
+    if(ratio < 0.2 || ratio > 0.6) { gibberish = true; }
+
+  }
+ 
+  return gibberish;
+}
+
+function validateReply(reply){
+  return (dispatch, getState) => {
+    //console.log(reply);
+    const content = reply.content;
+    if (content === '') { 
+      dispatch(setWarning('Empty reply'));
+      return false; 
+    }
+    const isGib = isGibberish(content);
+    if(isGib){
+      dispatch(setWarning('Gibberish!!!'));
+      return false;
+    }
+    return true;
+  };
+}
+
 export function addReply(topicId, reply){
   return (dispatch, getState) => {
 
     // validate and send feedback
     // disable button when appropriate
-  
-    dispatch(requestAddReply(topicId, reply));
-    reply.ref = topicId;
+    const isValid = dispatch(validateReply(reply));
 
-    const uid = db.getAuth().uid;
-    db.getTimestamp(['postStamp', uid])
-    .then(ts => {
-      dispatch(allowPost(5000));
-      reply.stamp = ts;
-      db.push(['topic'], reply)
-      .then(newId => { 
-        db.set(['replies', topicId, newId], reply);
-        db.set(['votes', topicId, newId], { count: 0, stamp: 1});
+    if(isValid){
+      console.log('the reply is valid');
+      dispatch(requestAddReply(topicId, reply));
+      reply.ref = topicId;
+
+      const uid = db.getAuth().uid;
+      db.getTimestamp(['postStamp', uid])
+      .then(ts => {
+        dispatch(allowPost(5000));
+        reply.stamp = ts;
+        db.push(['topic'], reply)
+        .then(newId => { 
+          db.set(['replies', topicId, newId], reply);
+          db.set(['votes', topicId, newId], { count: 0, stamp: 1});
+        });
+      }, err => {
+        console.log(err.message);
       });
-    }, err => {
-      console.log(err.message);
-    });
+    }else{
+      console.log('invalid reply, not doing anything');
+    }
 
  };
 }
