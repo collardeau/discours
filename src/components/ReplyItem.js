@@ -28,6 +28,8 @@ export default class ReplyItem extends Component {
 
   handleLink = () => {
     let { order, reply } = this.props;
+    order = order ? order : 'new';
+    reply = reply ? reply : 'root';
     window.location.hash = order + '/' + reply.topicId;
   }
 
@@ -47,7 +49,7 @@ export default class ReplyItem extends Component {
         opacity: canVote ? '1' : '0.4'
       }
     };
-
+    // temp disabled should be ? true 
     return (
       <li onClick={this.handleLink } style={styles.li}>
         <div style={styles.content}>{ reply.content }</div>

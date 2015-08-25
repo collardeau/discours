@@ -8,7 +8,7 @@ export default class Header extends React.Component {-}
    return true;
 
   handleHomeClick = () => {-}
-    window.location.hash = "new/root"
+    window.location.hash = ""
 
   handleMenuClick = () => {-}
     window.location.hash = "about"

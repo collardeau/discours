@@ -14,7 +14,7 @@ function uid(state=null, action){
   }
 }
 
-function route(state='about', action){
+function route(state='', action){
   switch(action.type){
     case routeActions.SELECT_ROUTE:
       return action.route;

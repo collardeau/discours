@@ -379,7 +379,7 @@ function validateReply(reply){
     }
     const isGib = isGibberish(content);
     if(isGib){
-      dispatch(setWarning('Gibberish!!!'));
+      dispatch(setWarning('Gibberish!'));
       return false;
     }
     return true;
@@ -389,8 +389,6 @@ function validateReply(reply){
 export function addReply(topicId, reply){
   return (dispatch, getState) => {
 
-    // validate and send feedback
-    // disable button when appropriate
     const isValid = dispatch(validateReply(reply));
 
     if(isValid){

@@ -7,6 +7,7 @@ import rules from '../styles/styles';
 import {changeRoute} from '../actions/routeActions';
 import {login} from '../actions/authActions';
 import Header from '../components/Header';
+//import About from '../components/About';
 import TopicContainer from './TopicContainer';
 
 class App extends Component {
@@ -21,36 +22,37 @@ class App extends Component {
     this.props.changeRoute(route);
   }
 
+  renderContent = entry => {
+    console.log('render switch statement with: ', entry);
+     switch(entry){
+      case 'new':
+      case 'popular':
+      case '':
+        return <TopicContainer />;
+      case 'about':
+        return <div>About</div>;
+      default:
+        return <div>Does not exist</div>;
+    }
+  }
+
   render(){
 
     const { route } = this.props;
-    let ui = <TopicContainer />;
-
-    if (route === 'about') {
-      ui = <div>Welcome to the new app with new powers!</div>;
-    }
-
     return (
       <div>
         <Style rules={rules}/>
         <Header />
-        {ui}
+        { this.renderContent(route) }
       </div>
 
     );
   }
 }
 
-App.propTypes = {
-  route: PropTypes.shape({
-    entry: PropTypes.string.isRequired,
-    params: PropTypes.array.isRequired
-  })
-};
-
 function mapStateToProps(state){
   return {
-    route: state.route.entry ? state.route : { entry: 'new', params: []}
+    route: state.route
   };
 }
 
