@@ -1,12 +1,49 @@
 import * as db from '../utils/fireUtils.js';
 import moment from 'moment';
 
-const voteTimeout = 4000;
-
 export const ALLOW_VOTE = 'ALLOW_VOTE';
 function allowVote(topicId){
   return {
     type: ALLOW_VOTE
+  };
+}
+
+export function allowVoteLater(time){
+  return (dispatch, getState) => {
+    setTimeout(() => {
+      dispatch(allowVote());
+    }, time); 
+  };
+}
+
+
+export const ALLOW_POST = 'ALLOW_POST';
+function allowPost(topicId){
+  return {
+    type: ALLOW_POST
+  };
+}
+
+export function allowPostLater(time){
+  return (dispatch, getState) => {
+    setTimeout(() => {
+      dispatch(allowPost());
+    }, time); 
+  };
+}
+
+export const CLEAR_WARNING = 'CLEAR_WARNING';
+function clearWarning(){
+  return {
+    type: CLEAR_WARNING
+  };
+}
+
+export const SET_WARNING = 'SET_WARNING';
+function setWarning(warning){
+  return {
+    type: SET_WARNING,
+    warning
   };
 }
 
@@ -206,14 +243,6 @@ function reorderPopular(topicId, votes){
   };
 }
 
-export function allowVoteLater(time){
-  return (dispatch, getState) => {
-    setTimeout(() => {
-      dispatch(allowVote());
-    }, time); 
-  };
-}
-
 export const RECEIVE_VOTE_COUNT = 'RECEIVE_VOTE_COUNT';
 function receiveVoteCount(topicId, votes){
   return {
@@ -234,6 +263,8 @@ export function requestVoteCount(parentId, topicId){
 
 export function fetchTopicAndReplies(order, topicId){
   return (dispatch, getState) => {
+
+    dispatch(setWarning("We are fetching info, bwahahsa"));
 
     //dispatch(allowVoteLater());
 
@@ -283,7 +314,7 @@ export function fetchTopicAndReplies(order, topicId){
     if(order === 'popular'){
 
       const lastRequested = getState().repliesByPopular[topicId].lastRequested;
-      const popCach = now - ( 5 * 60 * 1000); // 5
+      const popCach = now - ( 5 * 60 * 1000);
 
       console.log('last requested: ', lastRequested);
       console.log('pop cach: ', popCach);
@@ -321,16 +352,22 @@ function requestAddReply(topicId, reply){
 
 export function addReply(topicId, reply){
   return (dispatch, getState) => {
+
+    // validate and send feedback
+    // disable button when appropriate
+  
     dispatch(requestAddReply(topicId, reply));
     reply.ref = topicId;
 
     const uid = db.getAuth().uid;
-    db.getTimestamp(['postStamp', uid]).then(ts => {
+    db.getTimestamp(['postStamp', uid])
+    .then(ts => {
+      dispatch(allowPost(5000));
       reply.stamp = ts;
       db.push(['topic'], reply)
-      .then(newId => {  // does promise need to be nested
+      .then(newId => { 
         db.set(['replies', topicId, newId], reply);
-        db.set(['votes', topicId, newId], { count: 0, stamp: 10101});
+        db.set(['votes', topicId, newId], { count: 0, stamp: 1});
       });
     }, err => {
       console.log(err.message);

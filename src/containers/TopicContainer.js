@@ -10,14 +10,17 @@ class TopicContainer extends Component {
 
   render(){
 
+    //return <div>intercept</div>
+
     //console.log('topic container props: ', this.props);
 
     const { addReply, formIsOpen, hasReplies, order, permissions, 
       parentTopic, queuedReplies, toggleForm, 
-      topic, topicId, replies, unqueueIfNeeded, upvote } = this.props;
+      topic, topicId, replies, unqueueIfNeeded, upvote, warning } = this.props;
 
     return (
       <div>
+        <div>{warning}</div>
         <Topic
           formIsOpen = {formIsOpen}
           order = {order}
@@ -29,6 +32,7 @@ class TopicContainer extends Component {
        <ReplyForm
           addReply={addReply}
           formIsOpen = {formIsOpen}
+          permissions = {permissions}
           topic={topic}
           topicId={topicId}
         />
@@ -68,7 +72,7 @@ TopicContainer.propTypes = {
 function mapStateToProps(state){
   const { formIsOpen, haveReplies, permissions, 
     repliesByNew, repliesByPopular, route, 
-    selectedTopic, topics, votes } = state;
+    selectedTopic, topics, votes, warning } = state;
   const order = route;
   const topicId = selectedTopic;
   const replies = order === 'popular' ? repliesByPopular : repliesByNew;
@@ -82,14 +86,15 @@ function mapStateToProps(state){
     topics,
     replies,
     repliesByNew,
-    votes
+    votes,
+    warning
   };
 
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
   const { formIsOpen, haveReplies, order, permissions, 
-    replies, repliesByNew, topics, topicId } = stateProps;
+    replies, repliesByNew, topics, topicId, warning } = stateProps;
   const parentId = topics[topicId].parentId;
 
   return Object.assign({}, parentProps, {
@@ -107,7 +112,8 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     topic: topics[topicId],
     topicId,
     unqueueIfNeeded: (topicId) => dispatchProps.unqueueIfNeeded(topicId),
-    upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId)
+    upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
+    warning
   });
 }
 

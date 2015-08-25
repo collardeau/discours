@@ -35,14 +35,36 @@ function voteReducer(state=false, action){
   }
 }
 
-function permissions(state={post: false, vote: false}, action) {
-  switch(action.type){
-    case actionTypes.ALLOW_VOTE:
-    case actionTypes.LOGOUT_USER:
+function postReducer(state=false, action){
+  switch(action.type) {
     case authActions.LOGIN_USER:
-    case actionTypes.REQUEST_UPVOTE:
+    case authActions.LOGOUT_USER:
+    case actionTypes.REQUEST_ADD_REPLY:
+      return false;
+    case actionTypes.ALLOW_POST: 
+      return true;
+    default:
+      return state;
+  }
+}
+
+function permissions(state={}, action) {
+  switch(action.type){
+    case authActions.LOGIN_USER:
+    case authActions.LOGOUT_USER:
       return Object.assign({}, state, {
-        vote: voteReducer(state[vote], action)
+        post: postReducer(state.post, action),
+        vote: voteReducer(state.vote, action)
+     });
+    case actionTypes.ALLOW_POST: 
+    case actionTypes.REQUEST_ADD_REPLY: // what if warning message
+      return Object.assign({}, state, {
+      post: postReducer(state.post, action)
+     });
+    case actionTypes.REQUEST_UPVOTE:
+    case actionTypes.ALLOW_VOTE:
+      return Object.assign({}, state, {
+        vote: voteReducer(state.vote, action)
      });
     default:
       return state;
@@ -263,6 +285,17 @@ function formIsOpen(state=false, action){
   }
 }
 
+function warning(state='Be warned', action){
+  switch(action.type){
+    case actionTypes.SET_WARNING:
+      return action.warning;
+    case actionTypes.CLEAR_WARNING:
+      return '';
+    default:
+      return state;
+  } 
+}
+
 const rootReducer = combineReducers({
   formIsOpen,
   haveReplies,
@@ -274,7 +307,8 @@ const rootReducer = combineReducers({
   repliesByPopular,
   topics,
   uid,
-  votes
+  votes,
+  warning
 });
 
 export default rootReducer;

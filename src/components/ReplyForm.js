@@ -16,16 +16,28 @@ export default class ReplyForm extends Component {
   }
 
   render(){
-
+ 
     if (!this.props.formIsOpen){
       return <div></div>;
     }
+
+    const { permissions } = this.props;
+    const canPost = permissions.post;
+
+    let dyStyles = {
+      btn: {
+        opacity: canPost ? '1' : '0.4'
+      }
+    };
 
     return (
       <div>
         <textarea ref='reply' placeholder=' Go ahead, express yourself!'/>
         <div style={styles.div}>
-          <button onClick={this.handleClick}>Submit</button>
+          <button disabled={!canPost ? true : false }
+            onClick={this.handleClick} style={dyStyles.btn}>
+            Submit 
+          </button>
         </div>
       </div>
     );
