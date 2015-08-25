@@ -401,7 +401,7 @@ export function addReply(topicId, reply){
       const uid = db.getAuth().uid;
       db.getTimestamp(['postStamp', uid])
       .then(ts => {
-        dispatch(allowPost(5000));
+        dispatch(allowPostLater(30 * 1000));
         reply.stamp = ts;
         db.push(['topic'], reply)
         .then(newId => { 
@@ -409,6 +409,7 @@ export function addReply(topicId, reply){
           db.set(['votes', topicId, newId], { count: 0, stamp: 1});
         });
       }, err => {
+        dispatch(setWarning(err.message));
         console.log(err.message);
       });
     }else{
@@ -435,7 +436,7 @@ export function upvote(topicId, parentId){
       dispatch(requestUpvote(topicId));
       db.getTimestamp(['voteStamp', uid]).then(ts => {
         db.addVote(['votes', parentId, topicId], ts);        
-        db.push(['voteHistory', topicId], { uid, ts});        
+        db.push(['voteHistory', topicId], { uid, ts}); // but only if it works
       }, err => {
         dispatch(setWarning('Not enough time elapsed between votes'), 3000);
         console.log(err.message);
