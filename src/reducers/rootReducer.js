@@ -26,7 +26,7 @@ function route(state='about', action){
 function voteReducer(state=false, action){
   switch(action.type) {
     case actionTypes.REQUEST_UPVOTE:
-    case actionTypes.LOGOUT_USER:
+    case authActions.LOGOUT_USER:
       return false;
     case actionTypes.ALLOW_VOTE:
       return true;
