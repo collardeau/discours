@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import Topic from '../components/Topic';
+import Warning from '../components/Warning';
 import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
@@ -20,7 +21,7 @@ class TopicContainer extends Component {
 
     return (
       <div>
-        <div>{warning}</div>
+        <Warning warning={warning} />
         <Topic
           formIsOpen = {formIsOpen}
           order = {order}
