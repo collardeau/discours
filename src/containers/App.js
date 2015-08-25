@@ -7,7 +7,7 @@ import rules from '../styles/styles';
 import {changeRoute} from '../actions/routeActions';
 import {login} from '../actions/authActions';
 import Header from '../components/Header';
-//import About from '../components/About';
+import About from '../components/About';
 import TopicContainer from './TopicContainer';
 
 class App extends Component {
@@ -19,18 +19,19 @@ class App extends Component {
   }
 
   handleRoute = route => {
+    console.log('route to handle: ', route);
     this.props.changeRoute(route);
   }
 
   renderContent = entry => {
     console.log('render switch statement with: ', entry);
-     switch(entry){
+    switch(entry){
       case 'new':
       case 'popular':
       case '':
         return <TopicContainer />;
       case 'about':
-        return <div>About</div>;
+        return <About />;
       default:
         return <div>Does not exist</div>;
     }
@@ -39,10 +40,11 @@ class App extends Component {
   render(){
 
     const { route } = this.props;
+    console.log('route in App Container :', route);
     return (
       <div>
         <Style rules={rules}/>
-        <Header />
+        <Header route={route}/>
         { this.renderContent(route) }
       </div>
 
@@ -58,7 +60,7 @@ function mapStateToProps(state){
 
 function mergeProps(stateProps, dispatchProps, parentProps){
   return Object.assign({}, parentProps, {
-    route: stateProps.route,
+    route: stateProps.route, // blank when should be about
     changeRoute: (route) => dispatchProps.changeRoute(route),
     login: () => dispatchProps.login()
   });
