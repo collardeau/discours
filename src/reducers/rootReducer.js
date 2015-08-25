@@ -285,7 +285,7 @@ function formIsOpen(state=false, action){
   }
 }
 
-function warning(state='Be warned', action){
+function warning(state='', action){
   switch(action.type){
     case actionTypes.SET_WARNING:
       return action.warning;

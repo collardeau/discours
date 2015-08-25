@@ -33,7 +33,7 @@ export function allowPostLater(time){
 }
 
 export const CLEAR_WARNING = 'CLEAR_WARNING';
-function clearWarning(){
+export function clearWarning(){
   return {
     type: CLEAR_WARNING
   };
@@ -374,7 +374,7 @@ function validateReply(reply){
     //console.log(reply);
     const content = reply.content;
     if (content === '') { 
-      dispatch(setWarning('Empty reply'));
+      dispatch(setWarning('Empty Reply'));
       return false; 
     }
     const isGib = isGibberish(content);

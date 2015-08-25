@@ -3,7 +3,7 @@ import {primary} from '../styles/theme';
 
 let styles = {
   warning: {
-    backgroundColor: 'red',
+    backgroundColor: "hsl(0, 30%, 75%)",
     height: '2.1em',
     lineHeight: '2.1em',
     textAlign: 'center'
@@ -11,6 +11,12 @@ let styles = {
 };
 
 export default class Warning extends React.Component {
+
+  handleClear = () => {
+    console.log('handling clear warning');
+    console.log(this.props.clearWarning);
+    this.props.clearWarning(); 
+  }
 
   render() {
     const { warning } = this.props;
@@ -20,7 +26,7 @@ export default class Warning extends React.Component {
     }
 
     return (
-      <div style={styles.warning}>
+      <div style={styles.warning} onClick={this.handleClear}>
         { warning }
       </div>
     );

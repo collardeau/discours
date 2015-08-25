@@ -5,7 +5,8 @@ import Warning from '../components/Warning';
 import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
-import {addReply, toggleForm, unqueueIfNeeded, upvote} from '../actions/actions';
+import {addReply, clearWarning, toggleForm, 
+  unqueueIfNeeded, upvote} from '../actions/actions';
 
 class TopicContainer extends Component {
 
@@ -15,13 +16,13 @@ class TopicContainer extends Component {
 
     //console.log('topic container props: ', this.props);
 
-    const { addReply, formIsOpen, hasReplies, order, permissions, 
+    const { addReply, clearWarning, formIsOpen, hasReplies, order, permissions, 
       parentTopic, queuedReplies, toggleForm, 
       topic, topicId, replies, unqueueIfNeeded, upvote, warning } = this.props;
 
     return (
       <div>
-        <Warning warning={warning} />
+        <Warning clearWarning={clearWarning} warning={warning} />
         <Topic
           formIsOpen = {formIsOpen}
           order = {order}
@@ -100,6 +101,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
   return Object.assign({}, parentProps, {
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
+    clearWarning: () => dispatchProps.clearWarning(),
     formIsOpen: stateProps.formIsOpen,
     hasReplies: haveReplies[topicId],
     queuedReplies: repliesByNew[topicId].queued.length,
@@ -120,7 +122,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {addReply, toggleForm, unqueueIfNeeded, upvote},
+  {addReply, clearWarning, toggleForm, unqueueIfNeeded, upvote},
   mergeProps
 )(TopicContainer);
 
