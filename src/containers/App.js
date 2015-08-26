@@ -14,17 +14,21 @@ class App extends Component {
 
   constructor(props){
     super(props);
-    props.login();
-    router.start(this.handleRoute);
+    //router.start(this.handleRoute);
+    //props.login();
   }
 
+  componentDidMount(){
+    router.start(this.handleRoute);
+    this.props.login();
+  } 
+
   handleRoute = route => {
-    console.log('route to handle: ', route);
     this.props.changeRoute(route);
   }
 
   renderContent = entry => {
-    //console.log('render switch statement with: ', entry);
+    console.log('render switch statement with: ', entry);
     switch(entry){
       case 'new':
       case 'popular':
@@ -40,15 +44,15 @@ class App extends Component {
 
   render(){
 
-    console.log('rendering App');
+    //console.log('rendering App');
     //console.log(this.props);
     const { route } = this.props;
-    console.log('route in App Container :', route);
+    //console.log('route in App Container :', route);
     return (
       <div>
         <Style rules={rules}/>
         <Header route={route}/>
-        { this.renderContent(route) }
+        { this.renderContent(route.entry) }
       </div>
 
     );
@@ -56,8 +60,8 @@ class App extends Component {
 }
 
 function mapStateToProps(state){
-  console.log('map state top props');
-  console.log(state);
+  //console.log('map state top props');
+  //console.log(state);
   return {
     route: state.route
   };
