@@ -419,9 +419,6 @@ export function fetchDiscour(topicId, order){
     if(tabbedOver){
       dispatch(selectOrder(order));
     }else{
-      if(prevTopicId){
-        dispatch(unsync(prevTopicId));
-      }
       dispatch(selectTopic(topicId));
       dispatch(checkForReplies(topicId));// if needed
       dispatch(fetchTopicAndParentIfNeeded(topicId));

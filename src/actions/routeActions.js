@@ -8,34 +8,17 @@ function selectRoute(route) {
   };
 }
 
-export function changeRoute(route){
+export function changeRoute(nextRoute){
   return (dispatch, getState) => {
 
-    //console.log('changing route with: ', route);
+    nextRoute = nextRoute ? nextRoute : 'new/root'; 
+    let parts = nextRoute.split('/');
+    let route = {
+      entry: parts.shift(),
+      params: parts 
+    };
 
-    let params = route.split('/'),
-        entry = params.shift();
-
-    //dispatch(selectRoute(entry));
-
-    if(!entry){
-      //console.log('oh, entry is falsey, route to new/root');
-      dispatch(changeRoute('new/root'));
-    }
-    
-    if (entry === 'new' || entry === 'popular') {
-      //console.log('oh, entry is all about topics (new/popular)');
-      if(!params[0]){
-        dispatch(changeRoute(entry + '/root'));
-      }else {
-        dispatch(selectRoute(entry));
-        dispatch(fetchDiscour(params[0], entry));
-      }
-    }
-
-    if (entry === 'about'){
-      dispatch(selectRoute(entry));
-    }
+    dispatch(selectRoute(route));
 
   };
 }
