@@ -156,7 +156,6 @@ function fetchParentIfNeeded(topicId){
 
 function fetchTopicAndParentIfNeeded(topicId){
   return (dispatch, getState) => {
-    console.log('fetching topic and parent if needed');
     let topics = getState().topics;
     let localTopic = stateHasTopic(topicId, topics);
     let parentId, parentTopic;
@@ -169,7 +168,7 @@ function fetchTopicAndParentIfNeeded(topicId){
         dispatch(fetchParentIfNeeded(topic.ref));
       });
     }else{
-        dispatch(fetchParentIfNeeded(topicId));
+        dispatch(fetchParentIfNeeded(localTopic.parentId));
     }
   };
 }
@@ -234,13 +233,11 @@ function syncRepliesSince(topicId, timestamp){
 function syncReplies(topicId, timestamp){
   return (dispatch, getState) => {
     const lastUpdated = getState().repliesByNew[topicId].lastUpdated;
-    if(!lastUpdated){ 
-      console.log('getting past replies from server');
+    if(!lastUpdated){ console.log('getting past replies from server');
       const now = Date.now();
       dispatch(fetchRepliesUntil(topicId, now));
       dispatch(syncRepliesSince(topicId, now));
-    }else{ 
-      console.log('queuing replies from last update');
+    }else{ console.log('queuing replies from last update');
       dispatch(syncRepliesSince(topicId, lastUpdated + 1));
     }
   };
@@ -280,11 +277,9 @@ function fetchPopularIfNeeded(topicId, timestamp){
   return (dispatch, getState) => {
     const lastRequested = getState().repliesByPopular[topicId].lastRequested;
     const cache = Date.now() - ( 5 * 60 * 1000);
-    if(lastRequested < cache ){ 
-      console.log('get new order list from server');
+    if(lastRequested < cache ){ console.log('get new order list from server');
       dispatch(fetchRepliesByOrder(topicId, 'count'));
-    }else{ 
-      console.log('use cache, but reorder');
+    }else{ console.log('use cache, but reorder');
       dispatch(reorderPopular(topicId, getState().votes));
     }
   };
@@ -333,7 +328,6 @@ function isGibberish(s) {
 
 function validateReply(reply){
   return (dispatch, getState) => {
-    //console.log(reply);
     const content = reply.content;
     if (content === '') { 
       dispatch(setWarning('Empty Reply'));
