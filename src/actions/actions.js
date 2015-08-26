@@ -285,15 +285,7 @@ export function requestVoteCount(parentId, topicId){
   };
 }
 
-//export function fetchTopicAndParent(topicId){
-//  return (dispatch, getState) => {
-//    //dispatch(selectTopic(topicId));
-//    dispatch(checkIfNoReplies(topicId)); // if needed
-//    dispatch(fetchTopicAndParentIfNeeded(topicId));
-//  };
-//}
-//
-export function syncRepliesSince(topicId, timestamp){
+function syncRepliesSince(topicId, timestamp){
   return (dispatch, getState) => {
     db.syncSince(['replies', topicId], timestamp, reply => {
       dispatch(queueReply(topicId, reply));
@@ -302,6 +294,21 @@ export function syncRepliesSince(topicId, timestamp){
   };
 }
 
+function syncReplies(topicId, timestamp){
+  return (dispatch, getState) => {
+    const lastUpdated = getState().repliesByNew[topicId].lastUpdated;
+    if(!lastUpdated){ 
+      console.log('getting past replies from server');
+      const now = Date.now();
+      dispatch(fetchRepliesUntil(topicId, now));
+      dispatch(syncRepliesSince(topicId, now));
+    }else{ 
+      console.log('queuing replies from last update');
+      dispatch(syncRepliesSince(topicId, lastUpdated + 1));
+    }
+  };
+}
+  
 function fetchRepliesUntil(topicId, timestamp){
   return (dispatch, getState) => {
     db.fetchUntil(['replies', topicId], timestamp, reply => {
@@ -321,7 +328,7 @@ function fetchRepliesByOrder(topicId, order){
   };
 }
 
-function fetchPopular(topicId, timestamp){
+function fetchPopularIfNeeded(topicId, timestamp){
   return (dispatch, getState) => {
     const lastRequested = getState().repliesByPopular[topicId].lastRequested;
     const cache = Date.now() - ( 5 * 60 * 1000);
@@ -344,27 +351,21 @@ function trackVotes(topicId){
   };
 }
  
-export function fetchDiscour(topicId, order){ // fetch discours?
+export function fetchDiscour(topicId, order){
   return (dispatch, getState) => {
-    const isSameTopic = topicId === getState().selectedTopic;
+
+    const tabbedOver = topicId === getState().selectedTopic;
+
     dispatch(selectOrder(order));
     dispatch(selectTopic(topicId));
 
-    // always get topic and replies by new
-    if(!isSameTopic){  // we've only tabbed over, dont need to get data again
+    if(!tabbedOver){
       dispatch(fetchTopicAndParentIfNeeded(topicId));
-      const lastUpdated = getState().repliesByNew[topicId].lastUpdated;
-      if(!lastUpdated){ //console.log('getting past replies from server');
-        const now = Date.now();
-        dispatch(fetchRepliesUntil(topicId, now));
-        dispatch(syncRepliesSince(topicId, now));
-      }else{ //console.log('queuing replies from last update');
-        dispatch(syncRepliesSince(topicId, lastUpdated + 1));
-      }
+      dispatch(syncReplies(topicId));
     }
 
     if(order === 'popular'){
-      dispatch(fetchPopular(topicId));
+      dispatch(fetchPopularIfNeeded(topicId));
     }
 
     dispatch(trackVotes(topicId));
