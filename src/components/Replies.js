@@ -42,7 +42,6 @@ Replies.propTypes = {
   order: PropTypes.oneOf(['new', 'popular']).isRequired,
   replies: PropTypes.arrayOf(PropTypes.shape({
     content: PropTypes.string.isRequired,
-    count: PropTypes.number.isRequired,
     topicId: PropTypes.string.isRequired
   })).isRequired
 };

@@ -11,16 +11,17 @@ function selectRoute(route) {
 export function changeRoute(route){
   return (dispatch, getState) => {
 
-    let params = route.split('/'),
-      entry = params.shift();
+    console.log('changing route with: ', route);
 
-    console.log('entry after the split hash: ', entry);
+    let params = route.split('/'),
+        entry = params.shift();
+
     const prevTopicId = getState().selectedTopic;
     if(prevTopicId && params[0] !== prevTopicId){ // a different topic
       dispatch(unsync(prevTopicId));
     }
 
-    dispatch(selectRoute(entry));
+    //dispatch(selectRoute(entry));
 
     if(!entry){
       console.log('oh, entry is falsey, route to new/root');
@@ -32,8 +33,13 @@ export function changeRoute(route){
       if(!params[0]){
         dispatch(changeRoute(entry + '/root'));
       }else {
+        dispatch(selectRoute(entry));
         dispatch(fetchTopicAndReplies(entry, params[0]));
       }
+    }
+
+    if (entry === 'about'){
+      dispatch(selectRoute(entry));
     }
 
   };

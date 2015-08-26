@@ -24,13 +24,14 @@ class App extends Component {
   }
 
   renderContent = entry => {
-    console.log('render switch statement with: ', entry);
+    //console.log('render switch statement with: ', entry);
     switch(entry){
       case 'new':
       case 'popular':
-      case '':
+      //case '':
         return <TopicContainer />;
       case 'about':
+      case '':
         return <About />;
       default:
         return <div>Does not exist</div>;
@@ -39,6 +40,8 @@ class App extends Component {
 
   render(){
 
+    console.log('rendering App');
+    //console.log(this.props);
     const { route } = this.props;
     console.log('route in App Container :', route);
     return (
@@ -53,6 +56,8 @@ class App extends Component {
 }
 
 function mapStateToProps(state){
+  console.log('map state top props');
+  console.log(state);
   return {
     route: state.route
   };

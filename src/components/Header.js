@@ -2,36 +2,49 @@ import React from 'react';
 import {toggleForm} from '../actions/actions';
 import {primary} from '../styles/theme';
 
-export default class Header extends React.Component {-}
+let styles = {
+  header: {
+    backgroundColor: primary,
+    height: '3.4em',
+    display: 'flex'
+  },
+  title: {
+    lineHeight: '3.4em',
+    marginLeft: '0.5em'
+  }
+};
 
-  shouldComponentUpdate(newProps){-}
+export default class Header extends React.Component {
+
+  shouldComponentUpdate(newProps){
    return true;
+  }
 
-  handleHomeClick = () => {-}
-    window.location.hash = ""
+  handleHomeClick = () => {
+    window.location.hash = "";
+  }
 
-  handleMenuClick = () => {-}
-    window.location.hash = "about"
+  handleAboutClick = () => {
+    window.location.hash = "about";
+  }
 
+  render() {
 
-  handleToggle = () => {-}
-    toggleForm();
+    let btn;
+    if(this.props.route === 'about'){
+      btn = <button onClick={this.handleHomeClick}>Home</button>;
+    }else{
+      btn = <button onClick={this.handleAboutClick}>About</button>;
+    }
 
-  render() {-}
     return (
       <header style={styles.header}>
-        <button onClick={this.handleMenuClick}>Menu</button>
+        { btn }
         <div style={styles.title}>
           <h1 onClick={this.handleHomeClick}>DISCOURS</h1>
         </div>
       </header>
     );
+  }
 
-styles:= {-}
-  header: {-},
-    backgroundColor: primary,
-    height: '3.4em',
-    display: 'flex',
-  title: {-},
-    lineHeight: '3.4em',
-    marginLeft: '0.5em'
+}

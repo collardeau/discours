@@ -12,8 +12,6 @@ class TopicContainer extends Component {
 
   render(){
 
-    //return <div>intercept</div>
-
     //console.log('topic container props: ', this.props);
 
     const { addReply, clearWarning, formIsOpen, hasReplies, order, permissions, 
@@ -22,7 +20,9 @@ class TopicContainer extends Component {
 
     return (
       <div>
-        <Warning clearWarning={clearWarning} warning={warning} />
+        <Warning 
+          clearWarning={clearWarning} 
+          warning={warning} />
         <Topic
           formIsOpen = {formIsOpen}
           order = {order}
@@ -57,19 +57,6 @@ class TopicContainer extends Component {
     );
   }
 }
-
-TopicContainer.propTypes = {
-  addReply: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['new', 'popular']).isRequired,
-  parentTopic: PropTypes.shape({
-    content: PropTypes.string.isRequired
-  }),
-  topic: PropTypes.shape({
-    content: PropTypes.string.isRequired
-  }),
-  topicId: PropTypes.string.isRequired
-  //replies: PropTypes.array.isRequired
-};
 
 function mapStateToProps(state){
   const { formIsOpen, haveReplies, permissions, 
