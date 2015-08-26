@@ -141,16 +141,14 @@ function stateHasTopic(topicId, topics){
 
 function fetchParentIfNeeded(topicId){
   return (dispatch, getState) => {
+    if( topicId === 'none') { return; }
+    const topic = stateHasTopic(topicId, getState().topics);
 
-    const parentId = topicId.ref;
-    if( parentId === 'none') { return; }
-    const parentTopic = stateHasTopic(parentId, getState().topics);
-
-    if(!parentTopic){
-      dispatch(requestTopic(parentId));
-      db.fetch(['topic', parentId])
+    if(!topic){
+      dispatch(requestTopic(topicId));
+      db.fetch(['topic', topicId])
       .then(topic => {
-        dispatch(receiveTopic(parentId, topic));
+        dispatch(receiveTopic(topicId, topic));
        });
      }
   };
@@ -164,11 +162,11 @@ function fetchTopicAndParentIfNeeded(topicId){
     let parentId, parentTopic;
 
     if(!localTopic){ //async
+      dispatch(requestTopic(topicId));
       db.fetch(['topic', topicId])
       .then(topic => {
-        dispatch(requestTopic(topicId));
         dispatch(receiveTopic(topicId, topic));
-        dispatch(fetchParentIfNeeded(topic));
+        dispatch(fetchParentIfNeeded(topic.ref));
       });
     }else{
         dispatch(fetchParentIfNeeded(topicId));
@@ -406,7 +404,7 @@ function hasNoReplies(topicId){
   };
 }
 
-function checkIfNoReplies(topicId){
+function checkForReplies(topicId){
   return (dispatch, getState) => { // check the state first
     db.exists(['replies', topicId])
     .then(exists => {
@@ -423,10 +421,11 @@ export function fetchDiscour(topicId, order){
 
     const tabbedOver = topicId === getState().selectedTopic;
 
-    dispatch(selectOrder(order));
-    dispatch(selectTopic(topicId));
-
-    if(!tabbedOver){
+    if(tabbedOver){
+      dispatch(selectOrder(order));
+    }else{
+      dispatch(selectTopic(topicId));
+      dispatch(checkForReplies(topicId));
       dispatch(fetchTopicAndParentIfNeeded(topicId));
       dispatch(syncReplies(topicId));
     }

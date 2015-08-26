@@ -59,7 +59,7 @@ function permissions(state={}, action) {
     case actionTypes.ALLOW_POST: 
     case actionTypes.REQUEST_ADD_REPLY: // what if warning message
       return Object.assign({}, state, {
-      post: postReducer(state.post, action)
+        post: postReducer(state.post, action)
      });
     case actionTypes.REQUEST_UPVOTE:
     case actionTypes.ALLOW_VOTE:
@@ -80,7 +80,7 @@ function selectedTopic(state='', action){
   }
 }
 
-function selectedOrder(state='new', action){
+function selectedOrder(state='', action){
   switch(action.type) {
     case actionTypes.SELECT_ORDER:
       return action.order;
