@@ -1,4 +1,4 @@
-import { fetchTopicAndReplies, unsync } from './actions';
+import { fetchDiscour, unsync } from './actions';
 
 export const SELECT_ROUTE = 'SELECT_ROUTE';
 function selectRoute(route) {
@@ -11,7 +11,7 @@ function selectRoute(route) {
 export function changeRoute(route){
   return (dispatch, getState) => {
 
-    console.log('changing route with: ', route);
+    //console.log('changing route with: ', route);
 
     let params = route.split('/'),
         entry = params.shift();
@@ -24,17 +24,17 @@ export function changeRoute(route){
     //dispatch(selectRoute(entry));
 
     if(!entry){
-      console.log('oh, entry is falsey, route to new/root');
+      //console.log('oh, entry is falsey, route to new/root');
       dispatch(changeRoute('new/root'));
     }
     
     if (entry === 'new' || entry === 'popular') {
-      console.log('oh, entry is all about topics (new/popular)');
+      //console.log('oh, entry is all about topics (new/popular)');
       if(!params[0]){
         dispatch(changeRoute(entry + '/root'));
       }else {
         dispatch(selectRoute(entry));
-        dispatch(fetchTopicAndReplies(entry, params[0]));
+        dispatch(fetchDiscour(params[0], entry));
       }
     }
 
