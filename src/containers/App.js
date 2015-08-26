@@ -19,8 +19,8 @@ class App extends Component {
   }
 
   componentDidMount(){
-    router.start(this.handleRoute);
-    this.props.login();
+    //router.start(this.handleRoute);
+    //this.props.login();
   } 
 
   handleRoute = route => {
@@ -51,8 +51,8 @@ class App extends Component {
     return (
       <div>
         <Style rules={rules}/>
+        Hello my good friend, how awesome is this
         <Header route={route}/>
-        { this.renderContent(route.entry) }
       </div>
 
     );
