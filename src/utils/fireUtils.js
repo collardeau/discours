@@ -1,11 +1,19 @@
 const Firebase = require('firebase');
 const ref = new Firebase('https://discours.firebaseio.com/');
+const logRef = new Firebase('https://discours-log.firebaseio.com/');
 
 function buildPath(path){
   let p = path.slice();
   return p.reduce((prev, next) => {
     return prev.child(next);
   }, ref);
+}
+
+function buildLogPath(path){ // ramda
+  let p = path.slice();
+  return p.reduce((prev, next) => {
+    return prev.child(next);
+  }, logRef);
 }
 
 export function exists(loc){
@@ -90,7 +98,7 @@ export function setEmpty(loc){
   buildPath(loc).set(null);
 }
 
-export function pushWithStamp (loc, data){
+export function pushWithStamp(loc, data){
   const newData = {...data, stamp: Firebase.ServerValue.TIMESTAMP};
   let newRef = buildPath(loc).push(newData);
   if (newRef){
@@ -98,13 +106,19 @@ export function pushWithStamp (loc, data){
   }
 }
 
-export function push (loc, data){
+export function push(loc, data){
   let newRef = buildPath(loc).push(data);
   if (newRef){
     return Promise.resolve(newRef.key());
   }
 }
 
+export function pushLog(loc, data){
+  let newRef = buildLogPath(loc).push(data);
+  if (newRef){
+    return Promise.resolve(newRef.key());
+  }
+}
 
 export function increment(loc){
   buildPath(loc).transaction( current_value => {
@@ -115,6 +129,7 @@ export function increment(loc){
 }
 
 export function addVote(loc, timestamp){
+  // should be promise, might vote might fail, in which case we don't want to save to history
   buildPath(loc).transaction( current_value => {
     return Object.assign({}, current_value, {
       stamp: timestamp,
@@ -136,7 +151,7 @@ export function loginAnonymously(){
 export function getTimestamp(loc) {
   return new Promise((res, rej) => {
     let ref = buildPath(loc);
-    // on disconnect?
+    ref.onDisconnect().remove(); // testing this
     ref.set(Firebase.ServerValue.TIMESTAMP, err => {
       if (err) { rej(err); }
       else {

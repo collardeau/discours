@@ -87,7 +87,7 @@ export function upvote(topicId, parentId){
       dispatch(requestUpvote(topicId));
       db.getTimestamp(['voteStamp', uid]).then(ts => {
         db.addVote(['votes', parentId, topicId], ts);        
-        db.push(['voteHistory', topicId], { uid, ts}); // but only if it works
+        db.pushLog(['voteHistory', topicId], { uid, ts}); // but only if it works
       }, err => {
         dispatch(setWarning('Not enough time elapsed between votes'), 3000);
         console.log(err.message);
@@ -413,13 +413,17 @@ export function fetchDiscour(topicId, order){
 
   return (dispatch, getState) => {
 
-    const tabbedOver = topicId === getState().selectedTopic;
+    const prevTopicId = getState().selectedTopic;
+    const tabbedOver = topicId === prevTopicId;
 
     if(tabbedOver){
       dispatch(selectOrder(order));
     }else{
+      if(prevTopicId){
+        dispatch(unsync(prevTopicId));
+      }
       dispatch(selectTopic(topicId));
-      dispatch(checkForReplies(topicId));
+      dispatch(checkForReplies(topicId));// if needed
       dispatch(fetchTopicAndParentIfNeeded(topicId));
       dispatch(syncReplies(topicId));
     }

@@ -16,11 +16,6 @@ export function changeRoute(route){
     let params = route.split('/'),
         entry = params.shift();
 
-    const prevTopicId = getState().selectedTopic;
-    if(prevTopicId && params[0] !== prevTopicId){ // a different topic
-      dispatch(unsync(prevTopicId));
-    }
-
     //dispatch(selectRoute(entry));
 
     if(!entry){
