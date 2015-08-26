@@ -179,8 +179,7 @@ function receiveChangedReply(topicId, reply){
 }
 
 function checkIfNoReplies(topicId){
-  return (dispatch, getState) => {
-    // check the state first
+  return (dispatch, getState) => { // check the state first
     db.exists(['replies', topicId])
     .then(exists => {
       if(!exists){
@@ -190,23 +189,47 @@ function checkIfNoReplies(topicId){
   };
 }
 
-function fetchTopicIfNeeded(topicId){
-  // debugger;
+function stateHasTopic(topicId, topics){
+  if(topics[topicId] && topics[topicId].content) {
+    return topics[topicId];
+  }
+  return null;
+}
+
+function fetchParentIfNeeded(topicId){
   return (dispatch, getState) => {
-    // if it doesn't exist or content doesn't exists or ref (parent) doesn't exist
-    if(!getState().topics[topicId] || !getState().topics[topicId].content){
+
+    const parentId = topicId.ref;
+    if( parentId === 'none') { return; }
+    const parentTopic = stateHasTopic(parentId, getState().topics);
+
+    if(!parentTopic){
+      dispatch(requestTopic(parentId));
+      db.fetch(['topic', parentId])
+      .then(topic => {
+        dispatch(receiveTopic(parentId, topic));
+       });
+     }
+  };
+}
+
+function fetchTopicAndParentIfNeeded(topicId){
+  return (dispatch, getState) => {
+    let topics = getState().topics;
+    let localTopic = stateHasTopic(topicId, topics);
+    let parentId, parentTopic;
+
+    if(!localTopic){ //async
       db.fetch(['topic', topicId])
-      .then(data => {
-        dispatch(receiveTopic(topicId, data));
-        let parentId = data.ref;
-        if(parentId !== 'none' && !getState().topics[parentId]){
-          db.fetch(['topic', parentId])
-          .then(parentData => {
-            dispatch(receiveTopic(parentId, parentData));
-          });
-        }
+      .then(topic => {
+        dispatch(requestTopic(topicId));
+        dispatch(receiveTopic(topicId, topic));
+        dispatch(fetchParentIfNeeded(topic));
       });
+    }else{
+        fetchParentIfNeeded(topicId);
     }
+
   };
 }
 
@@ -277,14 +300,14 @@ export function fetchTopicAndReplies(order, topicId){
       dispatch(selectTopic(topicId));
       dispatch(checkIfNoReplies(topicId)); // if needed
       dispatch(requestTopic(topicId));
-      dispatch(fetchTopicIfNeeded(topicId)); // and parent
+      dispatch(fetchTopicAndParentIfNeeded(topicId)); // and parent
 
       const lastUpdated = getState().repliesByNew[topicId].lastUpdated;
-      console.log('last updated: ', lastUpdated);
+      //console.log('last updated: ', lastUpdated);
 
       if(!lastUpdated){ 
 
-        console.log('getting past replies from server');
+        //console.log('getting past replies from server');
 
         db.fetchUntil(['replies', topicId], now, reply => {
           dispatch(requestVoteCount(topicId, reply.topicId));
@@ -298,8 +321,8 @@ export function fetchTopicAndReplies(order, topicId){
    
       }else{
 
-        console.log('queuing replies from last update');
-        console.log(lastUpdated);
+        //console.log('queuing replies from last update');
+        //console.log(lastUpdated);
 
         db.syncSince(['replies', topicId], lastUpdated + 1, reply => {
           dispatch(queueReply(topicId, reply));
@@ -314,18 +337,18 @@ export function fetchTopicAndReplies(order, topicId){
       const lastRequested = getState().repliesByPopular[topicId].lastRequested;
       const popCach = now - ( 5 * 60 * 1000);
 
-      console.log('last requested: ', lastRequested);
-      console.log('pop cach: ', popCach);
+      //console.log('last requested: ', lastRequested);
+      //console.log('pop cach: ', popCach);
 
       if(lastRequested < popCach ){
-        console.log('get fresh order list');
+        //console.log('get fresh order list');
         dispatch(requestRepliesByPopular(topicId));
         db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
           dispatch(receiveOrderByCount(topicId, reply));
-          dispatch(fetchTopicIfNeeded(reply.topicId));
+          dispatch(fetchTopicAndParentIfNeeded(reply.topicId));
         });
       }else{ // seems to always go to this branch
-        console.log('use cache, but reorder');
+        //console.log('use cache, but reorder');
         dispatch(reorderPopular(topicId, getState().votes));
       }
     }
