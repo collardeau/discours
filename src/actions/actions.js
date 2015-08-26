@@ -1,5 +1,6 @@
 import * as db from '../utils/fireUtils.js';
-import moment from 'moment';
+
+// PERMISSIONS
 
 export const ALLOW_VOTE = 'ALLOW_VOTE';
 function allowVote(topicId){
@@ -32,6 +33,8 @@ export function allowPostLater(time){
   };
 }
 
+// WARNING
+
 export const CLEAR_WARNING = 'CLEAR_WARNING';
 export function clearWarning(){
   return {
@@ -47,19 +50,68 @@ function setWarning(warning){
   };
 }
 
+// VOTES 
+
+export const RECEIVE_VOTE_COUNT = 'RECEIVE_VOTE_COUNT';
+function receiveVoteCount(topicId, votes){
+  return {
+    type: RECEIVE_VOTE_COUNT,
+    topicId,
+    votes
+  };
+}
+
+export function requestVoteCount(parentId, topicId){
+  return (dispatch, getState) => {
+    db.fetch(['votes', parentId, topicId]).then(data => {
+      const count = data ? data.count : 0; 
+      dispatch(receiveVoteCount(topicId, count));
+    });
+  };
+}
+
+export const REQUEST_UPVOTE = 'REQUEST_UPVOTE';
+function requestUpvote(topicId, reply){
+  return {
+    type: REQUEST_UPVOTE,
+    topicId: topicId
+  };
+}
+
+export function upvote(topicId, parentId){
+  return dispatch => {
+   const auth = db.getAuth();
+    if(auth){
+      dispatch(allowVoteLater(3200));
+      const uid = auth.uid;
+      dispatch(requestUpvote(topicId));
+      db.getTimestamp(['voteStamp', uid]).then(ts => {
+        db.addVote(['votes', parentId, topicId], ts);        
+        db.push(['voteHistory', topicId], { uid, ts}); // but only if it works
+      }, err => {
+        dispatch(setWarning('Not enough time elapsed between votes'), 3000);
+        console.log(err.message);
+      });
+    }
+  };
+}
+
+function trackVotes(topicId){
+  return (dispatch, getState) => {
+    db.syncOnChange(['votes', topicId], data => { 
+      // test disconnect here or in utils actually
+      dispatch(receiveVoteCount(data.topicId, data.count)); 
+    }); 
+  };
+}
+
+// TOPIC
+
 export const SELECT_TOPIC = 'SELECT_TOPIC';
 function selectTopic(topicId){
   return {
     type: SELECT_TOPIC,
     topicId
-  };
-}
-
-export const SELECT_ORDER = 'SELECT_ORDER';
-function selectOrder(order){
-  return {
-    type: SELECT_ORDER,
-    order
   };
 }
 
@@ -71,45 +123,6 @@ export function requestTopic(topicId) {
   };
 }
 
-export const HAS_NO_REPLIES = 'HAS_NO_REPLIES';
-function hasNoReplies(topicId){
-  return {
-    type: HAS_NO_REPLIES,
-    topicId
-  };
-}
-
-export const SYNC_ADD = 'SYNC_ADD';
-function syncAdd(topicId){
-  return {
-    type: SYNC_ADD,
-    topicId
-  };
-}
-
-export const SYNC_CHANGE = 'SYNC_CHANGE';
-function syncChange(topicId){
-  return {
-    type: SYNC_CHANGE,
-    topicId
-  };
-}
-
-export const UNSYNC_ALL = 'UNSYNC_ALL';
-function unsyncAll(topicId){
-  return {
-    type: UNSYNC_ALL,
-    topicId
-  };
-}
-
-export function unsync(topicId) {
-  return dispatch => {
-    dispatch(unsyncAll(topicId));    
-    db.unsync(['votes', topicId]);
-    db.unsync(['replies', topicId]);
-  };
-}
 export const RECEIVE_TOPIC = 'RECEIVE_TOPIC';
 export function receiveTopic(topicId, topic){
   return {
@@ -117,76 +130,6 @@ export function receiveTopic(topicId, topic){
     topic,
     topicId
  };
-}
-
-export const RECEIVE_REPLY = 'RECEIVE_REPLY';
-function receiveReply(topicId, reply){
- return {
-    type: RECEIVE_REPLY,
-    parentId: topicId,
-    topic: reply,
-    topicId: reply.topicId
-  };
-}
-
-export const RECEIVE_ORDER_BY_COUNT = 'RECEIVE_ORDER_BY_COUNT';
-function receiveOrderByCount(topicId, data){
-  return {
-    type: RECEIVE_ORDER_BY_COUNT,
-    parentId: topicId,
-    topic: data,
-    topicId: data.topicId
-  };
-}
-
-
-export const QUEUE_REPLY = 'QUEUE_REPLY';
-function queueReply(topicId, reply){
-  return {
-    type: QUEUE_REPLY,
-    parentId: reply.ref,
-    topic: reply,
-    topicId: reply.topicId
-  };
-}
-
-export const UNQUEUE = 'UNQUEUE';
-function unqueue(topicId) {
-  return {
-    type: UNQUEUE,
-    topicId
-  };
-}
-
-export function unqueueIfNeeded(topicId){
-  return (dispatch, getState) => {
-    const queue = getState().repliesByNew[topicId].queued;
-    if(queue.length) {
-      dispatch(unqueue(topicId));
-    }
-  };
-}
-
-export const RECEIVE_CHANGED_REPLY = 'RECEIVE_CHANGED_REPLY';
-function receiveChangedReply(topicId, reply){
-  return {
-    type: RECEIVE_CHANGED_REPLY,
-    topic: {
-      count: reply.count
-    },
-    topicId
-  };
-}
-
-function checkIfNoReplies(topicId){
-  return (dispatch, getState) => { // check the state first
-    db.exists(['replies', topicId])
-    .then(exists => {
-      if(!exists){
-        dispatch(hasNoReplies(topicId));
-      }
-    });
-  };
 }
 
 function stateHasTopic(topicId, topics){
@@ -230,57 +173,53 @@ function fetchTopicAndParentIfNeeded(topicId){
     }else{
         dispatch(fetchParentIfNeeded(topicId));
     }
-
   };
 }
 
-function getReplies(state, order){
-  if(order === 'popular') {
-    return state.repliesByPopular; 
-  }
-  return state.repliesByNew;
+// REPLIES BY NEW
+
+export const RECEIVE_REPLY = 'RECEIVE_REPLY';
+function receiveReply(topicId, reply){
+ return {
+    type: RECEIVE_REPLY,
+    parentId: topicId,
+    topic: reply,
+    topicId: reply.topicId
+  };
 }
 
-export const REQUEST_REPLIES_BY_POPULAR = 'REQUEST_REPLIES_BY_POPULAR';
-function requestRepliesByPopular(topicId){
+export const QUEUE_REPLY = 'QUEUE_REPLY';
+function queueReply(topicId, reply){
   return {
-    type: REQUEST_REPLIES_BY_POPULAR,
+    type: QUEUE_REPLY,
+    parentId: reply.ref,
+    topic: reply,
+    topicId: reply.topicId
+  };
+}
+
+export const UNQUEUE = 'UNQUEUE';
+function unqueue(topicId) {
+  return {
+    type: UNQUEUE,
     topicId
   };
 }
 
-export const REQUEST_REPLIES_BY_NEW = 'REQUEST_REPLIES_BY_NEW';
-function requestRepliesByNew(topicId){
-  return {
-    type: REQUEST_REPLIES_BY_NEW,
-    topicId
-  };
-}
-
-
-export const REORDER_POPULAR = 'REORDER_POPULAR';
-function reorderPopular(topicId, votes){
-  return {
-    type: REORDER_POPULAR,
-    topicId,
-    votes
-  };
-}
-
-export const RECEIVE_VOTE_COUNT = 'RECEIVE_VOTE_COUNT';
-function receiveVoteCount(topicId, votes){
-  return {
-    type: RECEIVE_VOTE_COUNT,
-    topicId,
-    votes
-  };
-}
-
-export function requestVoteCount(parentId, topicId){
+export function unqueueIfNeeded(topicId){
   return (dispatch, getState) => {
-    db.fetch(['votes', parentId, topicId]).then(data => {
-      const count = data ? data.count : 0; 
-      dispatch(receiveVoteCount(topicId, count));
+    const queue = getState().repliesByNew[topicId].queued;
+    if(queue.length) {
+      dispatch(unqueue(topicId));
+    }
+  };
+}
+
+function fetchRepliesUntil(topicId, timestamp){
+  return (dispatch, getState) => {
+    db.fetchUntil(['replies', topicId], timestamp, reply => {
+      dispatch(requestVoteCount(topicId, reply.topicId)); // if needed
+      dispatch(receiveReply(topicId, reply));
     });
   };
 }
@@ -308,13 +247,24 @@ function syncReplies(topicId, timestamp){
     }
   };
 }
-  
-function fetchRepliesUntil(topicId, timestamp){
-  return (dispatch, getState) => {
-    db.fetchUntil(['replies', topicId], timestamp, reply => {
-      dispatch(requestVoteCount(topicId, reply.topicId)); // if needed
-      dispatch(receiveReply(topicId, reply));
-    });
+
+// REPLIES BY POPULAR 
+
+export const RECEIVE_POPULAR_REPLY = 'RECEIVE_POPULAR_REPLY';
+function receivePopularReply(topicId, data){
+  return {
+    type: RECEIVE_POPULAR_REPLY,
+    parentId: topicId,
+    topic: data,
+    topicId: data.topicId
+  };
+}
+
+export const REQUEST_REPLIES_BY_POPULAR = 'REQUEST_REPLIES_BY_POPULAR';
+function requestRepliesByPopular(topicId){
+  return {
+    type: REQUEST_REPLIES_BY_POPULAR,
+    topicId
   };
 }
 
@@ -322,7 +272,7 @@ function fetchRepliesByOrder(topicId, order){
   return (dispatch, getState) => {
       dispatch(requestRepliesByPopular(topicId));
       db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
-        dispatch(receiveOrderByCount(topicId, reply));
+        dispatch(receivePopularReply(topicId, reply));
         dispatch(fetchTopicAndParentIfNeeded(reply.topicId));
       });
   };
@@ -342,37 +292,16 @@ function fetchPopularIfNeeded(topicId, timestamp){
   };
 }
 
-function trackVotes(topicId){
-  return (dispatch, getState) => {
-    db.syncOnChange(['votes', topicId], data => { 
-      // test disconnect here or in utils actually
-      dispatch(receiveVoteCount(data.topicId, data.count)); 
-    }); 
+export const REORDER_POPULAR = 'REORDER_POPULAR';
+function reorderPopular(topicId, votes){
+  return {
+    type: REORDER_POPULAR,
+    topicId,
+    votes
   };
 }
- 
-export function fetchDiscour(topicId, order){
-  return (dispatch, getState) => {
 
-    const tabbedOver = topicId === getState().selectedTopic;
-
-    dispatch(selectOrder(order));
-    dispatch(selectTopic(topicId));
-
-    if(!tabbedOver){
-      dispatch(fetchTopicAndParentIfNeeded(topicId));
-      dispatch(syncReplies(topicId));
-    }
-
-    if(order === 'popular'){
-      dispatch(fetchPopularIfNeeded(topicId));
-    }
-
-    dispatch(trackVotes(topicId));
- 
-  };
-
-}
+// POST
 
 export const REQUEST_ADD_REPLY = 'REQUEST_ADD_REPLY';
 function requestAddReply(topicId, reply){
@@ -452,35 +381,81 @@ export function addReply(topicId, reply){
  };
 }
 
-export const REQUEST_UPVOTE = 'REQUEST_UPVOTE';
-function requestUpvote(topicId, reply){
-  return {
-    type: REQUEST_UPVOTE,
-    topicId: topicId
-  };
-}
-
-export function upvote(topicId, parentId){
-  return dispatch => {
-   const auth = db.getAuth();
-    if(auth){
-      dispatch(allowVoteLater(3200));
-      const uid = auth.uid;
-      dispatch(requestUpvote(topicId));
-      db.getTimestamp(['voteStamp', uid]).then(ts => {
-        db.addVote(['votes', parentId, topicId], ts);        
-        db.push(['voteHistory', topicId], { uid, ts}); // but only if it works
-      }, err => {
-        dispatch(setWarning('Not enough time elapsed between votes'), 3000);
-        console.log(err.message);
-      });
-    }
-  };
-}
-
 export const TOGGLE_FORM = 'TOGGLE_FORM';
 export function toggleForm(){
   return {
     type: TOGGLE_FORM
   };
 }
+
+// DISCOURS
+
+export const SELECT_ORDER = 'SELECT_ORDER';
+function selectOrder(order){
+  return {
+    type: SELECT_ORDER,
+    order
+  };
+}
+
+export const HAS_NO_REPLIES = 'HAS_NO_REPLIES';
+function hasNoReplies(topicId){
+  return {
+    type: HAS_NO_REPLIES,
+    topicId
+  };
+}
+
+function checkIfNoReplies(topicId){
+  return (dispatch, getState) => { // check the state first
+    db.exists(['replies', topicId])
+    .then(exists => {
+      if(!exists){
+        dispatch(hasNoReplies(topicId));
+      }
+    });
+  };
+}
+
+export function fetchDiscour(topicId, order){
+
+  return (dispatch, getState) => {
+
+    const tabbedOver = topicId === getState().selectedTopic;
+
+    dispatch(selectOrder(order));
+    dispatch(selectTopic(topicId));
+
+    if(!tabbedOver){
+      dispatch(fetchTopicAndParentIfNeeded(topicId));
+      dispatch(syncReplies(topicId));
+    }
+
+    if(order === 'popular'){
+      dispatch(fetchPopularIfNeeded(topicId));
+    }
+
+    dispatch(trackVotes(topicId));
+ 
+  };
+
+}
+
+// KILL SYNCS
+
+export const UNSYNC_ALL = 'UNSYNC_ALL';
+function unsyncAll(topicId){
+  return {
+    type: UNSYNC_ALL,
+    topicId
+  };
+}
+
+export function unsync(topicId) {
+  return dispatch => {
+    dispatch(unsyncAll(topicId));    
+    db.unsync(['votes', topicId]);
+    db.unsync(['replies', topicId]);
+  };
+}
+ 
