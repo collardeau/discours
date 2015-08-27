@@ -14,7 +14,7 @@ class App extends Component {
 
   constructor(props){
     super(props);
-    //props.login();
+    props.login();
   }
 
   componentDidMount(){
@@ -35,11 +35,7 @@ class App extends Component {
 }
 
 function mapStateToProps(state){
-  //console.log('map state top props');
-  //console.log(state);
-  return {
-    //route: state.route
-  };
+  return {};
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps){

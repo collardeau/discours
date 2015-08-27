@@ -19,17 +19,20 @@ class PopularContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    if(nextProps.topicId !== this.props.topicId){
+      loadData(nextProps);
+    }
   }
 
   render(){
 
-    const { hasReplies, order, permissions, 
+    const { hasReplies, permissions, 
       topicId, replies, upvote } = this.props;
 
     return (
         <Replies
           hasReplies = {hasReplies}
-          order = {order}
+          order = 'popular' 
           permissions = {permissions}
           parentId={topicId}
           replies = {replies}

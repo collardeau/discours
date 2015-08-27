@@ -21,8 +21,7 @@ export default class ReplyForm extends Component {
       return <div></div>;
     }
 
-    const { permissions } = this.props;
-    const canPost = permissions.post;
+    const { canPost } = this.props;
 
     let dyStyles = {
       btn: {

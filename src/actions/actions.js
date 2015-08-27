@@ -402,8 +402,7 @@ function hasNoReplies(topicId){
 function checkForReplies(topicId){
   return (dispatch, getState) => { // check the state first
     const exists = getState().haveReplies[topicId] === 1;
-    if(!exists){
-      console.log('checking for replies');
+    if(!exists){ console.log('checking for replies');
       db.exists(['replies', topicId])
       .then(exists => {
         if(!exists){
@@ -413,7 +412,6 @@ function checkForReplies(topicId){
     }
   };
 }
-
 
 export function fetchTopic(topicId){
   return (dispatch, getState) => {
@@ -440,7 +438,6 @@ export function fetchReplies(topicId){
 
       dispatch(checkForReplies(topicId));// if needed
       dispatch(syncReplies(topicId));
-
       //dispatch(trackVotes(topicId));
   };
  

@@ -33,6 +33,11 @@ export default class Topic extends Component {
     this.props.toggleForm();
   }
 
+  handleParentClick = () => {
+    const { router } = this.context;
+    router.transitionTo('/');    
+  }
+
   render(){
 
     const { formIsOpen, order, parentTopic, topic, topicId } = this.props;
@@ -46,10 +51,8 @@ export default class Topic extends Component {
     return (
       <div style={styles.topic}>
         <div style={[styles.parentTopic, dynamicStyles.parentTopic]}>
-          <small>
-            <Link to={`/${order}/${topic.parentId}`}>
-              In response to: { parentTopic.content}
-            </Link>
+          <small onClick={this.handleParentClick}>
+            In response to: { parentTopic.content}
           </small>
         </div> 
         <div style={styles.flex}>
@@ -64,6 +67,10 @@ export default class Topic extends Component {
     );
   }
 }
+
+Topic.contextTypes = {
+  router: PropTypes.object.isRequired
+};
 
 Topic.propTypes = {
  topic: PropTypes.shape({

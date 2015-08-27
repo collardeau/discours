@@ -5,7 +5,7 @@ export default class Replies extends React.Component {
 
   render(){
 
-    const {hasReplies, order, permissions, 
+    const {canVote, hasReplies, order, 
       parentId, replies, topicId, upvote } = this.props;
 
     let styles = {
@@ -24,9 +24,9 @@ export default class Replies extends React.Component {
       <ul> 
         { replies.map((reply, i) =>
           <ReplyItem
+            canVote={canVote}
             key={i}
             order={order}
-            permissions={permissions}
             parentId={parentId}
             reply={reply}
             upvote={upvote}

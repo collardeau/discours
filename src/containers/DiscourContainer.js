@@ -33,7 +33,7 @@ class DiscourContainer extends Component { //DiscourContainer
 
   render(){
 
-    const { addReply, clearWarning, formIsOpen, order, permissions, 
+    const { addReply, canPost, clearWarning, formIsOpen, order, 
       parentTopic, queuedReplies, toggleForm, 
       topic, topicId, unqueueIfNeeded, warning } = this.props;
 
@@ -52,8 +52,8 @@ class DiscourContainer extends Component { //DiscourContainer
         />
        <ReplyForm
           addReply={addReply}
+          canPost={canPost}
           formIsOpen = {formIsOpen}
-          permissions = {permissions}
           topic={topic}
           topicId={topicId}
         />
@@ -107,10 +107,10 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     unsync: (topicId) => dispatchProps.unsync(topicId),
  
     //props
+    canPost: stateProps.permissions.post,
     formIsOpen: stateProps.formIsOpen,
     queuedReplies,
     order,
-    permissions,
     parentTopic,
     topic,
     topicId,

@@ -27,13 +27,6 @@ let styles = {
 
 export default class ReplyItem extends Component {
 
-  handleLink = () => {
-    let { order, reply } = this.props;
-    order = order ? order : 'new';
-    reply = reply ? reply : 'root';
-    window.location.hash = order + '/' + reply.topicId;
-  }
-
   handleUpvote = (e) => {
     e.stopPropagation();
     const { parentId, reply } = this.props;
@@ -42,8 +35,7 @@ export default class ReplyItem extends Component {
 
   render(){
 
-    const { order, permissions, reply } = this.props;
-    const canVote = permissions.vote;
+    const { order, canVote, reply } = this.props;
 
     let dyStyles = {
       btn: {

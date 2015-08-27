@@ -11,7 +11,6 @@ function loadData(props) {
 class RepliesContainer extends Component {
 
   componentDidMount(){
-    console.log('replies container');
     loadData(this.props);
   }
 
@@ -20,18 +19,21 @@ class RepliesContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    if(nextProps.topicId !== this.props.topicId){
+      loadData(nextProps);
+    }
   }
 
   render(){
 
-    const { hasReplies, order, permissions, 
+    const { canVote, hasReplies, 
       topicId, replies, upvote } = this.props;
 
     return (
         <Replies
+          canVote = {canVote}
           hasReplies = {hasReplies}
-          order = {order}
-          permissions = {permissions}
+          order = 'new' 
           parentId={topicId}
           replies = {replies}
           topicId = {topicId}
@@ -66,12 +68,12 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   return Object.assign({}, parentProps, {
 
     // actions
-    fetchReplies: (topicId, order) => dispatchProps.fetchReplies(topicId, order),
+    fetchReplies: topicId => dispatchProps.fetchReplies(topicId),
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
  
     //props
     hasReplies: haveReplies[topicId],
-    permissions,
+    canVote: permissions.vote,
     replies,
     topicId
   });
