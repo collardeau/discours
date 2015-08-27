@@ -31,7 +31,9 @@ class RepliesContainer extends Component {
 
     if(hasReplies === -1){
       return <div style={{margin: '0.5em'}}>Loading...</div>;
-    }else if (hasReplies === 0) {
+    }
+
+    if (hasReplies === 0) {
       return <div style={{margin: '0.5em'}}>No replies, be the first to respond!</div>;
     }
 

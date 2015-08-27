@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import { Link } from 'react-router';
 import Radium from 'radium';
 import {light, primary} from '../styles/theme';
 
@@ -22,11 +21,15 @@ let styles = {
 export default class Filter extends Component {
 
   handleTab = tab => {
+    const { router } = this.context;
+    const path = '/' + tab + '/' + this.props.topicId;
+    router.transitionTo(path);    
+ 
     // don't handle unqueue here
-    const { order, topicId, unqueueIfNeeded } = this.props;
-    if(tab === 'new'){
-      unqueueIfNeeded(topicId);
-    }
+    //const { order, topicId, unqueueIfNeeded } = this.props;
+    //if(tab === 'new'){
+    //  unqueueIfNeeded(topicId);
+    //}
   }
 
   renderTab = (tab, tabName, last = false) => {
@@ -43,13 +46,9 @@ export default class Filter extends Component {
       }
     };
 
-    let path = '/';
-    if (tab === 'new') { path = '/new/' + topicId; }
-    if (tab === 'popular') { path = '/popular/' + topicId; }
-
     return (
-      <li style={[styles.li, dyStyles.tab]}>
-        <Link to={path}>{tabName} </Link>
+      <li onClick={() => this.handleTab(tab)} style={[styles.li, dyStyles.tab]}>
+        {tabName}
         <span style={dyStyles.queue}> { this.props.queued }</span>
       </li>
     );
@@ -70,6 +69,10 @@ export default class Filter extends Component {
 Filter.propTypes = {
   order: PropTypes.oneOf(['new', 'popular']),
   topicId: PropTypes.string.isRequired
+};
+
+Filter.contextTypes = {
+  router: PropTypes.object.isRequired
 };
 
 
