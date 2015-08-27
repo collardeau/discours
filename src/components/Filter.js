@@ -21,15 +21,17 @@ let styles = {
 export default class Filter extends Component {
 
   handleTab = tab => {
+
+    const { topicId, unqueueIfNeeded } = this.props;
     const { router } = this.context;
-    const path = '/' + tab + '/' + this.props.topicId;
+ 
+    if(tab === 'new'){
+      unqueueIfNeeded(topicId);
+    }
+ 
+    const path = '/' + tab + '/' + topicId;
     router.transitionTo(path);    
  
-    // don't handle unqueue here
-    //const { order, topicId, unqueueIfNeeded } = this.props;
-    //if(tab === 'new'){
-    //  unqueueIfNeeded(topicId);
-    //}
   }
 
   renderTab = (tab, tabName, last = false) => {

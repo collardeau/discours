@@ -26,8 +26,7 @@ class RepliesContainer extends Component {
 
   render(){
 
-    const { canVote, hasReplies, 
-      topicId, replies, upvote } = this.props;
+    const { canVote, hasReplies, topicId, replies, upvote } = this.props;
 
     if(hasReplies === -1){
       return <div style={{margin: '0.5em'}}>Loading...</div>;
