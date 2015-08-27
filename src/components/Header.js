@@ -24,7 +24,7 @@ export default class Header extends React.Component {
   render() {
 
     const { order } = this.props.params;
-    console.log(order); // the condition isn't working
+    //console.log(order); // the condition isn't working
 
     return (
       <header style={styles.header}>

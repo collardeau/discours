@@ -5,31 +5,28 @@ import Warning from '../components/Warning';
 import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
-import {addReply, clearWarning, fetchDiscour, toggleForm, 
+import {addReply, clearWarning, fetchTopicIfNeeded, toggleForm, 
   unqueueIfNeeded, unsync, upvote} from '../actions/actions';
 
 class TopicContainer extends Component {
 
   componentDidMount(){
-    console.log('topic container did mount');
-    console.log(this.props);
-    const { fetchDiscour, order, topicId } = this.props;
-    fetchDiscour(topicId, order);
+    const { fetchTopicIfNeeded, order, topicId } = this.props;
+    fetchTopicIfNeeded(topicId, order);
   }
 
   componentWillReceiveProps(nextProps){
-    const isSameTopic = nextProps.topicId === this.props.topicId;
-    const isSameOrder = nextProps.order === this.props.order;
-    // unqueue if needed
 
-    if(!isSameTopic || !isSameOrder){
-      const { fetchDiscour, topicId: previousTopicId, unsync } = this.props;
-      const { order, topicId } = nextProps;
-      fetchDiscour(topicId, order); // similar logic there, but good for iso?
-      if(!isSameTopic){
-        unsync(previousTopicId);
-      }
-    }
+    if(nextProps.topicId !== this.props.topicId){
+       const { fetchTopicIfNeeded } = this.props;
+       const { order, topicId } = nextProps;
+       //fetchDiscour(topicId, order); // similar logic there, but good for iso?
+       //fetchDiscourTopic(topicId);
+       fetchTopicIfNeeded(topicId, order);
+    //   if(!isSameTopic){
+    //     unsync(previousTopicId);
+    //   }
+     }
 
  }
 
@@ -126,7 +123,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     // actions
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     clearWarning: () => dispatchProps.clearWarning(), // should be app wide
-    fetchDiscour: (topicId, order) => dispatchProps.fetchDiscour(topicId, order),
+    fetchTopicIfNeeded: (topicId, order) => dispatchProps.fetchTopicIfNeeded(topicId, order),
     toggleForm: () => dispatchProps.toggleForm(),
     unqueueIfNeeded: (topicId) => dispatchProps.unqueueIfNeeded(topicId),
     unsync: (topicId) => dispatchProps.unsync(topicId),
@@ -148,7 +145,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {addReply, clearWarning, fetchDiscour, 
+  {addReply, clearWarning, fetchTopicIfNeeded,
     toggleForm, unqueueIfNeeded, upvote, unsync
   },
   mergeProps

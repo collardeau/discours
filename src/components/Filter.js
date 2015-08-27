@@ -27,8 +27,6 @@ export default class Filter extends Component {
     if(tab === 'new'){
       unqueueIfNeeded(topicId);
     }
-    //window.location.hash = tab + '/' + topicId;
-    //Router.transitionTo('/about');
   }
 
   renderTab = (tab, tabName, last = false) => {

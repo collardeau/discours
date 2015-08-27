@@ -409,12 +409,34 @@ function checkForReplies(topicId){
   };
 }
 
+export function fetchTopic(topicId){
+  return (dispatch, getState) => {
+    db.fetch(['topic', topicId])
+    .then(topic => {
+      dispatch(receiveTopic(topicId, topic));
+    });
+  };
+}
+ 
+export function fetchTopicIfNeeded(topicId){
+  console.log('hwere er are ');
+  console.log(topicId);
+  return (dispatch, getState) => {
+    const topics = getState().topics; 
+    if(!topics[topicId] || !topics[topicId].content) {
+      dispatch(selectTopic(topicId));
+      dispatch(fetchTopic(topicId));
+    }
+  };
+}
+
 export function fetchDiscour(topicId, order){
 
   return (dispatch, getState) => {
 
     const prevTopicId = getState().selectedTopic;
     const tabbedOver = topicId === prevTopicId;
+    console.log('tabbed over? ', tabbedOver);
 
     if(tabbedOver){
       dispatch(selectOrder(order));
