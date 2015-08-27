@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import { Link } from 'react-router';
+import Vote from './Vote';
 
 let styles = {
   li: {
@@ -13,15 +14,6 @@ let styles = {
   },
   content: {
     width: '80%'
-  },
-  vote: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  count: {
-    paddingTop: '0.5em',
-    textAlign: 'center',
-    fontSize: '1.3em'
   }
 };
 
@@ -42,7 +34,7 @@ export default class ReplyItem extends Component {
 
   render(){
 
-    const { order, canVote, reply } = this.props;
+    const { canVote, order, parentId, reply, upvote } = this.props;
 
     let dyStyles = {
       btn: {
@@ -55,14 +47,8 @@ export default class ReplyItem extends Component {
         <div style={styles.content}>
           { reply.content }
         </div>
-        <div style={styles.vote}>
-          <button disabled={!canVote ? true : false }
-            onClick={this.handleUpvote} style={dyStyles.btn}>
-            &#8593;
-          </button>
-          <span style={styles.count}>{reply.count}</span>
-        </div>
-      </li>
+        <Vote canVote={canVote} upvote={upvote} parentId={parentId} reply={reply}/>
+     </li>
     );
   }
 
