@@ -419,8 +419,6 @@ export function fetchTopic(topicId){
 }
  
 export function fetchTopicIfNeeded(topicId){
-  console.log('hwere er are ');
-  console.log(topicId);
   return (dispatch, getState) => {
     const topics = getState().topics; 
     if(!topics[topicId] || !topics[topicId].content) {
