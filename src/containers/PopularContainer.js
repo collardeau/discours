@@ -1,17 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import Replies from '../components/Replies';
-import { fetchReplies, upvote } from '../actions/actions';
+import { fetchPopularReplies, upvote } from '../actions/actions';
 
 function loadData(props) {
-  const { fetchReplies, topicId } = props;
-    fetchReplies(topicId);
+  const { fetchPopularReplies, topicId } = props;
+    fetchPopularReplies(topicId);
 }
 
-class RepliesContainer extends Component {
+class PopularContainer extends Component {
 
   componentDidMount(){
-    console.log('replies container');
+    console.log('popular container');
     loadData(this.props);
   }
 
@@ -42,13 +42,13 @@ class RepliesContainer extends Component {
 }
 
 function mapStateToProps(state){
-  const { haveReplies, repliesByNew, permissions,
+  const { haveReplies, repliesByPopular, permissions,
     topics, votes } = state;
 
   return {
     haveReplies,
     topics,
-    repliesByNew,
+    repliesByPopular,
     permissions,
     votes
   };
@@ -56,17 +56,17 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { haveReplies, repliesByNew, permissions, topics } = stateProps;
+  const { haveReplies, repliesByPopular, permissions, topics } = stateProps;
   const topicId = parentProps.params.topicId || 'root';
-  const replies = repliesByNew[topicId] ? 
-    repliesByNew[topicId].view.map(tId => {
+  const replies = repliesByPopular[topicId] ? 
+    repliesByPopular[topicId].view.map(tId => {
       return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
     }) : [];
 
   return Object.assign({}, parentProps, {
 
     // actions
-    fetchReplies: (topicId, order) => dispatchProps.fetchReplies(topicId, order),
+    fetchPopularReplies: (topicId, order) => dispatchProps.fetchPopularReplies(topicId, order),
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
  
     //props
@@ -79,7 +79,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {fetchReplies, upvote},
+  {fetchPopularReplies, upvote},
   mergeProps
-)(RepliesContainer);
+)(PopularContainer);
 

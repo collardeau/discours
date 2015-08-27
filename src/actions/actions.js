@@ -230,9 +230,10 @@ function syncRepliesSince(topicId, timestamp){
   };
 }
 
-function syncReplies(topicId, timestamp){
+function syncReplies(topicId){
   return (dispatch, getState) => {
-    const lastUpdated = getState().repliesByNew[topicId].lastUpdated;
+    const repliesByNew = getState().repliesByNew;
+    const lastUpdated = repliesByNew && repliesByNew.lastUpdated;
     if(!lastUpdated){ console.log('getting past replies from server');
       const now = Date.now();
       dispatch(fetchRepliesUntil(topicId, now));
@@ -400,11 +401,12 @@ function hasNoReplies(topicId){
 
 function checkForReplies(topicId){
   return (dispatch, getState) => { // check the state first
+    console.log('checking for replies');
     db.exists(['replies', topicId])
     .then(exists => {
       if(!exists){
         dispatch(hasNoReplies(topicId));
-      }
+      }else{ console.log('this topic has replies'); }
     });
   };
 }
@@ -428,31 +430,28 @@ export function fetchTopicIfNeeded(topicId){
   };
 }
 
-export function fetchDiscour(topicId, order){
+export function fetchRepliesByPopular(topicId, order){
+
+}
+
+export function fetchReplies(topicId){
 
   return (dispatch, getState) => {
 
-    const prevTopicId = getState().selectedTopic;
-    const tabbedOver = topicId === prevTopicId;
-    console.log('tabbed over? ', tabbedOver);
-
-    if(tabbedOver){
-      dispatch(selectOrder(order));
-    }else{
-      dispatch(selectTopic(topicId));
       dispatch(checkForReplies(topicId));// if needed
-      dispatch(fetchTopicAndParentIfNeeded(topicId));
       dispatch(syncReplies(topicId));
-    }
 
-    if(order === 'popular'){
-      dispatch(fetchPopularIfNeeded(topicId));
-    }
-
-    dispatch(trackVotes(topicId));
- 
+      //dispatch(trackVotes(topicId));
   };
+ 
+}
 
+export function fetchPopularReplies(topicId){
+
+  return (dispatch, getState) => {
+      dispatch(fetchPopularIfNeeded(topicId));
+  };
+ 
 }
 
 // KILL SYNCS

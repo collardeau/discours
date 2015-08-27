@@ -63,11 +63,7 @@ class DiscourContainer extends Component { //DiscourContainer
           topicId= {topicId}
           unqueueIfNeeded = { unqueueIfNeeded }
         />
-        <RepliesContainer 
-          order={order} 
-          topicId={topicId}
-          permissions={permissions}
-        />
+        { this.props.children }
      </div>
     );
   }
