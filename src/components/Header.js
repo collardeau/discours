@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {PropTypes } from 'react';
 import { Link } from 'react-router';
 import {toggleForm} from '../actions/actions';
 import {primary} from '../styles/theme';
@@ -18,24 +18,44 @@ let styles = {
 export default class Header extends React.Component {
 
   shouldComponentUpdate(newProps){
-   return true;
+    return newProps.route !== this.props.route;
+  }
+
+  handleAbout = () => {
+    const { router } = this.context;
+    router.transitionTo('/about');    
+  }
+
+  handleBack = () => {
+
+    const { router } = this.context;
+    router.goBack();
+ 
+  }
+
+  renderBtn = name => {
+
+    if(name === 'about'){
+      return (
+        <button onClick = { () => this.handleBack() }>
+          Back 
+        </button>
+      );
+    }
+    
+    return (
+     <button onClick={() => this.handleAbout()}>
+        About          
+      </button>
+    );
   }
 
   render() {
 
-    const { order } = this.props.params;
-    //console.log(order); // the condition isn't working
-
     return (
       <header style={styles.header}>
-        <button>
 
-          { order ? 
-            <Link to='/'>Home</Link> : 
-            <Link to='/about'> About</Link> 
-          }
-
-        </button>
+        { this.renderBtn(this.props.route) }
 
         <div style={styles.title}>
           <Link to='/'><h1>DISCOURS</h1></Link>
@@ -45,3 +65,9 @@ export default class Header extends React.Component {
   }
 
 }
+
+Header.contextTypes = {
+  router: PropTypes.object.isRequired
+};
+
+

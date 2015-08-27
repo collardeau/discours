@@ -16,17 +16,17 @@ class App extends Component {
     props.login();
   }
 
-  componentDidMount(){
-    //this.props.login();
-  } 
-
   render(){
+
+    const { location, children } = this.props;
+    const { pathname } = location;
+    const route = pathname.substring(1);
 
     return (
       <div>
         <Style rules={rules}/>
-        <Header params={this.props.params}/>
-        { this.props.children }
+        <Header route={route}/>
+        { children }
       </div>
 
     );
