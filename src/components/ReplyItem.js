@@ -27,6 +27,13 @@ let styles = {
 
 export default class ReplyItem extends Component {
 
+  handleClick = () => {
+    const { router } = this.context;
+    const { order, reply } = this.props;
+    const path = '/' + order + '/' + reply.topicId;
+    router.transitionTo(path);    
+  }
+
   handleUpvote = (e) => {
     e.stopPropagation();
     const { parentId, reply } = this.props;
@@ -42,13 +49,11 @@ export default class ReplyItem extends Component {
         opacity: canVote ? '1' : '0.4'
       }
     };
-    // temp disabled should be ? true 
+
     return (
-      <li style={styles.li}>
+      <li onClick={ this.handleClick } style={styles.li}>
         <div style={styles.content}>
-          <Link to={`/${order}/${reply.topicId}`}>
-            { reply.content }
-          </Link>
+          { reply.content }
         </div>
         <div style={styles.vote}>
           <button disabled={!canVote ? true : false }
@@ -69,6 +74,10 @@ ReplyItem.propTypes = {
     content: PropTypes.string.isRequired,
     topicId: PropTypes.string.isRequired
   }).isRequired
+};
+
+ReplyItem.contextTypes = {
+  router: PropTypes.object.isRequired
 };
 
 
