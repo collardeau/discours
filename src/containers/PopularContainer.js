@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
-import Replies from '../components/Replies';
+import ReplyItem from '../components/ReplyItem';
 import { fetchPopularIfNeeded, upvote } from '../actions/actions';
 
 function loadData(props) {
@@ -26,29 +26,31 @@ class PopularContainer extends Component {
 
   render(){
 
-    const { hasReplies, permissions, 
-      topicId, replies, upvote } = this.props;
+    const { canVote, topicId, replies, upvote } = this.props;
 
     return (
-        <Replies
-          hasReplies = {hasReplies}
-          order = 'popular' 
-          permissions = {permissions}
-          parentId={topicId}
-          replies = {replies}
-          topicId = {topicId}
-          upvote = {upvote}
-        />
+      <ul> 
+        { replies.map((reply, i) =>
+          <ReplyItem
+            canVote={canVote}
+            key={i}
+            order='popular'
+            parentId={topicId}
+            reply={reply}
+            upvote={upvote}
+          />
+        )}
+      </ul>
+ 
     );
   }
 }
 
 function mapStateToProps(state){
-  const { haveReplies, repliesByPopular, permissions,
+  const { repliesByPopular, permissions,
     topics, votes } = state;
 
   return {
-    haveReplies,
     topics,
     repliesByPopular,
     permissions,
@@ -58,7 +60,7 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { haveReplies, repliesByPopular, permissions, topics } = stateProps;
+  const { repliesByPopular, permissions, topics } = stateProps;
   const topicId = parentProps.params.topicId || 'root';
   const replies = repliesByPopular[topicId] ? 
     repliesByPopular[topicId].view.map(tId => {
@@ -72,8 +74,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
  
     //props
-    hasReplies: haveReplies[topicId],
-    permissions,
+    canVote: permissions.vote,
     replies,
     topicId
   });

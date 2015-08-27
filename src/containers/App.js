@@ -8,7 +8,6 @@ import {changeRoute} from '../actions/routeActions';
 import {login} from '../actions/authActions';
 import Header from '../components/Header';
 import About from '../components/About';
-import TopicContainer from './TopicContainer';
 
 class App extends Component {
 

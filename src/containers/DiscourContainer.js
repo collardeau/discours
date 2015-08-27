@@ -3,7 +3,6 @@ import {connect } from 'react-redux';
 import Topic from '../components/Topic';
 import Warning from '../components/Warning';
 import RepliesContainer from './RepliesContainer';
-import Replies from '../components/Replies';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
 import {addReply, clearWarning, fetchTopicIfNeeded, toggleForm, 

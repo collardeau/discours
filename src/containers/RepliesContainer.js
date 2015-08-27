@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
-import Replies from '../components/Replies';
+import ReplyItem from '../components/ReplyItem';
 import { fetchReplies, upvote } from '../actions/actions';
 
 function loadData(props) {
@@ -29,16 +29,25 @@ class RepliesContainer extends Component {
     const { canVote, hasReplies, 
       topicId, replies, upvote } = this.props;
 
+    if(hasReplies === -1){
+      return <div style={{margin: '0.5em'}}>Loading...</div>;
+    }else if (hasReplies === 0) {
+      return <div style={{margin: '0.5em'}}>No replies, be the first to respond!</div>;
+    }
+
     return (
-        <Replies
-          canVote = {canVote}
-          hasReplies = {hasReplies}
-          order = 'new' 
-          parentId={topicId}
-          replies = {replies}
-          topicId = {topicId}
-          upvote = {upvote}
-        />
+      <ul> 
+        { replies.map((reply, i) =>
+          <ReplyItem
+            canVote={canVote}
+            key={i}
+            order='new'
+            parentId={topicId}
+            reply={reply}
+            upvote={upvote}
+          />
+        )}
+      </ul>
     );
   }
 }
