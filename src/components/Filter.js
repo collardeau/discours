@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import { Link } from 'react-router';
 import Radium from 'radium';
 import {light, primary} from '../styles/theme';
 
@@ -20,12 +21,14 @@ let styles = {
 @Radium
 export default class Filter extends Component {
 
-  handleTabClick = tab => {
+  handleTab = tab => {
+    // don't handle unqueue here
     const { order, topicId, unqueueIfNeeded } = this.props;
     if(tab === 'new'){
       unqueueIfNeeded(topicId);
     }
-    window.location.hash = tab + '/' + topicId;
+    //window.location.hash = tab + '/' + topicId;
+    //Router.transitionTo('/about');
   }
 
   renderTab = (tab, tabName, last = false) => {
@@ -43,9 +46,8 @@ export default class Filter extends Component {
     };
 
     return (
-      <li style={[styles.li, dyStyles.tab]}
-        onClick= { () => this.handleTabClick(tab)}>
-        {tabName} 
+      <li style={[styles.li, dyStyles.tab]}>
+        <Link to='/new/root'>{tabName} </Link>
         <span style={dyStyles.queue}> { this.props.queued }</span>
       </li>
     );

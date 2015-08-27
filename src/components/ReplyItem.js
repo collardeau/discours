@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import { Link } from 'react-router';
 
 let styles = {
   li: {
@@ -41,7 +42,7 @@ export default class ReplyItem extends Component {
 
   render(){
 
-    const { permissions, reply } = this.props;
+    const { order, permissions, reply } = this.props;
     const canVote = permissions.vote;
 
     let dyStyles = {
@@ -51,8 +52,12 @@ export default class ReplyItem extends Component {
     };
     // temp disabled should be ? true 
     return (
-      <li onClick={this.handleLink } style={styles.li}>
-        <div style={styles.content}>{ reply.content }</div>
+      <li style={styles.li}>
+        <div style={styles.content}>
+          <Link to={`/${order}/${reply.topicId}`}>
+            { reply.content }
+          </Link>
+        </div>
         <div style={styles.vote}>
           <button disabled={!canVote ? true : false }
             onClick={this.handleUpvote} style={dyStyles.btn}>

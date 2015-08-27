@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import Radium from 'radium';
 import {light, white} from '../styles/theme';
 
@@ -28,20 +29,13 @@ export default class Topic extends Component {
     return true;
   }
 
-  handleClick = (e) => {
-    e.preventDefault();
-    window.location.hash = '' +
-      this.props.order + '/' +
-      this.props.topic.parentId;
-  }
-
   handleToggle = () => {
     this.props.toggleForm();
   }
 
   render(){
 
-    const { formIsOpen, parentTopic, topic, topicId } = this.props;
+    const { formIsOpen, order, parentTopic, topic, topicId } = this.props;
 
     let dynamicStyles = {
       parentTopic: {
@@ -53,7 +47,9 @@ export default class Topic extends Component {
       <div style={styles.topic}>
         <div style={[styles.parentTopic, dynamicStyles.parentTopic]}>
           <small>
-            In response to: <a href='' onClick={this.handleClick}>{ parentTopic.content}</a>
+            <Link to={`/${order}/${topic.parentId}`}>
+              In response to: { parentTopic.content}
+            </Link>
           </small>
         </div> 
         <div style={styles.flex}>

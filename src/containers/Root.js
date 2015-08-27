@@ -4,6 +4,8 @@ import { Router, Route } from 'react-router';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import configureStore from '../store/configureStore';
 import App from './App';
+import TopicContainer from './TopicContainer';
+import About from '../components/About';
 
 const store = configureStore();
 
@@ -14,7 +16,12 @@ export default class Root extends Component {
         <Provider store={store}>
           {() => 
             <Router history={this.props.history}>
-              <Route path='/' component={App} />
+              <Route component={App}>
+                <Route path ='/' component={TopicContainer} />
+                <Route path ='/about' component={About} />
+                <Route path='/:order/:topicId' component={TopicContainer} />
+              </Route>
+                
             </Router>
           }
         </Provider>

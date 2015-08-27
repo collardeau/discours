@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import {toggleForm} from '../actions/actions';
 import {primary} from '../styles/theme';
 
@@ -20,28 +21,24 @@ export default class Header extends React.Component {
    return true;
   }
 
-  handleHomeClick = () => {
-    window.location.hash = "";
-  }
-
-  handleAboutClick = () => {
-    window.location.hash = "about";
-  }
-
   render() {
 
-    let btn;
-    if(this.props.route === 'about'){
-      btn = <button onClick={this.handleHomeClick}>Home</button>;
-    }else{
-      btn = <button onClick={this.handleAboutClick}>About</button>;
-    }
+    const { order } = this.props.params;
+    console.log(order); // the condition isn't working
 
     return (
       <header style={styles.header}>
-        { btn }
+        <button>
+
+          { order ? 
+            <Link to='/'>Home</Link> : 
+            <Link to='/about'> About</Link> 
+          }
+
+        </button>
+
         <div style={styles.title}>
-          <h1 onClick={this.handleHomeClick}>DISCOURS</h1>
+          <Link to='/'><h1>DISCOURS</h1></Link>
         </div>
       </header>
     );

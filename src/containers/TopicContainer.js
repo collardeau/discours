@@ -20,6 +20,7 @@ class TopicContainer extends Component {
   componentWillReceiveProps(nextProps){
     const isSameTopic = nextProps.topicId === this.props.topicId;
     const isSameOrder = nextProps.order === this.props.order;
+    // unqueue if needed
 
     if(!isSameTopic || !isSameOrder){
       const { fetchDiscour, topicId: previousTopicId, unsync } = this.props;
@@ -87,21 +88,16 @@ class TopicContainer extends Component {
 
 function mapStateToProps(state){
   const { formIsOpen, haveReplies, permissions, 
-    repliesByNew, repliesByPopular, route, 
-    selectedTopic, topics, votes, warning } = state;
-  const order = route.entry;
-  const topicId = route.params[0];
-  const selectedReplies = order === 'popular' ? repliesByPopular : repliesByNew;
+    repliesByNew, repliesByPopular, 
+    topics, votes, warning } = state;
 
   return {
     formIsOpen,
     haveReplies,
-    order,
     permissions,
-    topicId,
     topics,
     repliesByNew,
-    selectedReplies,
+    repliesByPopular,
     votes,
     warning
   };
@@ -109,12 +105,15 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { formIsOpen, haveReplies, order, permissions, 
-    selectedReplies, repliesByNew, topics, topicId, warning } = stateProps;
+  const { formIsOpen, haveReplies, permissions, 
+    repliesByNew, repliesByPopular, topics, warning } = stateProps;
 
+  const topicId = parentProps.params.topicId || 'root';
+  const order = parentProps.params.order || 'new'; 
   const parentId = topics[topicId] ? topics[topicId].parentId : 'none';
   const parentTopic = topics[parentId] ? topics[parentId] : {content: '', topicId: ''};
   const topic = topics[topicId] ? topics[topicId] : { content: '', parentId: ''};
+  const selectedReplies = order === 'popular' ? repliesByPopular : repliesByNew;
   const replies = selectedReplies[topicId] ? 
     selectedReplies[topicId].view.map(tId => {
       return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
@@ -134,7 +133,6 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
  
     //props
-    
     formIsOpen: stateProps.formIsOpen,
     hasReplies: haveReplies[topicId],
     queuedReplies,
