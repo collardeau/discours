@@ -33,7 +33,7 @@ export default class Filter extends Component {
 
   renderTab = (tab, tabName, last = false) => {
 
-    const { order, queued } = this.props;
+    const { order, topicId, queued } = this.props;
 
     let dyStyles = {
       tab: {
@@ -45,9 +45,13 @@ export default class Filter extends Component {
       }
     };
 
+    let path = '/';
+    if (tab === 'new') { path = '/new/' + topicId; }
+    if (tab === 'popular') { path = '/popular/' + topicId; }
+
     return (
       <li style={[styles.li, dyStyles.tab]}>
-        <Link to='/new/root'>{tabName} </Link>
+        <Link to={path}>{tabName} </Link>
         <span style={dyStyles.queue}> { this.props.queued }</span>
       </li>
     );
