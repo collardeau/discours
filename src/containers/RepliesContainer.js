@@ -26,11 +26,6 @@ class TopicContainer extends Component { //DiscourContainer
      }
  }
 
-  componentWillUnmount(){
-    console.log('topic container will unmount');
-    //unsync(this.props.topicId);
-  }
-
   render(){
 
     const { addReply, clearWarning, formIsOpen, hasReplies, order, permissions, 
@@ -38,31 +33,6 @@ class TopicContainer extends Component { //DiscourContainer
       topic, topicId, replies, unqueueIfNeeded, upvote, warning } = this.props;
 
     return (
-      <div>
-        <Warning 
-          clearWarning={clearWarning} 
-          warning={warning} />
-        <Topic
-          formIsOpen = {formIsOpen}
-          order = {order}
-          parentTopic = {parentTopic}
-          toggleForm = {toggleForm}
-          topic = {topic}
-          topicId={topicId}
-        />
-       <ReplyForm
-          addReply={addReply}
-          formIsOpen = {formIsOpen}
-          permissions = {permissions}
-          topic={topic}
-          topicId={topicId}
-        />
-        <Filter
-          order={order}
-          queued = {queuedReplies}
-          topicId= {topicId}
-          unqueueIfNeeded = { unqueueIfNeeded }
-        />
         <Replies
           hasReplies = {hasReplies}
           order = {order}
@@ -72,7 +42,6 @@ class TopicContainer extends Component { //DiscourContainer
           topicId = {topicId}
           upvote = {upvote}
         />
-      </div>
     );
   }
 }
