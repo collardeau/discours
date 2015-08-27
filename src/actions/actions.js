@@ -233,7 +233,7 @@ function syncRepliesSince(topicId, timestamp){
 function syncReplies(topicId){
   return (dispatch, getState) => {
     const repliesByNew = getState().repliesByNew;
-    const lastUpdated = repliesByNew && repliesByNew.lastUpdated;
+    const lastUpdated = repliesByNew[topicId] && repliesByNew[topicId].lastUpdated;
     if(!lastUpdated){ console.log('getting past replies from server');
       const now = Date.now();
       dispatch(fetchRepliesUntil(topicId, now));
@@ -274,7 +274,7 @@ function fetchRepliesByOrder(topicId, order){
   };
 }
 
-function fetchPopularIfNeeded(topicId, timestamp){
+export function fetchPopularIfNeeded(topicId, timestamp){
   return (dispatch, getState) => {
     const lastRequested = getState().repliesByPopular[topicId].lastRequested;
     const cache = Date.now() - ( 5 * 60 * 1000);
@@ -401,15 +401,19 @@ function hasNoReplies(topicId){
 
 function checkForReplies(topicId){
   return (dispatch, getState) => { // check the state first
-    console.log('checking for replies');
-    db.exists(['replies', topicId])
-    .then(exists => {
-      if(!exists){
-        dispatch(hasNoReplies(topicId));
-      }else{ console.log('this topic has replies'); }
-    });
+    const exists = getState().haveReplies[topicId] === 1;
+    if(!exists){
+      console.log('checking for replies');
+      db.exists(['replies', topicId])
+      .then(exists => {
+        if(!exists){
+          dispatch(hasNoReplies(topicId));
+        }else{ console.log('this topic has replies'); }
+      });
+    }
   };
 }
+
 
 export function fetchTopic(topicId){
   return (dispatch, getState) => {
@@ -430,10 +434,6 @@ export function fetchTopicIfNeeded(topicId){
   };
 }
 
-export function fetchRepliesByPopular(topicId, order){
-
-}
-
 export function fetchReplies(topicId){
 
   return (dispatch, getState) => {
@@ -447,11 +447,9 @@ export function fetchReplies(topicId){
 }
 
 export function fetchPopularReplies(topicId){
-
-  return (dispatch, getState) => {
+  return dispatch => {
       dispatch(fetchPopularIfNeeded(topicId));
   };
- 
 }
 
 // KILL SYNCS

@@ -1,17 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import Replies from '../components/Replies';
-import { fetchPopularReplies, upvote } from '../actions/actions';
+import { fetchPopularIfNeeded, upvote } from '../actions/actions';
 
 function loadData(props) {
-  const { fetchPopularReplies, topicId } = props;
-    fetchPopularReplies(topicId);
-}
+  const { fetchPopularIfNeeded, topicId } = props;
+    fetchPopularIfNeeded(topicId); // could bind this topic id 
+  }
 
 class PopularContainer extends Component {
 
   componentDidMount(){
-    console.log('popular container');
     loadData(this.props);
   }
 
@@ -66,7 +65,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   return Object.assign({}, parentProps, {
 
     // actions
-    fetchPopularReplies: (topicId, order) => dispatchProps.fetchPopularReplies(topicId, order),
+    fetchPopularIfNeeded: (topicId) => dispatchProps.fetchPopularIfNeeded(topicId),
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
  
     //props
@@ -79,7 +78,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {fetchPopularReplies, upvote},
+  {fetchPopularIfNeeded, upvote},
   mergeProps
 )(PopularContainer);
 
