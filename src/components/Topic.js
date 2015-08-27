@@ -34,8 +34,9 @@ export default class Topic extends Component {
   }
 
   handleParentClick = () => {
+    const { order, topic } = this.props;
     const { router } = this.context;
-    router.transitionTo('/');    
+    router.transitionTo('/' + order + '/' + topic.parentId );    
   }
 
   render(){
