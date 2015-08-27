@@ -1,13 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
-import router from '../utils/router';
 import normalize from 'normalize.css/normalize.css';
 import Radium, { Style } from 'radium';
 import rules from '../styles/styles';
-import {changeRoute} from '../actions/routeActions';
 import {login} from '../actions/authActions';
 import Header from '../components/Header';
 import About from '../components/About';
+
+function getRoute(props){
+    return props.location.pathname.substring(1);
+}
 
 class App extends Component {
 
@@ -18,15 +20,13 @@ class App extends Component {
 
   render(){
 
-    const { location, children } = this.props;
-    const { pathname } = location;
-    const route = pathname.substring(1);
+    const route = getRoute(this.props);
 
     return (
       <div>
         <Style rules={rules}/>
         <Header route={route}/>
-        { children }
+        { this.props.children }
       </div>
 
     );
