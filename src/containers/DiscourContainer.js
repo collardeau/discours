@@ -33,7 +33,7 @@ class DiscourContainer extends Component { //DiscourContainer
 
   render(){
 
-    const { addReply, canPost, canVote, clearWarning, formIsOpen, order, 
+    const { addReply, canPost, clearWarning, formIsOpen, order, 
       parentTopic, queuedReplies, toggleForm, 
       topic, topicId, unqueueIfNeeded, warning } = this.props;
 
@@ -64,27 +64,21 @@ class DiscourContainer extends Component { //DiscourContainer
           unqueueIfNeeded = { unqueueIfNeeded }
         />
         
-        <div>
-        { React.cloneElement(this.props.children, {
-          canVote
-          })
-        }
-        </div>
+        { this.props.children }
+
      </div>
     );
   }
 }
 
 function mapStateToProps(state){
-  const { formIsOpen, permissions, 
-    repliesByNew, topics, votes, warning } = state;
+  const { formIsOpen, permissions, repliesByNew, topics, warning } = state;
 
   return {
     formIsOpen,
     permissions,
     repliesByNew, // for queue
     topics,
-    votes,
     warning
   };
 
@@ -112,7 +106,6 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
  
 
     canPost: stateProps.permissions.post,
-    canVote: stateProps.permissions.vote,
     formIsOpen: stateProps.formIsOpen,
     queuedReplies,
     order,

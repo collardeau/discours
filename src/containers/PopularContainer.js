@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import ReplyItem from '../components/ReplyItem';
-import { fetchPopularIfNeeded, upvote } from '../actions/actions';
+import { fetchPopularIfNeeded } from '../actions/actions';
 
 function loadData(props) {
   const { fetchPopularIfNeeded, topicId } = props;
@@ -26,18 +26,16 @@ class PopularContainer extends Component {
 
   render(){
 
-    const { canVote, topicId, replies, upvote } = this.props;
+    const { topicId, replies } = this.props;
 
     return (
       <ul> 
         { replies.map((reply, i) =>
           <ReplyItem
-            canVote={canVote}
             key={i}
             order='popular'
             parentId={topicId}
             reply={reply}
-            upvote={upvote}
           />
         )}
       </ul>
@@ -62,12 +60,11 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   const topicId = parentProps.params.topicId || 'root';
   const replies = repliesByPopular[topicId] ? 
     repliesByPopular[topicId].view.map(tId => {
-      return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
+      return {topicId: tId, ...topics[tId] };
     }) : [];
 
   return Object.assign({}, parentProps, {
     fetchPopularIfNeeded: (topicId) => dispatchProps.fetchPopularIfNeeded(topicId),
-    upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
     replies,
     topicId
   });
@@ -75,7 +72,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {fetchPopularIfNeeded, upvote},
+  {fetchPopularIfNeeded},
   mergeProps
 )(PopularContainer);
 

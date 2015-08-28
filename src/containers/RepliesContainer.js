@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import ReplyItem from '../components/ReplyItem';
-import { fetchReplies, upvote, unsync } from '../actions/actions';
+import { fetchReplies, unsync } from '../actions/actions';
 
 function syncData(props) {
   const { fetchReplies, topicId, unsync } = props;
@@ -32,7 +32,7 @@ class RepliesContainer extends Component {
 
   render(){
 
-    const { canVote, hasReplies, topicId, replies, upvote } = this.props;
+    const { hasReplies, topicId, replies } = this.props;
 
     if(hasReplies === -1){
       return <div style={{margin: '0.5em'}}>Loading...</div>;
@@ -46,12 +46,10 @@ class RepliesContainer extends Component {
       <ul> 
         { replies.map((reply, i) =>
           <ReplyItem
-            canVote={canVote}
             key={i}
             order='new'
             parentId={topicId}
             reply={reply}
-            upvote={upvote}
           />
         )}
       </ul>
@@ -60,13 +58,12 @@ class RepliesContainer extends Component {
 }
 
 function mapStateToProps(state){
-  const { haveReplies, repliesByNew, topics, votes } = state;
+  const { haveReplies, repliesByNew, topics } = state;
 
   return {
     haveReplies,
     topics,
-    repliesByNew,
-    votes
+    repliesByNew
   };
 
 }
@@ -76,14 +73,13 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   const topicId = parentProps.params.topicId || 'root';
   const replies = repliesByNew[topicId] ? 
     repliesByNew[topicId].view.map(tId => {
-      return {...topics[tId], count: stateProps.votes[tId], topicId: tId };
+      return {topicId: tId, ...topics[tId]};
     }) : [];
 
   return Object.assign({}, parentProps, {
 
     // actions
     fetchReplies: topicId => dispatchProps.fetchReplies(topicId),
-    upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
     unsync: (topicId) => dispatchProps.unsync(topicId),
  
     //props
@@ -95,7 +91,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {fetchReplies, upvote, unsync},
+  {fetchReplies, unsync},
   mergeProps
 )(RepliesContainer);
 

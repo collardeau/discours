@@ -28,7 +28,7 @@ export default class ReplyItem extends Component {
 
  render(){
 
-    const { canVote, order, parentId, reply, upvote } = this.props;
+    const { canVote, order, reply } = this.props;
 
     let dyStyles = {
       btn: {
@@ -41,7 +41,7 @@ export default class ReplyItem extends Component {
         <div style={styles.content}>
           { reply.content }
         </div>
-        <VoteContainer canVote={canVote} upvote={upvote} reply={reply}/>
+        <VoteContainer reply={reply}/>
      </li>
     );
   }

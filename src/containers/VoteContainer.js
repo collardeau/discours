@@ -38,6 +38,4 @@ export default connect(
   mapStateToProps, { canVote, upvote }, mergeProps
 )(VoteContainer);
 
-// vote count
-// upvote
 // syncChange
