@@ -425,6 +425,9 @@ export function fetchTopic(topicId){
  
 export function fetchTopicIfNeeded(topicId){
   return (dispatch, getState) => {
+    if(!topicId){ 
+      return;
+    }
     const topics = getState().topics; 
     if(!topics[topicId] || !topics[topicId].content) {
       dispatch(selectTopic(topicId));

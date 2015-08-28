@@ -10,21 +10,31 @@ let styles = {
   }
 };
 
+function loadData(props) {
+    const { fetchTopicIfNeeded, parentId } = props;
+    fetchTopicIfNeeded(parentId);
+  }
+
 @Radium
 class ParentTopic extends Component {
 
   componentDidMount(){
-    //loadData(this.props);
+    loadData(this.props);
   }
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps.parentId !== this.props.parentId){
+      loadData(nextProps);
+     }
+   }
 
   shouldComponentUpdate(nextProps){
     return true;
   }
 
   handleClick = () => {
-    const { order, parentId } = this.props;
     const { router } = this.context;
+    const { order, parentId } = this.props;
     router.transitionTo('/' + order + '/' + parentId );    
   }
 
@@ -62,10 +72,8 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     { order, parentId } = parentProps;
 
   return Object.assign({}, parentProps, {
-
-    fetchTopicIfNeeded: (parentId) => parentProps.fetchTopicIfNeeded(parentId),
+    fetchTopicIfNeeded: (topicId) => parentProps.fetchTopicIfNeeded(topicId),
     content: topics[parentId] ? topics[parentId].content : ''
-
   });
 }
 

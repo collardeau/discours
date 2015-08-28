@@ -95,8 +95,8 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   const
     topicId = parentProps.params.topicId || 'root',
     order = parentProps.params.order || 'new',
-    parentId = topics[topicId] ? topics[topicId].parentId : 'none',
-    topic = topics[topicId] ? topics[topicId] : { content: '', parentId: ''},
+    parentId = topics[topicId] ? topics[topicId].parentId : '',
+    topic = topics[topicId] ? topics[topicId] : { },
     queuedReplies = repliesByNew[topicId] ? repliesByNew[topicId].queued.length : 0;
 
   return Object.assign({}, parentProps, {
