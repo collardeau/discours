@@ -466,3 +466,9 @@ export function unsync(topicId) {
   };
 }
  
+export function unsyncVote(topicId, parentId){
+  console.log('unsync vote count for topicId: ', topicId);
+  return dispatch => {
+    db.unsync(['votes', parentId, topicId]);
+  };
+}

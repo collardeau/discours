@@ -26,6 +26,7 @@ export default class Vote extends Component {
     let dyStyles = {
       btn: { opacity: canVote ? '1' : '0.4' }
     };
+
     return (
       <div style={styles.vote}>
         <button disabled={!canVote ? true : false }

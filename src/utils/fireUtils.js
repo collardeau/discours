@@ -59,7 +59,15 @@ export function fetchByOrder(loc, numToFetch, order, cb){
  });
 }
 
+export function syncChange(loc, cb){
+  console.log('fireUtiles syncs change');
+  buildPath(loc).on('value', snap => {
+    cb(snap.val());
+  });
+}
+
 export function syncSince(loc, timestamp, cb){
+  console.log('syncing some data since...');
   buildPath(loc).orderByChild('stamp')
   .startAt(timestamp)
   .on('child_added', snap => {
@@ -160,21 +168,6 @@ export function getTimestamp(loc) {
         });
       }
     });
-  });
-}
-
-export function createRecord(data) {
-  getTimestamp(data, timestamp => {
-    //data.timestamp = timestamp;
-    console.log('creating record', data); 
-    console.log(timestamp); 
-    //let countRef = ref.child('replies...').push(data, err => {
-    //  if(err) { console.log(err); }
-    //  else {
-    //    next(countRef.name(), timestamp);
-    //  }
-    //});
-    //ref.onDisconnnect().remove();
   });
 }
 

@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import { canVote, syncVote, upvote } from '../actions/actions';
+import { canVote, syncVote, unsyncVote, upvote } from '../actions/actions';
 import {connect } from 'react-redux';
 import Vote from '../components/Vote';
 
@@ -10,6 +10,8 @@ class VoteContainer extends Component {
   }
 
   componentWillUnmount(){
+    console.log('vote container will unmount');
+    this.props.unsyncVote();
   }
 
   render(){
@@ -33,11 +35,12 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     canVote: permissions.vote,
     voteCount: votes[topicId],
     syncVote: () => dispatchProps.syncVote(topicId, parentId),
+    unsyncVote: () => dispatchProps.unsyncVote(topicId, parentId),
     upvote: () => dispatchProps.upvote(topicId, parentId)
   });
 }
 
 export default connect(
-  mapStateToProps, { syncVote, upvote }, mergeProps
+  mapStateToProps, { syncVote, unsyncVote, upvote }, mergeProps
 )(VoteContainer);
 
