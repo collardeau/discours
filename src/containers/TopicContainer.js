@@ -5,6 +5,7 @@ import Warning from '../components/Warning';
 import RepliesContainer from './RepliesContainer';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
+import ParentTopic from '../components/ParentTopic';
 import {addReply, clearWarning, fetchTopicIfNeeded, toggleForm, 
   unqueueIfNeeded, unsync } from '../actions/actions';
 
@@ -13,7 +14,7 @@ function loadData(props) {
     fetchTopicIfNeeded(topicId);
   }
 
-class DiscourContainer extends Component { //DiscourContainer
+class TopicContainer extends Component { 
 
   componentDidMount(){
     loadData(this.props);
@@ -33,8 +34,8 @@ class DiscourContainer extends Component { //DiscourContainer
 
   render(){
 
-    const { addReply, canPost, clearWarning, formIsOpen, order, 
-      parentTopic, queuedReplies, toggleForm, 
+    const { addReply, canPost, clearWarning, fetchTopicIfNeeded, formIsOpen, order, 
+      parentId, queuedReplies, toggleForm, 
       topic, topicId, unqueueIfNeeded, warning } = this.props;
 
     return (
@@ -42,10 +43,14 @@ class DiscourContainer extends Component { //DiscourContainer
         <Warning 
           clearWarning={clearWarning} 
           warning={warning} />
+        <ParentTopic 
+          fetchTopicIfNeeded = {fetchTopicIfNeeded}
+          order = {order}
+          parentId = { parentId }
+        />
         <Topic
           formIsOpen = {formIsOpen}
           order = {order}
-          parentTopic = {parentTopic}
           toggleForm = {toggleForm}
           topic = {topic}
           topicId={topicId}
@@ -91,7 +96,6 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     topicId = parentProps.params.topicId || 'root',
     order = parentProps.params.order || 'new',
     parentId = topics[topicId] ? topics[topicId].parentId : 'none',
-    parentTopic = topics[parentId] ? topics[parentId] : {content: '', topicId: ''},
     topic = topics[topicId] ? topics[topicId] : { content: '', parentId: ''},
     queuedReplies = repliesByNew[topicId] ? repliesByNew[topicId].queued.length : 0;
 
@@ -109,7 +113,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     formIsOpen: stateProps.formIsOpen,
     queuedReplies,
     order,
-    parentTopic,
+    parentId,
     topic,
     topicId,
     warning
@@ -122,5 +126,5 @@ export default connect(
     toggleForm, unqueueIfNeeded, unsync
   },
   mergeProps
-)(DiscourContainer);
+)(TopicContainer);
 

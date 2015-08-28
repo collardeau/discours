@@ -8,11 +8,7 @@ let styles = {
     backgroundColor: white,
     margin: '0.5em'
   },
-  parentTopic: {
-    marginBottom: '0.8em',
-    display: 'none'
-  },
-  flex: {
+ flex: {
     display: 'flex',
     justifyContent: 'space-between'
   },
@@ -33,30 +29,13 @@ export default class Topic extends Component {
     this.props.toggleForm();
   }
 
-  handleParentClick = () => {
-    const { order, topic } = this.props;
-    const { router } = this.context;
-    router.transitionTo('/' + order + '/' + topic.parentId );    
-  }
-
   render(){
 
-    const { formIsOpen, order, parentTopic, topic, topicId } = this.props;
+    const { formIsOpen, order, topic, topicId } = this.props;
 
-    let dynamicStyles = {
-      parentTopic: {
-        display: topicId === 'root' ? 'none' : 'block'
-      }
-    };
- 
     return (
       <div style={styles.topic}>
-        <div style={[styles.parentTopic, dynamicStyles.parentTopic]}>
-          <small onClick={this.handleParentClick}>
-            In response to: { parentTopic.content}
-          </small>
-        </div> 
-        <div style={styles.flex}>
+       <div style={styles.flex}>
           <p style={styles.content}>{topic.content}</p>
           <span style={styles.child}>
             <button onClick={this.handleToggle}>

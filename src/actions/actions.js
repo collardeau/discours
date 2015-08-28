@@ -266,6 +266,8 @@ function requestRepliesByPopular(topicId){
 function fetchRepliesByOrder(topicId, order){
   return (dispatch, getState) => {
       dispatch(requestRepliesByPopular(topicId));
+      console.log('fetch by order');
+      console.log(topicId);
       db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
         dispatch(receivePopularReply(topicId, reply));
         dispatch(fetchTopicAndParentIfNeeded(reply.topicId));
@@ -275,7 +277,7 @@ function fetchRepliesByOrder(topicId, order){
 
 export function fetchPopularIfNeeded(topicId, timestamp){
   return (dispatch, getState) => {
-    const lastRequested = getState().repliesByPopular[topicId].lastRequested;
+    const lastRequested = getState().repliesByPopular[topicId].lastRequested || 0;
     const cache = Date.now() - ( 5 * 60 * 1000);
     if(lastRequested < cache ){ console.log('get new order list from server');
       dispatch(fetchRepliesByOrder(topicId, 'count'));

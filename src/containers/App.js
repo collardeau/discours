@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
+
 import normalize from 'normalize.css/normalize.css';
 import Radium, { Style } from 'radium';
 import rules from '../styles/styles';
+
 import {login} from '../actions/authActions';
+
 import Header from '../components/Header';
 import About from '../components/About';
 
@@ -19,16 +22,13 @@ class App extends Component {
   }
 
   render(){
-
     const route = getRoute(this.props);
-
     return (
       <div>
         <Style rules={rules}/>
         <Header route={route}/>
         { this.props.children }
       </div>
-
     );
   }
 }

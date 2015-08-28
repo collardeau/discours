@@ -4,7 +4,7 @@ import { Router, Route } from 'react-router';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import configureStore from '../store/configureStore';
 import App from './App';
-import DiscourContainer from './DiscourContainer';
+import TopicContainer from './TopicContainer';
 import RepliesContainer from './RepliesContainer';
 import PopularContainer from './PopularContainer';
 import About from '../components/About';
@@ -20,7 +20,7 @@ export default class Root extends Component {
             <Router history={this.props.history}>
               <Route component={App}>
                 <Route path ='/about' component={About} />
-                <Route component={DiscourContainer}>
+                <Route component={TopicContainer}>
                   <Route path='/' component={RepliesContainer} />
                   <Route path='/new/:topicId' component={RepliesContainer} />
                   <Route path='/popular/:topicId' component={PopularContainer} />
