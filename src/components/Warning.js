@@ -12,9 +12,7 @@ let styles = {
 
 export default class Warning extends React.Component {
 
-  handleClear = () => {
-    console.log('handling clear warning');
-    console.log(this.props.clearWarning);
+  handleClick = () => {
     this.props.clearWarning(); 
   }
 
@@ -26,7 +24,7 @@ export default class Warning extends React.Component {
     }
 
     return (
-      <div style={styles.warning} onClick={this.handleClear}>
+      <div style={styles.warning} onClick={this.handleClick}>
         { warning }
       </div>
     );

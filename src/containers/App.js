@@ -9,6 +9,7 @@ import {login} from '../actions/authActions';
 
 import Header from '../components/Header';
 import About from '../components/About';
+import WarningContainer from './WarningContainer';
 
 function getRoute(props){
     return props.location.pathname.substring(1);
@@ -27,6 +28,7 @@ class App extends Component {
       <div>
         <Style rules={rules}/>
         <Header route={route}/>
+        <WarningContainer />
         { this.props.children }
       </div>
     );

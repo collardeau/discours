@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import Topic from '../components/Topic';
-import Warning from '../components/Warning';
 import RepliesContainer from './RepliesContainer';
+
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
 import ParentTopic from '../components/ParentTopic';
-import {addReply, clearWarning, fetchTopicIfNeeded, toggleForm, 
+import {addReply, fetchTopicIfNeeded, toggleForm, 
   unqueueIfNeeded, unsync } from '../actions/actions';
 
 function loadData(props) {
@@ -34,16 +34,13 @@ class TopicContainer extends Component {
 
   render(){
 
-    const { addReply, canPost, clearWarning, fetchTopicIfNeeded, formIsOpen, order, 
+    const { addReply, canPost, fetchTopicIfNeeded, formIsOpen, order, 
       parentId, queuedReplies, toggleForm, 
-      topic, topicId, unqueueIfNeeded, warning } = this.props;
+      topic, topicId, unqueueIfNeeded } = this.props;
 
     return (
       <div>
-        <Warning 
-          clearWarning={clearWarning} 
-          warning={warning} />
-        <ParentTopic 
+       <ParentTopic 
           fetchTopicIfNeeded = {fetchTopicIfNeeded}
           order = {order}
           parentId = { parentId }
@@ -77,20 +74,19 @@ class TopicContainer extends Component {
 }
 
 function mapStateToProps(state){
-  const { formIsOpen, permissions, repliesByNew, topics, warning } = state;
+  const { formIsOpen, permissions, repliesByNew, topics } = state;
 
   return {
     formIsOpen,
     permissions,
     repliesByNew, // for queue
-    topics,
-    warning
+    topics
   };
 
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { formIsOpen, permissions, repliesByNew, topics, warning } = stateProps;
+  const { formIsOpen, permissions, repliesByNew, topics } = stateProps;
 
   const
     topicId = parentProps.params.topicId || 'root',
@@ -102,7 +98,6 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   return Object.assign({}, parentProps, {
 
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
-    clearWarning: () => dispatchProps.clearWarning(), // should be app wide
     fetchTopicIfNeeded: (topicId, order) => dispatchProps.fetchTopicIfNeeded(topicId, order),
     toggleForm: () => dispatchProps.toggleForm(),
     unqueueIfNeeded: (topicId) => dispatchProps.unqueueIfNeeded(topicId),
@@ -114,16 +109,13 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     order,
     parentId,
     topic,
-    topicId,
-    warning
+    topicId
   });
 }
 
 export default connect(
   mapStateToProps,
-  {addReply, clearWarning, fetchTopicIfNeeded,
-    toggleForm, unqueueIfNeeded, unsync
-  },
+  {addReply, fetchTopicIfNeeded, toggleForm, unqueueIfNeeded, unsync },
   mergeProps
 )(TopicContainer);
 
