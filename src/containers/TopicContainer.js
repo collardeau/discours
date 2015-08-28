@@ -2,10 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import Topic from '../components/Topic';
 import RepliesContainer from './RepliesContainer';
-
+import ParentTopicContainer from './ParentTopicContainer';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
-import ParentTopic from '../components/ParentTopic';
 import {addReply, fetchTopicIfNeeded, toggleForm, 
   unqueueIfNeeded, unsync } from '../actions/actions';
 
@@ -40,7 +39,7 @@ class TopicContainer extends Component {
 
     return (
       <div>
-       <ParentTopic 
+       <ParentTopicContainer
           fetchTopicIfNeeded = {fetchTopicIfNeeded}
           order = {order}
           parentId = { parentId }

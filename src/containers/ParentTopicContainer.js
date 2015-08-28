@@ -1,22 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
-import Radium from 'radium';
-import {light, white} from '../styles/theme';
-
-let styles = {
- parentTopic: {
-    marginBottom: '0.8em',
-    display: 'none'
-  }
-};
+import ParentTopic from '../components/ParentTopic';
 
 function loadData(props) {
     const { fetchTopicIfNeeded, parentId } = props;
     fetchTopicIfNeeded(parentId);
   }
 
-@Radium
-class ParentTopic extends Component {
+class ParentTopicContainer extends Component {
 
   componentDidMount(){
     loadData(this.props);
@@ -32,32 +23,18 @@ class ParentTopic extends Component {
     return nextProps.content !== this.props.content; 
   }
 
-  handleClick = () => {
-    const { router } = this.context;
-    const { order, parentId } = this.props;
-    router.transitionTo('/' + order + '/' + parentId );    
-  }
-
   render(){
 
-    const { content } = this.props;
-    if (!content){
+    if (!this.props.content){
       return <div></div>;
     }
 
     return (
-      <div style={styles.topic}>
-        <small onClick={this.handleClick}>
-          In response to: { content }
-        </small>
-     </div>
+      <ParentTopic {...this.props } />
     );
+
   }
 }
-
-ParentTopic.contextTypes = {
-  router: PropTypes.object.isRequired
-};
 
 function mapStateToProps(state){
   return {
@@ -81,5 +58,5 @@ export default connect(
   mapStateToProps,
   {},
   mergeProps
-)(ParentTopic);
+)(ParentTopicContainer);
 
