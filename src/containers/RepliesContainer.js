@@ -1,17 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
 import ReplyItem from '../components/ReplyItem';
-import { fetchReplies, upvote } from '../actions/actions';
+import { fetchReplies, upvote, unsync } from '../actions/actions';
 
-function loadData(props) {
-  const { fetchReplies, topicId } = props;
+function syncData(props) {
+  const { fetchReplies, topicId, unsync } = props;
     fetchReplies(topicId);
 }
 
 class RepliesContainer extends Component {
 
   componentDidMount(){
-    loadData(this.props);
+    syncData(this.props);
   }
 
   shouldComponentUpdate(nextProps){
@@ -20,9 +20,15 @@ class RepliesContainer extends Component {
 
   componentWillReceiveProps(nextProps){
     if(nextProps.topicId !== this.props.topicId){
-      loadData(nextProps);
+      unsync(this.props.topicId);
+      syncData(nextProps);
     }
   }
+
+  componentWillUnmount(){
+    unsync(this.props.topicId);
+  }
+
 
   render(){
 
@@ -54,21 +60,19 @@ class RepliesContainer extends Component {
 }
 
 function mapStateToProps(state){
-  const { haveReplies, repliesByNew, permissions,
-    topics, votes } = state;
+  const { haveReplies, repliesByNew, topics, votes } = state;
 
   return {
     haveReplies,
     topics,
     repliesByNew,
-    permissions,
     votes
   };
 
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { haveReplies, repliesByNew, permissions, topics } = stateProps;
+  const { haveReplies, repliesByNew, topics } = stateProps;
   const topicId = parentProps.params.topicId || 'root';
   const replies = repliesByNew[topicId] ? 
     repliesByNew[topicId].view.map(tId => {
@@ -80,10 +84,10 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     // actions
     fetchReplies: topicId => dispatchProps.fetchReplies(topicId),
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
+    unsync: (topicId) => dispatchProps.unsync(topicId),
  
     //props
     hasReplies: haveReplies[topicId],
-    canVote: permissions.vote,
     replies,
     topicId
   });
@@ -91,7 +95,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {fetchReplies, upvote},
+  {fetchReplies, upvote, unsync},
   mergeProps
 )(RepliesContainer);
 

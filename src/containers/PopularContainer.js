@@ -47,20 +47,18 @@ class PopularContainer extends Component {
 }
 
 function mapStateToProps(state){
-  const { repliesByPopular, permissions,
-    topics, votes } = state;
+  const { repliesByPopular, topics, votes } = state;
 
   return {
-    topics,
     repliesByPopular,
-    permissions,
+    topics,
     votes
   };
 
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { repliesByPopular, permissions, topics } = stateProps;
+  const { repliesByPopular, topics } = stateProps;
   const topicId = parentProps.params.topicId || 'root';
   const replies = repliesByPopular[topicId] ? 
     repliesByPopular[topicId].view.map(tId => {
@@ -74,7 +72,6 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
  
     //props
-    canVote: permissions.vote,
     replies,
     topicId
   });

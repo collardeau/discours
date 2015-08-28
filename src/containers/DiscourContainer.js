@@ -10,7 +10,7 @@ import {addReply, clearWarning, fetchTopicIfNeeded, toggleForm,
 
 function loadData(props) {
     const { fetchTopicIfNeeded, topicId } = props;
-    fetchTopicIfNeeded(topicId); // if(!isSameTopic){ unsync(previousTopicId); }
+    fetchTopicIfNeeded(topicId);
   }
 
 class DiscourContainer extends Component { //DiscourContainer
@@ -21,6 +21,7 @@ class DiscourContainer extends Component { //DiscourContainer
 
   componentWillReceiveProps(nextProps){
     if(nextProps.topicId !== this.props.topicId){
+      //unsync(this.props.topicId);
       loadData(nextProps);
      }
  }
@@ -32,7 +33,7 @@ class DiscourContainer extends Component { //DiscourContainer
 
   render(){
 
-    const { addReply, canPost, clearWarning, formIsOpen, order, 
+    const { addReply, canPost, canVote, clearWarning, formIsOpen, order, 
       parentTopic, queuedReplies, toggleForm, 
       topic, topicId, unqueueIfNeeded, warning } = this.props;
 
@@ -62,7 +63,14 @@ class DiscourContainer extends Component { //DiscourContainer
           topicId= {topicId}
           unqueueIfNeeded = { unqueueIfNeeded }
         />
-        { this.props.children }
+        
+        <div>
+        { React.cloneElement(this.props.children, {
+          canVote,
+          topicId
+          })
+        }
+        </div>
      </div>
     );
   }
@@ -84,29 +92,28 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { formIsOpen, permissions, 
-    repliesByNew, topics, warning } = stateProps;
+  const { formIsOpen, permissions, repliesByNew, topics, warning } = stateProps;
 
-  const topicId = parentProps.params.topicId || 'root';
-  const order = parentProps.params.order || 'new'; 
-  const parentId = topics[topicId] ? topics[topicId].parentId : 'none';
-  const parentTopic = topics[parentId] ? topics[parentId] : {content: '', topicId: ''};
-  const topic = topics[topicId] ? topics[topicId] : { content: '', parentId: ''};
-  const queuedReplies = repliesByNew[topicId] ? 
-    repliesByNew[topicId].queued.length : 0;
+  const
+    topicId = parentProps.params.topicId || 'root',
+    order = parentProps.params.order || 'new',
+    parentId = topics[topicId] ? topics[topicId].parentId : 'none',
+    parentTopic = topics[parentId] ? topics[parentId] : {content: '', topicId: ''},
+    topic = topics[topicId] ? topics[topicId] : { content: '', parentId: ''},
+    queuedReplies = repliesByNew[topicId] ? repliesByNew[topicId].queued.length : 0;
 
   return Object.assign({}, parentProps, {
 
-    // actions
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     clearWarning: () => dispatchProps.clearWarning(), // should be app wide
     fetchTopicIfNeeded: (topicId, order) => dispatchProps.fetchTopicIfNeeded(topicId, order),
     toggleForm: () => dispatchProps.toggleForm(),
     unqueueIfNeeded: (topicId) => dispatchProps.unqueueIfNeeded(topicId),
-    unsync: (topicId) => dispatchProps.unsync(topicId),
+    //unsync: (topicId) => dispatchProps.unsync(topicId),
  
-    //props
+
     canPost: stateProps.permissions.post,
+    canVote: stateProps.permissions.vote,
     formIsOpen: stateProps.formIsOpen,
     queuedReplies,
     order,
