@@ -61,17 +61,8 @@ function receiveVoteCount(topicId, votes){
   };
 }
 
-export function requestVoteCount(parentId, topicId){
-  return (dispatch, getState) => {
-    db.fetch(['votes', parentId, topicId]).then(data => {
-      const count = data ? data.count : 0; 
-      dispatch(receiveVoteCount(topicId, count));
-    });
-  };
-}
-
 export const REQUEST_UPVOTE = 'REQUEST_UPVOTE';
-function requestUpvote(topicId, reply){
+function requestUpvote(topicId){
   return {
     type: REQUEST_UPVOTE,
     topicId: topicId
@@ -96,11 +87,19 @@ export function upvote(topicId, parentId){
   };
 }
 
+export function syncVote(topicId, parentId){
+  return (dispatch, getState) => {
+    db.syncChange(['votes', parentId, topicId], data => {
+      dispatch(receiveVoteCount(topicId, data.count)); 
+    });
+  };
+}
+
 function trackVotes(topicId){
   return (dispatch, getState) => {
     db.syncOnChange(['votes', topicId], data => { 
       // test disconnect here or in utils actually
-      dispatch(receiveVoteCount(data.topicId, data.count)); 
+      //dispatch(receiveVoteCount(data.topicId, data.count)); 
     }); 
   };
 }
@@ -215,7 +214,7 @@ export function unqueueIfNeeded(topicId){
 function fetchRepliesUntil(topicId, timestamp){
   return (dispatch, getState) => {
     db.fetchUntil(['replies', topicId], timestamp, reply => {
-      dispatch(requestVoteCount(topicId, reply.topicId)); // if needed
+      //dispatch(requestVoteCount(topicId, reply.topicId)); // if needed
       dispatch(receiveReply(topicId, reply));
     });
   };
@@ -225,7 +224,7 @@ function syncRepliesSince(topicId, timestamp){
   return (dispatch, getState) => {
     db.syncSince(['replies', topicId], timestamp, reply => {
       dispatch(queueReply(topicId, reply));
-      dispatch(requestVoteCount(topicId, reply.topicId));
+      //dispatch(requestVoteCount(topicId, reply.topicId));
     });
   };
 }
@@ -462,7 +461,7 @@ function unsyncAll(topicId){
 export function unsync(topicId) {
   return dispatch => {
     dispatch(unsyncAll(topicId));    
-    db.unsync(['votes', topicId]);
+    //db.unsync(['votes', topicId]);
     db.unsync(['replies', topicId]);
   };
 }
