@@ -29,7 +29,7 @@ class ParentTopic extends Component {
    }
 
   shouldComponentUpdate(nextProps){
-    return true;
+    return nextProps.content !== this.props.content; 
   }
 
   handleClick = () => {

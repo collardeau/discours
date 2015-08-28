@@ -22,7 +22,7 @@ class TopicContainer extends Component {
 
   componentWillReceiveProps(nextProps){
     if(nextProps.topicId !== this.props.topicId){
-      //unsync(this.props.topicId);
+      this.props.unsync();
       loadData(nextProps);
      }
  }
@@ -106,8 +106,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     fetchTopicIfNeeded: (topicId, order) => dispatchProps.fetchTopicIfNeeded(topicId, order),
     toggleForm: () => dispatchProps.toggleForm(),
     unqueueIfNeeded: (topicId) => dispatchProps.unqueueIfNeeded(topicId),
-    //unsync: (topicId) => dispatchProps.unsync(topicId),
- 
+    unsync: () => dispatchProps.unsync(topicId),
 
     canPost: stateProps.permissions.post,
     formIsOpen: stateProps.formIsOpen,

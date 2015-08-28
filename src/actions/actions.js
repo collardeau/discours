@@ -266,7 +266,6 @@ function requestRepliesByPopular(topicId){
 function fetchRepliesByOrder(topicId, order){
   return (dispatch, getState) => {
       dispatch(requestRepliesByPopular(topicId));
-      console.log('fetch by order');
       console.log(topicId);
       db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
         dispatch(receivePopularReply(topicId, reply));
@@ -408,7 +407,7 @@ function checkForReplies(topicId){
       .then(exists => {
         if(!exists){
           dispatch(hasNoReplies(topicId));
-        }else{ console.log('this topic has replies'); }
+        }
       });
     }
   };
@@ -466,13 +465,11 @@ function unsyncAll(topicId){
 export function unsync(topicId) {
   return dispatch => {
     dispatch(unsyncAll(topicId));    
-    //db.unsync(['votes', topicId]);
     db.unsync(['replies', topicId]);
   };
 }
  
 export function unsyncVote(topicId, parentId){
-  console.log('unsync vote count for topicId: ', topicId);
   return dispatch => {
     db.unsync(['votes', parentId, topicId]);
   };
