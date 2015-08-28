@@ -16,32 +16,27 @@ export default class Vote extends Component {
 
   handleUpvote = (e) => {
     e.stopPropagation();
-    const { parentId, reply, upvote } = this.props;
-    upvote(reply.topicId, parentId);  
+    this.props.upvote();  
   }
 
   render(){
 
-    const { canVote, reply } = this.props;
+    const { canVote, voteCount } = this.props;
 
     let dyStyles = {
-      btn: {
-        opacity: canVote ? '1' : '0.4'
-      }
+      btn: { opacity: canVote ? '1' : '0.4' }
     };
-
     return (
       <div style={styles.vote}>
         <button disabled={!canVote ? true : false }
           onClick={this.handleUpvote} style={dyStyles.btn}>
             &#8593;
         </button>
-        <span style={styles.count}>{reply.count}</span>
+        <span style={styles.count}>{voteCount}</span>
       </div>
     );
   }
 
 }
-
 
 

@@ -66,12 +66,8 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     }) : [];
 
   return Object.assign({}, parentProps, {
-
-    // actions
     fetchPopularIfNeeded: (topicId) => dispatchProps.fetchPopularIfNeeded(topicId),
     upvote: (topicId, parentId) => dispatchProps.upvote(topicId, parentId),
- 
-    //props
     replies,
     topicId
   });

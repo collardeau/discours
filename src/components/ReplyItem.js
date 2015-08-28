@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import { Link } from 'react-router';
-import Vote from './Vote';
+import VoteContainer from '../containers/VoteContainer';
 
 let styles = {
   li: {
@@ -26,13 +26,7 @@ export default class ReplyItem extends Component {
     router.transitionTo(path);    
   }
 
-  handleUpvote = (e) => {
-    e.stopPropagation();
-    const { parentId, reply } = this.props;
-    this.props.upvote(reply.topicId, parentId);  
-  }
-
-  render(){
+ render(){
 
     const { canVote, order, parentId, reply, upvote } = this.props;
 
@@ -47,7 +41,7 @@ export default class ReplyItem extends Component {
         <div style={styles.content}>
           { reply.content }
         </div>
-        <Vote canVote={canVote} upvote={upvote} parentId={parentId} reply={reply}/>
+        <VoteContainer canVote={canVote} upvote={upvote} reply={reply}/>
      </li>
     );
   }

@@ -66,8 +66,7 @@ class DiscourContainer extends Component { //DiscourContainer
         
         <div>
         { React.cloneElement(this.props.children, {
-          canVote,
-          topicId
+          canVote
           })
         }
         </div>
