@@ -29,7 +29,7 @@ class PopularContainer extends Component {
     const { topicId, replies } = this.props;
 
     if (!replies.length){
-      return <p>No popular replies</p>;
+      return <p style={{margin: '0.5em'}}>No Popular Replies. Minimum count is 5.</p>;
     }
 
     return (

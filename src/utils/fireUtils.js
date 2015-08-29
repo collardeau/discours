@@ -34,7 +34,8 @@ export function fetch(loc){
 }
 
 export function fetchUntil(loc, timestamp, cb){
-  buildPath(loc).orderByChild('stamp')
+  buildPath(loc)
+  .orderByChild('stamp')
   .endAt(timestamp)
   .on('child_added', snap => {
     let d = snap.val();
@@ -43,9 +44,10 @@ export function fetchUntil(loc, timestamp, cb){
   });
 }
 
-export function fetchByOrder(loc, num, order, cb){
+export function fetchByOrder(loc, num, low, order, cb){
   buildPath(loc).limitToLast(num)
   .orderByChild(order)
+  .startAt(low)
   .on('child_added', snap => {
     let d = snap.val();
     d.topicId = snap.key();

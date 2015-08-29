@@ -89,7 +89,6 @@ export function upvote(topicId, parentId){
 
 export const REQUEST_VOTE_COUNT = 'REQUEST_VOTE_COUNT';
 function requestVoteCount(topicId){
-  console.log('requesting vote count for ' + topicId);
   return {
     type: REQUEST_VOTE_COUNT,
     topicId
@@ -99,20 +98,10 @@ function requestVoteCount(topicId){
 
 export function syncVote(topicId, parentId){
   return (dispatch, getState) => {
-    console.log('syncing vote at : ' + topicId + ' at parent: ' + parentId);
     dispatch(requestVoteCount(topicId));
     db.syncChange(['votes', parentId, topicId], data => {
       dispatch(receiveVoteCount(topicId, data.count)); 
     });
-  };
-}
-
-function trackVotes(topicId){
-  return (dispatch, getState) => {
-    db.syncOnChange(['votes', topicId], data => { 
-      // test disconnect here or in utils actually
-      //dispatch(receiveVoteCount(data.topicId, data.count)); 
-    }); 
   };
 }
 
@@ -172,41 +161,6 @@ export function fetchTopicIfNeeded(topicId){
   };
 }
 
-
-function fetchParentIfNeeded(topicId){
-  return (dispatch, getState) => {
-    if( topicId === 'none') { return; }
-    const topic = stateHasTopic(topicId, getState().topics);
-
-    if(!topic){
-      dispatch(requestTopic(topicId));
-      db.fetch(['topic', topicId])
-      .then(topic => {
-        dispatch(receiveTopic(topicId, topic));
-       });
-     }
-  };
-}
-
-function fetchTopicAndParentIfNeeded(topicId){
-  return (dispatch, getState) => {
-    let topics = getState().topics;
-    let localTopic = stateHasTopic(topicId, topics);
-    let parentId, parentTopic;
-
-    if(!localTopic){ //async
-      dispatch(requestTopic(topicId));
-      db.fetch(['topic', topicId])
-      .then(topic => {
-        dispatch(receiveTopic(topicId, topic));
-        dispatch(fetchParentIfNeeded(topic.ref));
-      });
-    }else{
-        dispatch(fetchParentIfNeeded(localTopic.parentId));
-    }
-  };
-}
-
 // REPLIES BY NEW
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
@@ -251,7 +205,6 @@ export function unqueueIfNeeded(topicId){
 function fetchRepliesUntil(topicId, timestamp){
   return (dispatch, getState) => {
     db.fetchUntil(['replies', topicId], timestamp, reply => {
-      //dispatch(requestVoteCount(topicId, reply.topicId)); // if needed
       dispatch(receiveReply(topicId, reply));
     });
   };
@@ -261,22 +214,24 @@ function syncRepliesSince(topicId, timestamp){
   return (dispatch, getState) => {
     db.syncSince(['replies', topicId], timestamp, reply => {
       dispatch(queueReply(topicId, reply));
-      //dispatch(requestVoteCount(topicId, reply.topicId));
     });
   };
 }
 
 function syncReplies(topicId){
   return (dispatch, getState) => {
-    console.log('synching replies with ', topicId);
-    const repliesByNew = getState().repliesByNew;
-    const lastUpdated = repliesByNew[topicId] && repliesByNew[topicId].lastUpdated;
-    if(!lastUpdated){ console.log('getting past replies from server');
-      const now = Date.now();
-      dispatch(fetchRepliesUntil(topicId, now));
-      dispatch(syncRepliesSince(topicId, now));
-    }else{ console.log('queuing replies from last update');
-      dispatch(syncRepliesSince(topicId, lastUpdated + 1));
+    const 
+      repliesByNew = getState().repliesByNew,
+      lastUpdated = repliesByNew[topicId] && repliesByNew[topicId].lastUpdated;
+
+      if(!lastUpdated){ 
+        const now = Date.now();
+        //console.log('getting all replies up to now');
+        dispatch(fetchRepliesUntil(topicId, now));
+        dispatch(syncRepliesSince(topicId, now));
+      }else{ 
+        //console.log('just sync reply from the last one we have');
+        dispatch(syncRepliesSince(topicId, lastUpdated + 1));
     }
   };
 }
@@ -288,6 +243,7 @@ function receivePopularVote(topicId, vote){
   return {
     type: RECEIVE_POPULAR_VOTE,
     parentId: topicId,
+    timestamp: Date.now(),
     topicId: vote.topicId,
     vote: vote
   };
@@ -295,6 +251,7 @@ function receivePopularVote(topicId, vote){
 
 export const REQUEST_REPLIES_BY_POPULAR = 'REQUEST_REPLIES_BY_POPULAR';
 function requestRepliesByPopular(topicId){
+  console.log('depreciated');
   return {
     type: REQUEST_REPLIES_BY_POPULAR,
     topicId
@@ -312,8 +269,7 @@ function requestReplyOrderByCount(topicId){
 function fetchReplyOrderByCount(topicId){
   return (dispatch, getState) => {
       dispatch(requestReplyOrderByCount);
-      db.fetchByOrder(['votes', topicId], 5, 'count', vote => {
-        console.log('receiving popular "vote": ', vote);
+      db.fetchByOrder(['votes', topicId], 25, 5, 'count', vote => {
         fetchTopicIfNeeded(vote.topicId);
         dispatch(receivePopularVote(topicId, vote));
       });
@@ -324,13 +280,12 @@ export function fetchPopularIfNeeded(topicId){
   return (dispatch, getState) => {
     const 
       repliesByPop = getState().repliesByPopular,
-      lastRequested = repliesByPop[topicId] && repliesByPop[topicId].lastUpdated || 0,
-      cache = Date.now() - ( 5 * 60 * 1000);
-      if(lastRequested < cache ){ 
-        console.log('get new order list from server');
-        dispatch(fetchReplyOrderByCount(topicId)); // need a parentid
+      lastReceived = repliesByPop[topicId] && repliesByPop[topicId].lastReceived,
+      cache = Date.now() - ( 10 * 60 * 60 * 1000); // 10 min, could be more?
+      if(lastReceived < cache ){ console.log('invalid cach, get new order list from server');
+        dispatch(fetchReplyOrderByCount(topicId));
       }else{ 
-        console.log('use cache, but reorder');
+        //console.log('use cache, but reorder');
         dispatch(reorderPopular(topicId, getState().votes));
     }
   };
@@ -464,17 +419,14 @@ function checkForReplies(topicId){
 }
 
 export function fetchReplies(topicId){
-
   return (dispatch, getState) => {
-
-      dispatch(checkForReplies(topicId));// if needed
+      dispatch(checkForReplies(topicId));
       dispatch(syncReplies(topicId));
-      //dispatch(trackVotes(topicId));
   };
- 
 }
 
 export function fetchPopularReplies(topicId){
+  console.log('depreciated');
   return dispatch => {
       dispatch(fetchPopularIfNeeded(topicId));
   };
@@ -484,6 +436,7 @@ export function fetchPopularReplies(topicId){
 
 export const UNSYNC_ALL = 'UNSYNC_ALL';
 function unsyncAll(topicId){
+  console.log('depreciated');
   return {
     type: UNSYNC_ALL,
     topicId

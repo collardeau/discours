@@ -9,15 +9,7 @@ class VoteContainer extends Component {
     this.props.syncVote();
   }
 
-  componentWillReceiveProps(nextProps){
-    //if(nextProps.topicId !== this.props.topicId){
-    //this.props.syncVote();
-    //}
-  }
-
-
   componentWillUnmount(){
-    console.log('vote container will unmount');
     this.props.unsyncVote();
   }
 
@@ -37,8 +29,6 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
   const 
     { permissions, votes } = stateProps,
     { parentId, topicId } = parentProps.reply;
-    //console.log('mergin props with topicId, ', topicId);
-    //console.log('parent props topicId, ', topicId);
 
   return Object.assign({}, {
     canVote: permissions.vote,

@@ -196,28 +196,31 @@ function repliesByNew(state={}, action){
 }
 
 function repliesByPopularReducer(state={
-  lastRequested: 0,
+  lastReceived: 0,
   high: 0,
   view: []}, action){
   switch(action.type){
     case actionTypes.RECEIVE_POPULAR_VOTE:
-      const newCount = action.vote.count;
-      const high = state.high;
-      const isNewHigh = newCount >= high;
+      const 
+        newCount = action.vote.count,
+        high = state.high,
+        isNewHigh = newCount >= high;
       return Object.assign({}, state, {
         high: isNewHigh ? newCount : high,
-        lastRequested: Date.now(),
+        lastReceived: action.timestamp,
         view: isNewHigh ? [action.topicId, ...state.view] : [...state.view, action.topicId]
       });
-      //case actionTypes.REQUEST_REPLY_ORDER_BY_COUNT:
-      //return { lastRequested: 0, high: 0, view: [] };
-    case actionTypes.REORDER_POPULAR:
-        const view = [...comp(state.view, action.votes)];
-        const newHigh = action.votes[view[0]];
+   case actionTypes.REORDER_POPULAR:
+      const 
+        view = [...comp(state.view, action.votes)],
+        newHigh = action.votes[view[0]];
       return Object.assign({}, state, {
         view,
         high: newHigh
       });
+   //case actionTypes.REQUEST_REPLY_ORDER_BY_COUNT:
+    //return { lastReceived: 0, high: 0, view: [] };
+ 
     default:
       return state;
   } 
