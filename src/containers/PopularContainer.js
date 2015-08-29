@@ -28,6 +28,10 @@ class PopularContainer extends Component {
 
     const { topicId, replies } = this.props;
 
+    if (!replies.length){
+      return <p>No popular replies</p>;
+    }
+
     return (
       <ul> 
         { replies.map((reply, i) =>

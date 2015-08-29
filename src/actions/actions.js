@@ -239,7 +239,9 @@ function unqueue(topicId) {
 
 export function unqueueIfNeeded(topicId){
   return (dispatch, getState) => {
-    const queue = getState().repliesByNew[topicId].queued;
+    const replies = getState().repliesByNew[topicId];
+    if(!replies) { return; }
+    const queue = replies.queued ? replies.queued : [];
     if(queue.length) {
       dispatch(unqueue(topicId));
     }
@@ -320,12 +322,16 @@ function fetchReplyOrderByCount(topicId){
 
 export function fetchPopularIfNeeded(topicId){
   return (dispatch, getState) => {
-    const lastRequested = getState().repliesByPopular[topicId].lastRequested || 0;
-    const cache = Date.now() - ( 5 * 60 * 1000);
-    if(lastRequested < cache ){ console.log('get new order list from server');
-      dispatch(fetchReplyOrderByCount(topicId)); // need a parentid
-    }else{ console.log('use cache, but reorder');
-      dispatch(reorderPopular(topicId, getState().votes));
+    const 
+      repliesByPop = getState().repliesByPopular,
+      lastRequested = repliesByPop[topicId] && repliesByPop[topicId].lastUpdated || 0,
+      cache = Date.now() - ( 5 * 60 * 1000);
+      if(lastRequested < cache ){ 
+        console.log('get new order list from server');
+        dispatch(fetchReplyOrderByCount(topicId)); // need a parentid
+      }else{ 
+        console.log('use cache, but reorder');
+        dispatch(reorderPopular(topicId, getState().votes));
     }
   };
 }
