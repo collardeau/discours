@@ -31,9 +31,9 @@ class PopularContainer extends Component {
     return (
       <ul> 
         { replies.map((reply, i) =>
-          <ReplyItem
-            key={i}
-            order='popular'
+           <ReplyItem
+            key={reply.topicId}
+            order='new'
             parentId={topicId}
             reply={reply}
           />
@@ -56,8 +56,10 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { repliesByPopular, topics } = stateProps;
-  const topicId = parentProps.params.topicId || 'root';
+  const 
+    { repliesByPopular, topics } = stateProps,
+    topicId = parentProps.params.topicId || 'root';
+
   const replies = repliesByPopular[topicId] ? 
     repliesByPopular[topicId].view.map(tId => {
       return {topicId: tId, ...topics[tId] };

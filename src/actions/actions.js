@@ -150,6 +150,29 @@ function stateHasTopic(topicId, topics){
   return null;
 }
 
+export function fetchTopic(topicId){
+  return (dispatch, getState) => {
+    db.fetch(['topic', topicId])
+    .then(topic => {
+      dispatch(receiveTopic(topicId, topic));
+    });
+  };
+}
+ 
+export function fetchTopicIfNeeded(topicId){
+  return (dispatch, getState) => {
+    if(!topicId){ 
+      return;
+    }
+    const topics = getState().topics; 
+    if(!topics[topicId] || !topics[topicId].content) {
+      dispatch(selectTopic(topicId));
+      dispatch(fetchTopic(topicId));
+    }
+  };
+}
+
+
 function fetchParentIfNeeded(topicId){
   return (dispatch, getState) => {
     if( topicId === 'none') { return; }
@@ -188,8 +211,6 @@ function fetchTopicAndParentIfNeeded(topicId){
 
 export const RECEIVE_REPLY = 'RECEIVE_REPLY';
 function receiveReply(topicId, reply){
-  console.log('receiving reply:');
-  console.log(reply);
  return {
     type: RECEIVE_REPLY,
     parentId: topicId,
@@ -260,13 +281,13 @@ function syncReplies(topicId){
 
 // REPLIES BY POPULAR 
 
-export const RECEIVE_POPULAR_REPLY = 'RECEIVE_POPULAR_REPLY';
-function receivePopularReply(topicId, data){
+export const RECEIVE_POPULAR_VOTE = 'RECEIVE_POPULAR_VOTE';
+function receivePopularVote(topicId, vote){
   return {
-    type: RECEIVE_POPULAR_REPLY,
+    type: RECEIVE_POPULAR_VOTE,
     parentId: topicId,
-    topic: data,
-    topicId: data.topicId
+    topicId: vote.topicId,
+    vote: vote
   };
 }
 
@@ -278,24 +299,31 @@ function requestRepliesByPopular(topicId){
   };
 }
 
-function fetchRepliesByOrder(topicId, order){
+export const REQUEST_REPLY_ORDER_BY_COUNT = 'REQUEST_REPLY_ORDER_BY_COUNT';
+function requestReplyOrderByCount(topicId){
+  return {
+    type: REQUEST_REPLY_ORDER_BY_COUNT,
+    topicId
+  };
+}
+
+function fetchReplyOrderByCount(topicId){
   return (dispatch, getState) => {
-      dispatch(requestRepliesByPopular(topicId));
-      console.log(topicId);
-      db.fetchByOrder(['votes', topicId], 5, 'count', reply => {
-        dispatch(receivePopularReply(topicId, reply));
-        dispatch(fetchTopicAndParentIfNeeded(reply.topicId));
+      dispatch(requestReplyOrderByCount);
+      db.fetchByOrder(['votes', topicId], 5, 'count', vote => {
+        console.log('receiving popular "vote": ', vote);
+        fetchTopicIfNeeded(vote.topicId);
+        dispatch(receivePopularVote(topicId, vote));
       });
   };
 }
 
-export function fetchPopularIfNeeded(topicId, timestamp){
+export function fetchPopularIfNeeded(topicId){
   return (dispatch, getState) => {
-    console.log('fetching popular if needed action');
     const lastRequested = getState().repliesByPopular[topicId].lastRequested || 0;
     const cache = Date.now() - ( 5 * 60 * 1000);
     if(lastRequested < cache ){ console.log('get new order list from server');
-      dispatch(fetchRepliesByOrder(topicId, 'count'));
+      dispatch(fetchReplyOrderByCount(topicId)); // need a parentid
     }else{ console.log('use cache, but reorder');
       dispatch(reorderPopular(topicId, getState().votes));
     }
@@ -425,28 +453,6 @@ function checkForReplies(topicId){
           dispatch(hasNoReplies(topicId));
         }
       });
-    }
-  };
-}
-
-export function fetchTopic(topicId){
-  return (dispatch, getState) => {
-    db.fetch(['topic', topicId])
-    .then(topic => {
-      dispatch(receiveTopic(topicId, topic));
-    });
-  };
-}
- 
-export function fetchTopicIfNeeded(topicId){
-  return (dispatch, getState) => {
-    if(!topicId){ 
-      return;
-    }
-    const topics = getState().topics; 
-    if(!topics[topicId] || !topics[topicId].content) {
-      dispatch(selectTopic(topicId));
-      dispatch(fetchTopic(topicId));
     }
   };
 }

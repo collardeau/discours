@@ -43,31 +43,23 @@ export function fetchUntil(loc, timestamp, cb){
   });
 }
 
-export function fetchByOrder(loc, numToFetch, order, cb){
-  let limit = numToFetch, i = 1, data;
-  buildPath(loc).limitToLast(limit)
+export function fetchByOrder(loc, num, order, cb){
+  buildPath(loc).limitToLast(num)
   .orderByChild(order)
   .on('child_added', snap => {
-    if(i > limit){
-      buildPath(loc).limitToLast(limit).orderByChild(order).off();
-    }else {
-      data = snap.val();
-      data.topicId = snap.key();
-      cb(data);
-      i++;
-    }
- });
+    let d = snap.val();
+    d.topicId = snap.key();
+    cb(d);
+  });
 }
 
 export function syncChange(loc, cb){
-  console.log('fireUtiles syncs change');
   buildPath(loc).on('value', snap => {
     cb(snap.val());
   });
 }
 
 export function syncSince(loc, timestamp, cb){
-  console.log('syncing some data since...');
   buildPath(loc).orderByChild('stamp')
   .startAt(timestamp)
   .on('child_added', snap => {
