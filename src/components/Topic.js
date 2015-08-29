@@ -54,8 +54,7 @@ Topic.contextTypes = {
 
 Topic.propTypes = {
  topic: PropTypes.shape({
-    content: PropTypes.string.isRequired,
-    parentId: PropTypes.string.isRequired
+   //content: PropTypes.string.isRequired
   })
 };
 

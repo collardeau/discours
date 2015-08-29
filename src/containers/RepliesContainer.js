@@ -46,7 +46,7 @@ class RepliesContainer extends Component {
       <ul> 
         { replies.map((reply, i) =>
           <ReplyItem
-            key={i}
+            key={reply.topicId}
             order='new'
             parentId={topicId}
             reply={reply}

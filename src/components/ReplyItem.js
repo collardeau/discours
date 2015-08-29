@@ -41,7 +41,7 @@ export default class ReplyItem extends Component {
         <div style={styles.content}>
           { reply.content }
         </div>
-        <VoteContainer reply={reply}/>
+        <VoteContainer topicId = {reply.topicId} reply={reply}/>
      </li>
     );
   }
