@@ -33,7 +33,7 @@ class PopularContainer extends Component {
         { replies.map((reply, i) =>
            <ReplyItem
             key={reply.topicId}
-            order='new'
+            order='popular'
             parentId={topicId}
             reply={reply}
           />

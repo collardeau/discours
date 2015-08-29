@@ -85,14 +85,17 @@ function mapStateToProps(state){
 }
 
 function mergeProps(stateProps, dispatchProps, parentProps) {
-  const { formIsOpen, permissions, repliesByNew, topics } = stateProps;
 
-  const
+  const 
+    { formIsOpen, permissions, repliesByNew, topics } = stateProps,
+    canPost = permissions.post,
     topicId = parentProps.params.topicId || 'root',
-    order = parentProps.params.order || 'new',
+    routeParams = parentProps.location.pathname.substring(1).split('/'),
+    order = routeParams[0] || 'new',
     parentId = topics[topicId] ? topics[topicId].parentId : '',
-    topic = topics[topicId] ? topics[topicId] : { },
-    queuedReplies = repliesByNew[topicId] ? repliesByNew[topicId].queued.length : 0;
+    topic = topics[topicId] ? topics[topicId] : {},
+    queuedReplies = repliesByNew[topicId] ? 
+      repliesByNew[topicId].queued.length : 0;
 
   return Object.assign({}, parentProps, {
 
@@ -102,8 +105,8 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     unqueueIfNeeded: (topicId) => dispatchProps.unqueueIfNeeded(topicId),
     unsync: () => dispatchProps.unsync(topicId),
 
-    canPost: stateProps.permissions.post,
-    formIsOpen: stateProps.formIsOpen,
+    canPost,
+    formIsOpen,
     queuedReplies,
     order,
     parentId,
