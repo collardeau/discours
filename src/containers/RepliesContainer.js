@@ -1,34 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import {connect } from 'react-redux';
+import { connect } from 'react-redux';
 import ReplyItem from '../components/ReplyItem';
-import { fetchReplies, unsync } from '../actions/actions';
-
-function syncData(props) {
-  const { fetchReplies, topicId, unsync } = props;
-    fetchReplies(topicId);
-}
 
 class RepliesContainer extends Component {
-
-  componentDidMount(){
-    syncData(this.props);
-  }
 
   shouldComponentUpdate(nextProps){
     return true;
   }
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.topicId !== this.props.topicId){
-      unsync(this.props.topicId);
-      syncData(nextProps);
-    }
-  }
-
-  componentWillUnmount(){
-    unsync(this.props.topicId);
-  }
-
 
   render(){
 
@@ -77,12 +55,6 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
     }) : [];
 
   return Object.assign({}, parentProps, {
-
-    // actions
-    fetchReplies: topicId => dispatchProps.fetchReplies(topicId),
-    unsync: (topicId) => dispatchProps.unsync(topicId),
- 
-    //props
     hasReplies: haveReplies[topicId],
     replies,
     topicId
@@ -91,7 +63,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {fetchReplies, unsync},
+  {},
   mergeProps
 )(RepliesContainer);
 

@@ -44,6 +44,6 @@ var win = window.open(null, "redux-devtools", "menubar=no,location=no,resizable=
 setTimeout(function() {
    React.render(
      <DebugPanel top right bottom left>
-       <DevTools select={state => state.repliesByPopular } store={store} monitor={LogMonitor} />
+       <DevTools select={state => state } store={store} monitor={LogMonitor} />
      </DebugPanel>, win.document.body);
 }, 10);

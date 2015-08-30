@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
-import Topic from '../components/Topic';
-import RepliesContainer from './RepliesContainer';
 import ParentTopicContainer from './ParentTopicContainer';
+import Topic from '../components/Topic';
 import ReplyForm from '../components/ReplyForm';
 import Filter from '../components/Filter';
-import {addReply, fetchTopicIfNeeded, toggleForm, 
+import {addReply, fetchReplies, fetchTopicIfNeeded, toggleForm, 
   unqueueIfNeeded, unsync } from '../actions/actions';
 
 function loadData(props) {
-    const { fetchTopicIfNeeded, topicId } = props;
+    const { fetchReplies, fetchTopicIfNeeded, topicId } = props;
     fetchTopicIfNeeded(topicId);
+    fetchReplies(topicId);
   }
 
 class TopicContainer extends Component { 
@@ -27,8 +27,7 @@ class TopicContainer extends Component {
  }
 
   componentWillUnmount(){
-    console.log('topic container will unmount');
-    //unsync(this.props.topicId);
+    this.props.unsync();
   }
 
   render(){
@@ -78,7 +77,7 @@ function mapStateToProps(state){
   return {
     formIsOpen,
     permissions,
-    repliesByNew, // for queue
+    repliesByNew,
     topics
   };
 
@@ -101,10 +100,11 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
     addReply: (inResponseTo, reply) => dispatchProps.addReply(inResponseTo, reply),
     fetchTopicIfNeeded: (topicId, order) => dispatchProps.fetchTopicIfNeeded(topicId, order),
+    fetchReplies: topicId => dispatchProps.fetchReplies(topicId),
     toggleForm: () => dispatchProps.toggleForm(),
     unqueueIfNeeded: (topicId) => dispatchProps.unqueueIfNeeded(topicId),
     unsync: () => dispatchProps.unsync(topicId),
-
+ 
     canPost,
     formIsOpen,
     queuedReplies,
@@ -117,7 +117,7 @@ function mergeProps(stateProps, dispatchProps, parentProps) {
 
 export default connect(
   mapStateToProps,
-  {addReply, fetchTopicIfNeeded, toggleForm, unqueueIfNeeded, unsync },
+  {addReply, fetchReplies, fetchTopicIfNeeded, toggleForm, unqueueIfNeeded, unsync },
   mergeProps
 )(TopicContainer);
 
