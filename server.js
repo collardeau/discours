@@ -1,14 +1,18 @@
-var express = require('express');
-var app = express();
+var 
+  express = require('express'),
+  path = require('path');
 
-var port = process.env.PORT || 8080;
+var 
+  app = express(),
+  isProduction = process.env.NODE_ENV === 'production',
+  port = isProduction? 8080 : 3001,
+  publicPath = path.resolve(__dirname, 'public');
 
-app.use(express.static(__dirname + '/public'));
+console.log('is production: ', isProduction); 
+console.log('publicPath: ', publicPath);
 
-app.get('/', function(req, res) {
-  res.render('index');
-});
+app.use(express.static(publicPath));
 
 app.listen(port, function() {
-  console.log('Listenin on port:' + port);
+  console.log('Server running on port ' + port);
 });
