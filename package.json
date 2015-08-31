@@ -1,11 +1,11 @@
 {
-  "name": "conversations",
+  "name": "discours",
   "version": "0.0.1",
-  "description": "",
+  "description": "universal chat app",
   "author": "thomas collardeau",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "dev": "webpack-dev-server --progress --colors --hot",
     "test": "mocha -w",
     "lint": "eslint src"
@@ -13,17 +13,12 @@
   "dependencies": {
     "express": "~4.9.8",
     "firebase": "^2.2.9",
-    "hasher": "^1.2.0",
-    "immutable": "^3.7.4",
-    "moment": "^2.10.6",
     "normalize.css": "^3.0.3",
     "radium": "^0.13.7",
-    "ramda": "^0.17.1",
     "react": "^0.13.3",
     "react-redux": "^0.9.0",
     "react-router": "^1.0.0-beta3",
     "redux": "^1.0.1",
-    "redux-logger": "0.0.3",
     "redux-thunk": "^0.1.0"
   },
   "devDependencies": {
@@ -35,7 +30,6 @@
     "css-loader": "^0.15.2",
     "eslint": "^0.24.1",
     "eslint-plugin-react": "^2.7.0",
-    "miel-loader": "0.0.0",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "path": "^0.11.14",

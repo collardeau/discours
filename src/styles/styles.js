@@ -1,39 +1,46 @@
 import theme from './theme';
 
-export default {-}
+export default {
 
-  body: {-},
+  body: {
     backgroundColor: theme.white,
     fontFamily: 'futura'
+  },
 
-  h1: {-},
+  h1: {
     margin: 0,
     padding: 0,
     verticalAlign: 'text-bottom'
+  },
 
-  h2: {-},
+  h2: {
     margin: '0.5em 0 0'
+  },
 
-  h3: {-},
+  h3: {
     margin: 0,
     padding: 0
+  },
 
-  ul: {-},
+  ul: {
     listStyleType: 'none',
     padding: 0 
+  },
 
-  textarea: {-},
+  textarea: {
     width: '100%',
     height: '3.4em'
+  },
 
-  button:{-},
+  button: {
     background: theme.dark,
     border: 0,
     padding: '0.5em 0.8em',
     cursor: 'pointer',
     color: theme.white,
-    borderRadius: '0.2em',
-
-  a:{-},
-    color: 'black'
-      
+    borderRadius: '0.2em'
+  },
+  a: {
+   color: 'black'
+  }
+};      
