@@ -8,7 +8,7 @@
     "start": "node server.js",
     "dev": "webpack-dev-server --progress --colors --hot",
     "lint": "eslint app",
-    "postprocess": 'node heroku",
+    "postprocess": "node heroku.js",
     "test": "mocha"
   },
   "dependencies": {
