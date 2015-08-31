@@ -1,11 +1,9 @@
-var 
-  webpack = require('webpack'),
-  path = require('path');
+var webpack = require('webpack'),
+    path = require('path');
 
-var 
-  nodeModulesPath = path.resolve(__dirname, 'node_modules'),
-  buildPath = path.resolve(__dirname, 'public', 'build'),
-  mainPath = path.resolve(__dirname, 'app', 'main.js');
+var nodeModulesPath = path.resolve(__dirname, 'node_modules'),
+    buildPath = path.resolve(__dirname, 'public', 'build'),
+    mainPath = path.resolve(__dirname, 'app', 'main.js');
 
 module.exports = {
 
