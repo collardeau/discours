@@ -1,6 +1,13 @@
 const Firebase = require('firebase');
-const ref = new Firebase('https://discours.firebaseio.com/');
-const logRef = new Firebase('https://discours-log.firebaseio.com/');
+
+const 
+  isProd = process.env.NODE_ENV === 'production',
+  dbConnection = isProd ? process.env.FIREBASE_REF : 
+    'https://dev-discours.firebaseio.com/',
+  logConnection = isProd ? process.env.FIREBASE_LOG_REF : 
+    'https://dev-log-discours.firebaseio.com/',
+  ref = new Firebase(dbConnection),
+  logRef = new Firebase(logConnection);
 
 function buildPath(path){
   let p = path.slice();

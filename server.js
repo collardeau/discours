@@ -28,7 +28,7 @@ if(!isProduction) {
 
 // It is important to catch any errors from the proxy or the
 // server will crash. An example of this is connecting to the
-// server when webpack is bundlingj
+// server when webpack is bundling
 proxy.on('error', function(e) {
   console.log('Could not connnect to proxy, please try again...');
 });
