@@ -9,10 +9,11 @@ var isProduction = process.env.NODE_ENV === 'production',
     port = isProduction ? process.env.PORT : 3000,
     publicPath = path.resolve(__dirname, 'public');
 
-console.log('is production: ', isProduction); 
-console.log('publicPath: ', publicPath);
-
-app.use(express.static(publicPath));
+app.use('/', express.static(publicPath));
+app.use('/new/*', express.static(publicPath));
+app.use('/popular/*', express.static(publicPath));
+app.use('/about', express.static(publicPath));
+//app.use('/build', express.static(publicPath + '/build'));
 
 if(!isProduction) {
   var bundle = require('./server/bundle.js');
@@ -26,12 +27,10 @@ if(!isProduction) {
   });
 }
 
-// It is important to catch any errors from the proxy or the
-// server will crash. An example of this is connecting to the
-// server when webpack is bundling
 proxy.on('error', function(e) {
   console.log('Could not connnect to proxy, please try again...');
 });
+
 app.listen(port, function() {
   console.log('Server running on port ' + port);
 });
