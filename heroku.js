@@ -1,6 +1,4 @@
-console.log('heroku.js');
-if(process.env.NPM_CONFIG_PRODUCTION) {
-  console.log('inside production environment');
+if(process.env.NODE_ENV === 'production') {
   var child_process = require('child_process');
   var proc = "webpack -p --config webpack.production.config.js";
   child_process.exec(proc, function(error, stdout, stderr) {

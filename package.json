@@ -5,9 +5,9 @@
   "author": "thomas collardeau",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
+    "start": "node server.js",
     "lint": "eslint app",
-    "postprocess": "node heroku",
+    "postinstall": "node heroku.js",
     "test": "mocha"
   },
   "dependencies": {
