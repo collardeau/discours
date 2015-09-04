@@ -40,7 +40,12 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      //__DEV__: 'true',
+      __DB__: '"http://dev-discours.firebaseIO.com"',
+      __LOG__: '"http://dev-log-discours.firebaseIO.com"'
+    })
   ]
 
 };

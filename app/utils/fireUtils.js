@@ -1,14 +1,8 @@
 const Firebase = require('firebase');
 
-let isProd = process.env.NODE_ENV === 'production';
-const 
-  dbConnection = isProd ? process.env.FIREBASE_REF : 
-    'https://dev-discours.firebaseio.com/',
-  logConnection = isProd ? process.env.FIREBASE_LOG_REF : 
-    'https://dev-log-discours.firebaseio.com/';
-const 
-  ref = new Firebase(dbConnection),
-  logRef = new Firebase(logConnection);
+/*global __DB__, __LOG__*/
+const ref = new Firebase(__DB__),
+      logRef = new Firebase(__LOG__);
 
 function buildPath(path){
   let p = path.slice();
@@ -17,7 +11,7 @@ function buildPath(path){
   }, ref);
 }
 
-function buildLogPath(path){ // ramda
+function buildLogPath(path){
   let p = path.slice();
   return p.reduce((prev, next) => {
     return prev.child(next);

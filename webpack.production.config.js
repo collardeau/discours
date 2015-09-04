@@ -26,6 +26,13 @@ module.exports = {
         loader: 'style-loader!css-loader'
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      __DB__: '"http://discours.firebaseIO.com"',
+      __LOG__: '"http://discours-log.firebaseIO.com"'
+    })
+ 
+  ]
 };
 
