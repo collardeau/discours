@@ -1,11 +1,12 @@
 const Firebase = require('firebase');
 
+let isProd = process.env.NODE_ENV === 'production';
 const 
-  isProd = process.env.NODE_ENV === 'production',
   dbConnection = isProd ? process.env.FIREBASE_REF : 
     'https://dev-discours.firebaseio.com/',
   logConnection = isProd ? process.env.FIREBASE_LOG_REF : 
-    'https://dev-log-discours.firebaseio.com/',
+    'https://dev-log-discours.firebaseio.com/';
+const 
   ref = new Firebase(dbConnection),
   logRef = new Firebase(logConnection);
 
