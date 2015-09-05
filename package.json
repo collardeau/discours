@@ -21,7 +21,6 @@
     "node-libs-browser": "0.5.2",
     "normalize.css": "3.0.3",
     "path": "0.11.14",
-    "radium": "0.13.7",
     "react": "0.13.3",
     "react-redux": "0.9.0",
     "react-router": "1.0.0-beta3",

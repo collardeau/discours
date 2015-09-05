@@ -1,11 +1,6 @@
 import React, {findDOMNode, Component, PropTypes} from 'react';
 import { addReply } from '../actions/actions';
 
-let styles = {
-  div: {
-    margin: '0.5em'
-  }
-};
 export default class ReplyForm extends Component {
 
   handleClick = () => {
@@ -23,18 +18,12 @@ export default class ReplyForm extends Component {
 
     const { canPost } = this.props;
 
-    let dyStyles = {
-      btn: {
-        opacity: canPost ? '1' : '0.4'
-      }
-    };
-
     return (
       <div>
         <textarea ref='reply' placeholder=' Go ahead, express yourself!'/>
-        <div style={styles.div}>
+        <div>
           <button disabled={!canPost ? true : false }
-            onClick={this.handleClick} style={dyStyles.btn}>
+            onClick={this.handleClick}>
             Submit 
           </button>
         </div>

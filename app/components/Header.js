@@ -1,19 +1,6 @@
 import React, {PropTypes } from 'react';
 import { Link } from 'react-router';
 import {toggleForm} from '../actions/actions';
-import {primary} from '../styles/theme';
-
-let styles = {
-  header: {
-    backgroundColor: primary,
-    height: '3.4em',
-    display: 'flex'
-  },
-  title: {
-    lineHeight: '3.4em',
-    marginLeft: '0.5em'
-  }
-};
 
 export default class Header extends React.Component {
 
@@ -53,11 +40,11 @@ export default class Header extends React.Component {
   render() {
 
     return (
-      <header style={styles.header}>
+      <header>
 
         { this.renderBtn(this.props.route) }
 
-        <div style={styles.title}>
+        <div>
           <Link to='/'><h1>DISCOURS</h1></Link>
         </div>
       </header>
