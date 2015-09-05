@@ -1,5 +1,6 @@
 var webpack = require('webpack'),
-    path = require('path');
+  path = require('path'),
+  ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var nodeModulesPath = path.resolve(__dirname, 'node_modules'),
     buildPath = path.resolve(__dirname, 'public', 'build'),
@@ -34,13 +35,16 @@ module.exports = {
       },
       { 
         test: /\.css$/, 
-        loader: 'style-loader!css-loader'
+        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
       }
     ]
   },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new ExtractTextPlugin('app.css', {
+      allChunks: true
+    }),
     new webpack.DefinePlugin({
       //__DEV__: 'true',
       __DB__: '"http://dev-discours.firebaseIO.com"',
