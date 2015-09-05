@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import {connect } from 'react-redux';
-import normalize from 'normalize.css/normalize.css';
 import {login} from '../actions/authActions';
 
 import Header from '../components/Header';
