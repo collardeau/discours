@@ -35,10 +35,14 @@ module.exports = {
       },
       { 
         test: /\.css$/, 
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
+        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader')
       }
     ]
   },
+
+  postcss: [
+    require('autoprefixer')
+  ],
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -46,7 +50,6 @@ module.exports = {
       allChunks: true
     }),
     new webpack.DefinePlugin({
-      //__DEV__: 'true',
       __DB__: '"http://dev-discours.firebaseIO.com"',
       __LOG__: '"http://dev-log-discours.firebaseIO.com"'
     })
