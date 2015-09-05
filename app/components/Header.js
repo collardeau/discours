@@ -1,7 +1,10 @@
 import React, {PropTypes } from 'react';
 import { Link } from 'react-router';
 import {toggleForm} from '../actions/actions';
+import styles from '../styles/header.css';
+import cssModules from 'react-css-modules';
 
+@cssModules(styles)
 export default class Header extends React.Component {
 
   shouldComponentUpdate(newProps){
@@ -14,24 +17,22 @@ export default class Header extends React.Component {
   }
 
   handleBack = () => {
-
     const { router } = this.context;
     router.goBack();
- 
   }
 
   renderBtn = name => {
 
     if(name === 'about'){
       return (
-        <button onClick = { () => this.handleBack() }>
+        <button styleName='btn' onClick = { () => this.handleBack() }>
           Back 
         </button>
       );
     }
     
     return (
-     <button onClick={() => this.handleAbout()}>
+     <button styleName='btn' onClick={() => this.handleAbout()}>
         About          
       </button>
     );
@@ -40,12 +41,14 @@ export default class Header extends React.Component {
   render() {
 
     return (
-      <header>
+      <header styleName='header'>
 
         { this.renderBtn(this.props.route) }
 
-        <div>
-          <Link to='/'><h1>DISCOURS</h1></Link>
+        <div styleName='title'>
+          <Link to='/'>
+            <h1 styleName='h1'>DISCOURS</h1>
+          </Link>
         </div>
       </header>
     );

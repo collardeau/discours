@@ -1,7 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import { Link } from 'react-router';
+import styles from '../styles/reply-item.css';
+import cssModules from 'react-css-modules';
 import VoteContainer from '../containers/VoteContainer';
 
+@cssModules(styles)
 export default class ReplyItem extends Component {
 
   handleClick = () => {
@@ -16,8 +19,8 @@ export default class ReplyItem extends Component {
     const { canVote, order, reply } = this.props;
 
     return (
-      <li onClick={ this.handleClick }>
-        <div>
+      <li styleName='item' onClick={ this.handleClick }>
+        <div styleName='content'>
           { reply.content }
         </div>
         <VoteContainer topicId = {reply.topicId} reply={reply}/>

@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import styles from '../styles/topic.css';
+import cssModules from 'react-css-modules';
 
+@cssModules(styles)
 export default class ParentTopic extends React.Component {
 
   handleClick = () => {
@@ -11,7 +14,7 @@ export default class ParentTopic extends React.Component {
   render(){
 
     return (
-      <div>
+      <div styleName='parent-topic'>
         <small onClick={this.handleClick}>
           In response to: { this.props.content }
         </small>

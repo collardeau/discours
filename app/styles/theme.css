@@ -1,0 +1,17 @@
+.white{
+  background-color: hsl(0, 0%, 97%); 
+}
+
+.light{
+  background-color: hsl(0, 0%, 89%);
+}
+
+.primay{
+  background-color: hsl(0, 0%, 55%);
+}
+
+.dark{
+  background-color: hsl(0, 0%, 25%);
+  color: #fff;
+}
+

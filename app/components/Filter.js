@@ -1,5 +1,8 @@
 import React, {Component, PropTypes} from 'react';
+import styles from '../styles/filter.css';
+import cssModules from 'react-css-modules';
 
+@cssModules(styles)
 export default class Filter extends Component {
 
   handleTab = tab => {
@@ -21,9 +24,13 @@ export default class Filter extends Component {
     const { order, topicId, queued } = this.props;
 
     return (
-      <li onClick={() => this.handleTab(tab)}>
-        {tabName}
-        <span> { this.props.queued }</span>
+      <li styleName={ tab === order ? 'tab-active' : 'tab'}
+        onClick={() => this.handleTab(tab)}>
+          {tabName}
+          <span styleName='queue'> 
+            { queued > 0 && tab === 'new' ?
+            this.props.queued : '' }
+          </span>
       </li>
     );
   }
@@ -31,7 +38,7 @@ export default class Filter extends Component {
   render(){
 
     return (
-      <ul>
+      <ul styleName='bar'>
         {this.renderTab('new', 'New')}
         {this.renderTab('popular', 'Popular', true)}
       </ul>

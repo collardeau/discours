@@ -1,0 +1,23 @@
+.header {
+  composes: light from './theme.css';
+  height: 3.4em;
+  display: flex;
+}
+
+.title {
+  line-height: 3.4em;
+  margin-left: 0.5em;
+}
+
+.h1 {
+  margin: 0;
+  padding: 0;
+  vertical-align: text-bottom;
+  text-decoration: none;
+}
+
+.btn {
+  composes: main from './buttons.css';
+}
+
+

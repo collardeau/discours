@@ -1,0 +1,12 @@
+.main {
+  composes: dark from './theme.css';
+  border: 0;
+  padding: 0.5em 0.8em;
+  cursor: pointer;
+}
+
+.disabled {
+  composes: main;
+  opacity: 0.4;
+}
+

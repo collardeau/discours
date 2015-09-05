@@ -1,0 +1,20 @@
+.topic {
+  padding: 0.5em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.content {
+  margin: 0;
+  font-size: 1.3em;
+}
+
+.parent-topic{
+  margin: 0.5em;
+}
+
+.btn {
+  composes: main from './buttons.css';
+}
+
+

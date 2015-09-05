@@ -1,0 +1,23 @@
+.box {
+  display: flex;
+  flex-direction: 'column';
+}
+
+.count {
+  padding-top: 0.5em;
+  text-align: center;
+  font-size: 1.3em;
+}
+
+.btn {
+  composes: main from './buttons.css';
+  margin-right: 0.5em;
+}
+
+.btn-disabled {
+  composes: disabled from './buttons.css';
+  margin-right: 0.5em;
+}
+
+
+

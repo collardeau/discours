@@ -1,5 +1,6 @@
 var webpack = require('webpack'),
-    path = require('path');
+    path = require('path'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var 
   nodeModulesPath = path.resolve(__dirname, 'node_modules'),
@@ -23,11 +24,14 @@ module.exports = {
       },
       { 
         test: /\.css$/, 
-        loader: 'style-loader!css-loader'
+        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
       }
-    ]
+   ]
   },
   plugins: [
+    new ExtractTextPlugin('app.css', {
+      allChunks: true
+    }),
     new webpack.DefinePlugin({
       __DB__: '"http://discours.firebaseIO.com"',
       __LOG__: '"http://discours-log.firebaseIO.com"'

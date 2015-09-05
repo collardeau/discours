@@ -1,0 +1,22 @@
+.bar {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid;
+}
+
+.tab {
+  flex: 1;
+  line-height: 2.1em;
+  text-align: center;
+}
+
+.tab-active { 
+  composes: tab;
+  composes: light from './theme.css';
+}
+
+.queue {
+  margin-left: 0.5em;
+}

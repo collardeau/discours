@@ -1,5 +1,8 @@
 import React, {Component, PropTypes} from 'react';
+import styles from '../styles/vote.css';
+import cssModules from 'react-css-modules';
 
+@cssModules(styles)
 export default class Vote extends Component {
 
   handleUpvote = (e) => {
@@ -13,11 +16,12 @@ export default class Vote extends Component {
 
     return (
       <div>
-        <button disabled={!canVote ? true : false }
+        <button styleName={ canVote ? 'btn' : 'btn-disabled' } 
+          disabled={!canVote ? true : false }
           onClick={this.handleUpvote}>
             &#8593;
         </button>
-        <span>{voteCount}</span>
+        <span styleName='count'>{voteCount}</span>
       </div>
     );
   }
