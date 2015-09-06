@@ -11,13 +11,13 @@
     "test": "mocha"
   },
   "dependencies": {
-    "autoprefixer": "^6.0.0",
+    "autoprefixer": "6.0.0",
     "babel": "5.8.21",
     "babel-core": "5.8.22",
     "babel-loader": "5.3.1",
     "css-loader": "0.15.2",
     "express": "~4.9.8",
-    "extract-text-webpack-plugin": "^0.8.2",
+    "extract-text-webpack-plugin": "0.8.2",
     "firebase": "2.2.9",
     "http-proxy": "1.11.2",
     "node-libs-browser": "0.5.2",
@@ -30,6 +30,7 @@
     "react-router": "1.0.0-beta3",
     "redux": "1.0.1",
     "redux-thunk": "0.1.0",
+    "strip-loader": "0.1.0",
     "style-loader": "0.12.3",
     "webpack": "1.10.1"
   },

@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var config = require('./webpack.config.js');
+var WebpackStrip = require('strip-loader');
 var appConstants = require('./appConstants.js');
 var paths = appConstants.paths;
 
@@ -12,7 +13,7 @@ config.output = {
  
 config.module.loaders.push({
   test: /\.js$/, 
-  loaders: ['babel'], 
+  loaders: [WebpackStrip.loader('console.log'), 'babel'], 
   exclude: [paths.nodeModules]
 });
 
