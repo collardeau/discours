@@ -1,22 +1,27 @@
 var webpack = require('webpack');
 var config = require('./webpack.config.js');
-var path = require('path');
-
-var buildPath = path.resolve(__dirname, 'public', 'build');
-var nodeModulesPath = path.resolve(__dirname, 'node_modules');
-var mainPath = path.resolve(__dirname, 'app', 'main.js');
+var appConstants = require('./appConstants.js');
+var paths = appConstants.paths;
 
 config.devtool = 'source-map';
-config.entry = mainPath;
+config.entry = paths.main;
 config.output = {
-  path: buildPath,
+  path: paths.build,
   filename: 'bundle.js'
 };
  
 config.module.loaders.push({
   test: /\.js$/, 
   loaders: ['babel'], 
-  exclude: [nodeModulesPath]
+  exclude: [paths.nodeModules]
 });
+
+config.plugins.push(
+  new webpack.DefinePlugin({
+    __DB__: JSON.stringify(paths.DB),
+    __LOG__: JSON.stringify(paths.log),
+    __DEV__: 'false'
+  })
+);
 
 module.exports = config;

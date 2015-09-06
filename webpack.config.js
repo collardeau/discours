@@ -1,17 +1,7 @@
-var webpack = require('webpack'),
-  path = require('path'),
-  ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-var nodeModulesPath = path.resolve(__dirname, 'node_modules'),
-    mainPath = path.resolve(__dirname, 'app', 'main.js');
+var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-
-  entry: {
-    app: [
-      mainPath 
-    ]
-  },
 
   module: {
     loaders: [ 

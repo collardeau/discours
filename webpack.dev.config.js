@@ -1,18 +1,20 @@
 var webpack = require('webpack');
 var config = require('./webpack.config.js');
-var path = require('path');
-
-var nodeModulesPath = path.resolve(__dirname, 'node_modules');
-var buildPath = path.resolve(__dirname, 'public', 'build');
+var appConstants = require('./appConstants.js');
+var paths = appConstants.paths;
 
 config.devtool = 'eval';
-config.entry.app.unshift(
-  'webpack-dev-server/client?http://localhost:8080',
-  'webpack/hot/only-dev-server'
-);
+
+config.entry = {
+  app: [
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',
+    paths.main 
+  ]
+};
 
 config.output = {
-  path: buildPath,
+  path: paths.build,
   filename: 'bundle.js',
   publicPath: '/build/'
 };
@@ -20,15 +22,16 @@ config.output = {
 config.module.loaders.push({
   test: /\.js$/, 
   loaders: ['react-hot', 'babel'], 
-  exclude: [nodeModulesPath]
+  exclude: [paths.nodeModules]
 });
  
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
 config.plugins.push(
   new webpack.DefinePlugin({
-    __DB__: '"http://dev-discours.firebaseIO.com"',
-    __LOG__: '"http://dev-log-discours.firebaseIO.com"'
+    __DB__: JSON.stringify(paths.devDB),
+    __LOG__: JSON.stringify(paths.devLog),
+    __DEV__: 'true'
   })
 );
 
