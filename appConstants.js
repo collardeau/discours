@@ -6,7 +6,7 @@ module.exports = {
     main: path.resolve(__dirname, 'app', 'main.js'),
     nodeModules: path.resolve(__dirname, 'node_modules'),
     DB: 'http://discours.firebaseIO.com',
-    logDB: 'http://discours-log.firebaseIO.com',
+    log: 'http://discours-log.firebaseIO.com',
     devDB: 'http://dev-discours.firebaseIO.com',
     devLog: 'http://dev-log-discours.firebaseIO.com'
   }
