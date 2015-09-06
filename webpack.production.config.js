@@ -1,42 +1,22 @@
-var webpack = require('webpack'),
-    path = require('path'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin');
+var webpack = require('webpack');
+var config = require('./webpack.config.js');
+var path = require('path');
 
-var 
-  nodeModulesPath = path.resolve(__dirname, 'node_modules'),
-  buildPath = path.resolve(__dirname, 'public', 'build'),
-  mainPath = path.resolve(__dirname, 'app', 'main.js');
+var buildPath = path.resolve(__dirname, 'public', 'build');
+var nodeModulesPath = path.resolve(__dirname, 'node_modules');
+var mainPath = path.resolve(__dirname, 'app', 'main.js');
 
-module.exports = {
-
-  devtool: 'source-map',
-  entry: mainPath,
-  output: {
-    path: buildPath,
-    filename: 'bundle.js'
-  },
-  module: {
-    loaders: [
-      { 
-        test: /\.js$/, 
-        loaders: ['babel'], 
-        exclude: [nodeModulesPath]
-      },
-      { 
-        test: /\.css$/, 
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
-      }
-   ]
-  },
-  plugins: [
-    new ExtractTextPlugin('app.css', {
-      allChunks: true
-    }),
-    new webpack.DefinePlugin({
-      __DB__: '"http://discours.firebaseIO.com"',
-      __LOG__: '"http://discours-log.firebaseIO.com"'
-    })
- 
-  ]
+config.devtool = 'source-map';
+config.entry = mainPath;
+config.output = {
+  path: buildPath,
+  filename: 'bundle.js'
 };
+ 
+config.module.loaders.push({
+  test: /\.js$/, 
+  loaders: ['babel'], 
+  exclude: [nodeModulesPath]
+});
 
+module.exports = config;
