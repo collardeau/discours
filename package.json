@@ -1,12 +1,11 @@
 {
   "name": "discours",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "universal chat app",
   "author": "thomas collardeau",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "lint": "eslint app",
     "postinstall": "node heroku.js",
     "test": "mocha"
   },
